@@ -1,0 +1,6 @@
+node_modules
+*.log
+.DS_Store
+.tsc-cache
+*.local
+examples/playground/dist
