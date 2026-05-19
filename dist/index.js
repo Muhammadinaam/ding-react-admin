@@ -1,30 +1,30 @@
 import { createContext as e, useCallback as t, useContext as n, useEffect as r, useMemo as i, useState as a } from "react";
 import { Navigate as o, Outlet as s, RouterProvider as c, createBrowserRouter as l, useLocation as u, useNavigate as d } from "react-router-dom";
-import { Avatar as f, Button as p, Card as m, ConfigProvider as h, Drawer as g, Dropdown as _, Flex as v, Form as y, Grid as b, Input as x, Layout as S, Menu as C, Popover as w, Segmented as T, Space as E, Typography as D, theme as O } from "antd";
-import { jsx as k, jsxs as A } from "react/jsx-runtime";
-import { ColumnHeightOutlined as ee, DesktopOutlined as j, LayoutOutlined as M, LogoutOutlined as te, MenuOutlined as ne, MoonOutlined as N, SettingOutlined as P, SunOutlined as F, UserOutlined as re } from "@ant-design/icons";
+import { Avatar as f, Button as p, Card as m, ConfigProvider as h, Drawer as ee, Dropdown as te, Flex as g, Form as _, Grid as v, Input as y, Layout as b, Menu as x, Popover as S, Segmented as C, Space as w, Typography as T, theme as E } from "antd";
+import { jsx as D, jsxs as O } from "react/jsx-runtime";
+import { ColumnHeightOutlined as k, DesktopOutlined as A, LayoutOutlined as j, LogoutOutlined as ne, MenuOutlined as re, MoonOutlined as M, SettingOutlined as N, SunOutlined as ie, UserOutlined as ae } from "@ant-design/icons";
 //#region src/context/AppThemeProvider.tsx
-var I = e(null);
-function L(e) {
+var P = e(null);
+function F(e) {
 	try {
 		let t = localStorage.getItem(e);
 		if (t === "light" || t === "dark" || t === "system") return t;
 	} catch {}
 	return "system";
 }
-function R() {
+function I() {
 	return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
-function z(e) {
+function L(e) {
 	try {
 		let t = localStorage.getItem(e);
 		if (t === "comfortable" || t === "compact") return t;
 	} catch {}
 	return "comfortable";
 }
-var B = "ding-react-admin-theme-mode", V = "ding-react-admin-theme-density";
-function H({ children: e, modeStorageKey: t = B, densityStorageKey: n = V }) {
-	let [o, s] = a(() => L(t)), [c, l] = a(() => z(n)), [u, d] = a(R);
+var R = "ding-react-admin-theme-mode", z = "ding-react-admin-theme-density";
+function B({ children: e, modeStorageKey: t = R, densityStorageKey: n = z }) {
+	let [o, s] = a(() => F(t)), [c, l] = a(() => L(n)), [u, d] = a(I);
 	r(() => {
 		if (o !== "system") return;
 		let e = window.matchMedia("(prefers-color-scheme: dark)"), t = () => d(e.matches);
@@ -40,10 +40,10 @@ function H({ children: e, modeStorageKey: t = B, densityStorageKey: n = V }) {
 		try {
 			localStorage.setItem(n, e);
 		} catch {}
-	}, m = o === "system" ? u ? "dark" : "light" : o, g = i(() => {
-		let e = m === "dark" ? O.darkAlgorithm : O.defaultAlgorithm;
-		return { algorithm: c === "compact" ? [e, O.compactAlgorithm] : e };
-	}, [m, c]), _ = i(() => ({
+	}, m = o === "system" ? u ? "dark" : "light" : o, ee = i(() => {
+		let e = m === "dark" ? E.darkAlgorithm : E.defaultAlgorithm;
+		return { algorithm: c === "compact" ? [e, E.compactAlgorithm] : e };
+	}, [m, c]), te = i(() => ({
 		mode: o,
 		setMode: f,
 		resolved: m,
@@ -56,23 +56,23 @@ function H({ children: e, modeStorageKey: t = B, densityStorageKey: n = V }) {
 		f,
 		p
 	]);
-	return /* @__PURE__ */ k(I.Provider, {
-		value: _,
-		children: /* @__PURE__ */ k(h, {
-			theme: g,
+	return /* @__PURE__ */ D(P.Provider, {
+		value: te,
+		children: /* @__PURE__ */ D(h, {
+			theme: ee,
 			children: e
 		})
 	});
 }
-function U() {
-	let e = n(I);
+function V() {
+	let e = n(P);
 	if (!e) throw Error("useThemeMode must be used within AppThemeProvider");
 	return e;
 }
 //#endregion
 //#region src/context/AuthProvider.tsx
-var W = e(null);
-function G({ children: e, adapter: n }) {
+var H = e(null);
+function U({ children: e, adapter: n }) {
 	let [r, o] = a(() => n.getToken()), s = t(async (e, t) => {
 		await n.login(e, t), o(n.getToken());
 	}, [n]), c = t(() => {
@@ -86,18 +86,18 @@ function G({ children: e, adapter: n }) {
 		s,
 		c
 	]);
-	return /* @__PURE__ */ k(W.Provider, {
+	return /* @__PURE__ */ D(H.Provider, {
 		value: l,
 		children: e
 	});
 }
-function K() {
-	let e = n(W);
+function W() {
+	let e = n(H);
 	if (!e) throw Error("useAuth must be used within AuthProvider");
 	return e;
 }
-var ie = "ding-react-admin-auth";
-function ae(e = ie) {
+var G = "ding-react-admin-auth";
+function K(e = G) {
 	return {
 		async login(t, n) {
 			if (!t.trim() || !n) throw Error("Invalid credentials");
@@ -113,152 +113,190 @@ function ae(e = ie) {
 }
 //#endregion
 //#region src/components/DensitySwitch.tsx
-var oe = [{
+var q = [{
 	label: "Comfortable",
 	value: "comfortable",
-	icon: /* @__PURE__ */ k(M, {})
+	icon: /* @__PURE__ */ D(j, {})
 }, {
 	label: "Compact",
 	value: "compact",
-	icon: /* @__PURE__ */ k(ee, {})
+	icon: /* @__PURE__ */ D(k, {})
 }];
-function q() {
-	let { density: e, setDensity: t } = U();
-	return /* @__PURE__ */ k(T, {
+function J() {
+	let { density: e, setDensity: t } = V();
+	return /* @__PURE__ */ D(C, {
 		size: "small",
 		value: e,
-		options: oe,
+		options: q,
 		onChange: (e) => t(e)
 	});
 }
 //#endregion
 //#region src/components/ThemeSwitch.tsx
-var se = [
+var Y = [
 	{
 		label: "Light",
 		value: "light",
-		icon: /* @__PURE__ */ k(F, {})
+		icon: /* @__PURE__ */ D(ie, {})
 	},
 	{
 		label: "Dark",
 		value: "dark",
-		icon: /* @__PURE__ */ k(N, {})
+		icon: /* @__PURE__ */ D(M, {})
 	},
 	{
 		label: "Auto",
 		value: "system",
-		icon: /* @__PURE__ */ k(j, {})
+		icon: /* @__PURE__ */ D(A, {})
 	}
 ];
-function J() {
-	let { mode: e, setMode: t } = U();
-	return /* @__PURE__ */ k(T, {
+function X() {
+	let { mode: e, setMode: t } = V();
+	return /* @__PURE__ */ D(C, {
 		size: "small",
 		value: e,
-		options: se,
+		options: Y,
 		onChange: (e) => t(e)
 	});
 }
 //#endregion
 //#region src/components/ThemeToolbar.tsx
-function Y() {
-	let { token: e } = O.useToken();
-	return /* @__PURE__ */ k(w, {
-		placement: b.useBreakpoint().lg ? "bottomRight" : "bottom",
+function Z() {
+	let { token: e } = E.useToken();
+	return /* @__PURE__ */ D(S, {
+		placement: v.useBreakpoint().lg ? "bottomRight" : "bottom",
 		trigger: "click",
-		content: /* @__PURE__ */ A(E, {
+		content: /* @__PURE__ */ O(w, {
 			direction: "vertical",
 			size: "middle",
 			style: {
 				minWidth: 240,
 				maxWidth: "min(92vw, 320px)"
 			},
-			children: [/* @__PURE__ */ k(J, {}), /* @__PURE__ */ k(q, {})]
+			children: [/* @__PURE__ */ D(X, {}), /* @__PURE__ */ D(J, {})]
 		}),
 		styles: { body: { padding: e.paddingSM } },
-		children: /* @__PURE__ */ k(p, {
+		children: /* @__PURE__ */ D(p, {
 			type: "default",
-			icon: /* @__PURE__ */ k(P, {}),
+			icon: /* @__PURE__ */ D(N, {}),
 			"aria-label": "Display and theme settings"
 		})
 	});
 }
 //#endregion
 //#region src/layouts/AdminLayout.tsx
-var ce = "#001529", le = "ding-react-admin-sider-collapsed";
-function ue(e) {
+var oe = "#001529", se = "ding-react-admin-sider-collapsed";
+function ce(e) {
 	try {
 		return localStorage.getItem(e) === "1";
 	} catch {
 		return !1;
 	}
 }
-function de() {
-	return b.useBreakpoint().lg !== !0;
+function le() {
+	return v.useBreakpoint().lg !== !0;
 }
-function X({ menuItems: e, selectedKeys: t, inlineCollapsed: n, onNavigate: r }) {
-	return /* @__PURE__ */ k(C, {
+function ue(e) {
+	let t = /* @__PURE__ */ new Set();
+	function n(e) {
+		for (let r of e) r.children?.length ? n(r.children) : t.add(r.path);
+	}
+	return n(e), t;
+}
+function de(e, t) {
+	function n(e) {
+		for (let r of e) if (r.children?.length) {
+			let e = n(r.children);
+			if (e !== null) return [r.path, ...e];
+		} else if (r.path === t) return [];
+		return null;
+	}
+	return n(e) ?? [];
+}
+function fe(e) {
+	return e.map((e) => {
+		let t = e.Icon, n = t ? /* @__PURE__ */ D(t, {}) : void 0;
+		return e.children?.length ? {
+			key: e.path,
+			icon: n,
+			label: e.label,
+			children: fe(e.children)
+		} : {
+			key: e.path,
+			icon: n,
+			label: e.label
+		};
+	});
+}
+function pe({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, onOpenChange: i, onNavigate: a }) {
+	return /* @__PURE__ */ D(x, {
 		mode: "inline",
 		theme: "dark",
 		inlineCollapsed: n,
 		selectedKeys: t,
+		...!n && r !== void 0 && i ? {
+			openKeys: r,
+			onOpenChange: i
+		} : {},
 		items: e,
-		onClick: ({ key: e }) => r(e),
+		onClick: ({ key: e }) => a(e),
 		style: {
 			background: "transparent",
 			borderInlineEnd: "none"
 		}
 	});
 }
-function Z({ navItems: e, brand: n = "Admin", collapsedBrand: o = "A", mobileDrawerTitle: c, headerExtras: l, userMenuItems: m, onUserMenuClick: h, loginPath: v = "/login", siderCollapsedStorageKey: y = le }) {
-	let b = d(), x = u(), { resolved: C } = U(), w = C === "dark", { logout: T } = K(), [E, ee] = a(() => ue(y)), [j, M] = a(!1), N = de(), { token: P } = O.useToken(), F = c ?? n, I = () => {
-		T(), b(v, { replace: !0 });
-	}, L = t((e) => {
-		ee(e);
+function me({ navItems: e, brand: n = "Admin", collapsedBrand: o = "A", mobileDrawerTitle: c, headerExtras: l, userMenuItems: m, onUserMenuClick: h, loginPath: g = "/login", siderCollapsedStorageKey: _ = se }) {
+	let v = d(), y = u(), { resolved: x } = V(), S = x === "dark", { logout: C } = W(), [w, k] = a(() => ce(_)), [A, j] = a(!1), M = le(), { token: N } = E.useToken(), ie = c ?? n, P = () => {
+		C(), v(g, { replace: !0 });
+	}, F = t((e) => {
+		k(e);
 		try {
-			localStorage.setItem(y, e ? "1" : "0");
+			localStorage.setItem(_, e ? "1" : "0");
 		} catch {}
-	}, [y]);
+	}, [_]);
 	r(() => {
-		N || M(!1);
-	}, [N]), r(() => {
-		M(!1);
-	}, [x.pathname]);
-	let R = i(() => e.map(({ path: e, label: t, Icon: n }) => ({
-		key: e,
-		icon: /* @__PURE__ */ k(n, {}),
-		label: t
-	})), [e]), z = i(() => [{
+		M || j(!1);
+	}, [M]), r(() => {
+		j(!1);
+	}, [y.pathname]);
+	let I = i(() => ue(e), [e]), L = i(() => fe(e), [e]), R = i(() => de(e, y.pathname), [e, y.pathname]), [z, B] = a(() => de(e, y.pathname));
+	r(() => {
+		B((e) => [...new Set([...e, ...R])]);
+	}, [R]);
+	let H = t((e) => {
+		B(e);
+	}, []), U = i(() => [{
 		key: "logout",
-		icon: /* @__PURE__ */ k(te, {}),
+		icon: /* @__PURE__ */ D(ne, {}),
 		label: "Log out",
 		danger: !0
-	}], []), B = m ?? z, V = (e) => {
+	}], []), G = m ?? U, K = (e) => {
 		if (h) {
 			h(e);
 			return;
 		}
-		e.key === "logout" && I();
-	}, H = w ? P.colorBgContainer : ce, W = [x.pathname], G = (e) => {
-		b(e), N && M(!1);
+		e.key === "logout" && P();
+	}, q = S ? N.colorBgContainer : oe, J = [y.pathname], Y = (e) => {
+		I.has(e) && (v(e), M && j(!1));
 	};
-	return /* @__PURE__ */ A(S, {
+	return /* @__PURE__ */ O(b, {
 		style: {
 			minHeight: "100vh",
 			width: "100%",
-			background: P.colorBgLayout
+			background: N.colorBgLayout
 		},
 		children: [
-			!N && /* @__PURE__ */ A(S.Sider, {
+			!M && /* @__PURE__ */ O(b.Sider, {
 				collapsible: !0,
-				collapsed: E,
-				onCollapse: L,
+				collapsed: w,
+				onCollapse: F,
 				collapsedWidth: 64,
 				style: {
-					background: H,
-					borderInlineEnd: w ? `1px solid ${P.colorSplit}` : void 0
+					background: q,
+					borderInlineEnd: S ? `1px solid ${N.colorSplit}` : void 0
 				},
-				children: [/* @__PURE__ */ k("div", {
+				children: [/* @__PURE__ */ D("div", {
 					style: {
 						height: 64,
 						display: "flex",
@@ -266,106 +304,110 @@ function Z({ navItems: e, brand: n = "Admin", collapsedBrand: o = "A", mobileDra
 						justifyContent: "center",
 						fontWeight: 600
 					},
-					children: /* @__PURE__ */ k(D.Text, {
+					children: /* @__PURE__ */ D(T.Text, {
 						strong: !0,
-						style: { color: P.colorTextLightSolid },
-						children: E ? o : n
+						style: { color: N.colorTextLightSolid },
+						children: w ? o : n
 					})
-				}), /* @__PURE__ */ k(X, {
-					menuItems: R,
-					selectedKeys: W,
-					inlineCollapsed: E,
-					onNavigate: G
+				}), /* @__PURE__ */ D(pe, {
+					menuItems: L,
+					selectedKeys: J,
+					inlineCollapsed: w,
+					openKeys: z,
+					onOpenChange: H,
+					onNavigate: Y
 				})]
 			}),
-			N && /* @__PURE__ */ k(g, {
-				title: /* @__PURE__ */ k(D.Text, {
+			M && /* @__PURE__ */ D(ee, {
+				title: /* @__PURE__ */ D(T.Text, {
 					strong: !0,
-					style: { color: P.colorTextLightSolid },
-					children: F
+					style: { color: N.colorTextLightSolid },
+					children: ie
 				}),
 				placement: "left",
 				width: 280,
-				onClose: () => M(!1),
-				open: j,
+				onClose: () => j(!1),
+				open: A,
 				styles: {
 					header: {
-						background: H,
-						borderBottom: `1px solid ${P.colorSplit}`
+						background: q,
+						borderBottom: `1px solid ${N.colorSplit}`
 					},
 					body: {
 						padding: 0,
-						background: H
+						background: q
 					}
 				},
 				destroyOnClose: !0,
-				children: /* @__PURE__ */ k(X, {
-					menuItems: R,
-					selectedKeys: W,
+				children: /* @__PURE__ */ D(pe, {
+					menuItems: L,
+					selectedKeys: J,
 					inlineCollapsed: !1,
-					onNavigate: G
+					openKeys: z,
+					onOpenChange: H,
+					onNavigate: Y
 				})
 			}),
-			/* @__PURE__ */ A(S, { children: [/* @__PURE__ */ A(S.Header, {
+			/* @__PURE__ */ O(b, { children: [/* @__PURE__ */ O(b.Header, {
 				style: {
-					background: P.colorBgContainer,
-					paddingInline: P.paddingLG,
+					background: N.colorBgContainer,
+					paddingInline: N.paddingLG,
 					display: "flex",
 					alignItems: "center",
-					gap: P.marginSM,
+					gap: N.marginSM,
 					lineHeight: "normal"
 				},
 				children: [
-					N && /* @__PURE__ */ k(p, {
+					M && /* @__PURE__ */ D(p, {
 						type: "text",
-						icon: /* @__PURE__ */ k(ne, {}),
-						onClick: () => M(!0),
+						icon: /* @__PURE__ */ D(re, {}),
+						onClick: () => j(!0),
 						"aria-label": "Open navigation"
 					}),
-					/* @__PURE__ */ k("div", { style: {
+					/* @__PURE__ */ D("div", { style: {
 						flex: 1,
 						minWidth: 0
 					} }),
 					l,
-					/* @__PURE__ */ k(Y, {}),
-					/* @__PURE__ */ k(_, {
+					/* @__PURE__ */ D(Z, {}),
+					/* @__PURE__ */ D(te, {
 						menu: {
-							items: B,
-							onClick: V
+							items: G,
+							onClick: K
 						},
 						trigger: ["click"],
-						children: /* @__PURE__ */ A(p, {
+						children: /* @__PURE__ */ O(p, {
 							type: "text",
 							style: {
 								display: "inline-flex",
 								alignItems: "center",
-								gap: P.marginXS,
-								maxWidth: N ? 44 : void 0,
-								paddingInline: N ? P.paddingXS : void 0
+								gap: N.marginXS,
+								maxWidth: M ? 44 : void 0,
+								paddingInline: M ? N.paddingXS : void 0
 							},
 							"aria-label": "Account menu",
-							children: [/* @__PURE__ */ k(f, {
+							children: [/* @__PURE__ */ D(f, {
 								size: "small",
-								icon: /* @__PURE__ */ k(re, {})
-							}), !N && /* @__PURE__ */ k(D.Text, {
+								icon: /* @__PURE__ */ D(ae, {})
+							}), !M && /* @__PURE__ */ D(T.Text, {
 								type: "secondary",
 								children: "User"
 							})]
 						})
 					})
 				]
-			}), /* @__PURE__ */ k(S.Content, {
-				style: { margin: N ? P.marginSM : P.marginLG },
-				children: /* @__PURE__ */ k(s, {})
+			}), /* @__PURE__ */ D(b.Content, {
+				style: { margin: M ? N.marginSM : N.marginLG },
+				children: /* @__PURE__ */ D(s, {})
 			})] })
 		]
 	});
 }
 //#endregion
 //#region src/pages/LoginPage.tsx
-function Q({ title: e = "Sign in", description: t = "Use any username and password to continue.", logo: n, extraFields: r, showThemeToolbar: i = !0, afterLoginPath: a = "/" }) {
-	let { login: o } = K(), s = d(), { token: c } = O.useToken();
-	return /* @__PURE__ */ A(v, {
+function he({ title: e = "Sign in", description: t = "Use any username and password to continue.", logo: n, extraFields: r, showThemeToolbar: i = !0, afterLoginPath: a = "/" }) {
+	let { login: o } = W(), s = d(), { token: c } = E.useToken();
+	return /* @__PURE__ */ O(g, {
 		vertical: !0,
 		align: "stretch",
 		style: {
@@ -375,7 +417,7 @@ function Q({ title: e = "Sign in", description: t = "Use any username and passwo
 			overflow: "hidden",
 			background: c.colorBgLayout
 		},
-		children: [i && /* @__PURE__ */ k(v, {
+		children: [i && /* @__PURE__ */ D(g, {
 			justify: "flex-end",
 			style: {
 				flexShrink: 0,
@@ -383,8 +425,8 @@ function Q({ title: e = "Sign in", description: t = "Use any username and passwo
 				padding: 16,
 				background: c.colorBgLayout
 			},
-			children: /* @__PURE__ */ k(Y, {})
-		}), /* @__PURE__ */ k(v, {
+			children: /* @__PURE__ */ D(Z, {})
+		}), /* @__PURE__ */ D(g, {
 			flex: 1,
 			justify: "center",
 			align: "center",
@@ -396,45 +438,45 @@ function Q({ title: e = "Sign in", description: t = "Use any username and passwo
 				overflowX: "hidden",
 				background: c.colorBgLayout
 			},
-			children: /* @__PURE__ */ A(m, {
+			children: /* @__PURE__ */ O(m, {
 				style: {
 					width: "100%",
 					maxWidth: 360
 				},
 				title: e,
 				extra: n,
-				children: [t ? /* @__PURE__ */ k(D.Paragraph, {
+				children: [t ? /* @__PURE__ */ D(T.Paragraph, {
 					type: "secondary",
 					style: { marginTop: 0 },
 					children: t
-				}) : null, /* @__PURE__ */ A(y, {
+				}) : null, /* @__PURE__ */ O(_, {
 					layout: "vertical",
 					onFinish: async (e) => {
 						await o(e.username, e.password), s(a, { replace: !0 });
 					},
 					children: [
-						/* @__PURE__ */ k(y.Item, {
+						/* @__PURE__ */ D(_.Item, {
 							name: "username",
 							label: "Username",
 							rules: [{
 								required: !0,
 								message: "Required"
 							}],
-							children: /* @__PURE__ */ k(x, { autoComplete: "username" })
+							children: /* @__PURE__ */ D(y, { autoComplete: "username" })
 						}),
-						/* @__PURE__ */ k(y.Item, {
+						/* @__PURE__ */ D(_.Item, {
 							name: "password",
 							label: "Password",
 							rules: [{
 								required: !0,
 								message: "Required"
 							}],
-							children: /* @__PURE__ */ k(x.Password, { autoComplete: "current-password" })
+							children: /* @__PURE__ */ D(y.Password, { autoComplete: "current-password" })
 						}),
 						r,
-						/* @__PURE__ */ k(y.Item, {
+						/* @__PURE__ */ D(_.Item, {
 							style: { marginBottom: 0 },
-							children: /* @__PURE__ */ k(p, {
+							children: /* @__PURE__ */ D(p, {
 								type: "primary",
 								htmlType: "submit",
 								block: !0,
@@ -449,23 +491,23 @@ function Q({ title: e = "Sign in", description: t = "Use any username and passwo
 }
 //#endregion
 //#region src/router/guards.tsx
-function $({ when: e, redirect: t, children: n }) {
-	return e ? n : /* @__PURE__ */ k(o, {
+function Q({ when: e, redirect: t, children: n }) {
+	return e ? n : /* @__PURE__ */ D(o, {
 		to: t,
 		replace: !0
 	});
 }
-function fe({ children: e, redirectTo: t = "/login" }) {
-	let { isAuthenticated: n } = K();
-	return /* @__PURE__ */ k($, {
+function ge({ children: e, redirectTo: t = "/login" }) {
+	let { isAuthenticated: n } = W();
+	return /* @__PURE__ */ D(Q, {
 		when: n,
 		redirect: t,
 		children: e
 	});
 }
-function pe({ children: e, redirectTo: t = "/" }) {
-	let { isAuthenticated: n } = K();
-	return /* @__PURE__ */ k($, {
+function _e({ children: e, redirectTo: t = "/" }) {
+	let { isAuthenticated: n } = W();
+	return /* @__PURE__ */ D(Q, {
 		when: !n,
 		redirect: t,
 		children: e
@@ -473,20 +515,20 @@ function pe({ children: e, redirectTo: t = "/" }) {
 }
 //#endregion
 //#region src/router/createAdminRouter.tsx
-function me({ navItems: e, children: t, layoutProps: n, loginPath: r = "/login", homePath: i = "/", loginElement: a }) {
+function ve({ navItems: e, children: t, layoutProps: n, loginPath: r = "/login", homePath: i = "/", loginElement: a }) {
 	return l([
 		{
 			path: r,
-			element: /* @__PURE__ */ k(pe, {
+			element: /* @__PURE__ */ D(_e, {
 				redirectTo: i,
-				children: a ?? /* @__PURE__ */ k(Q, { afterLoginPath: i })
+				children: a ?? /* @__PURE__ */ D(he, { afterLoginPath: i })
 			})
 		},
 		{
 			path: "/",
-			element: /* @__PURE__ */ k(fe, {
+			element: /* @__PURE__ */ D(ge, {
 				redirectTo: r,
-				children: /* @__PURE__ */ k(Z, {
+				children: /* @__PURE__ */ D(me, {
 					navItems: e,
 					loginPath: r,
 					...n
@@ -496,7 +538,7 @@ function me({ navItems: e, children: t, layoutProps: n, loginPath: r = "/login",
 		},
 		{
 			path: "*",
-			element: /* @__PURE__ */ k(o, {
+			element: /* @__PURE__ */ D(o, {
 				to: i,
 				replace: !0
 			})
@@ -505,8 +547,8 @@ function me({ navItems: e, children: t, layoutProps: n, loginPath: r = "/login",
 }
 //#endregion
 //#region src/app/AdminApp.tsx
-function he({ navItems: e, routes: t, authAdapter: n, layoutProps: r, loginPath: a, homePath: o, loginElement: s, theme: l }) {
-	let u = i(() => me({
+function ye({ navItems: e, routes: t, authAdapter: n, layoutProps: r, loginPath: a, homePath: o, loginElement: s, theme: l }) {
+	let u = i(() => ve({
 		navItems: e,
 		children: t,
 		layoutProps: r,
@@ -521,21 +563,59 @@ function he({ navItems: e, routes: t, authAdapter: n, layoutProps: r, loginPath:
 		o,
 		s
 	]);
-	return /* @__PURE__ */ k(H, {
+	return /* @__PURE__ */ D(B, {
 		...l,
-		children: /* @__PURE__ */ k(G, {
+		children: /* @__PURE__ */ D(U, {
 			adapter: n,
-			children: /* @__PURE__ */ k(c, { router: u })
+			children: /* @__PURE__ */ D(c, { router: u })
 		})
 	});
 }
 //#endregion
+//#region src/context/DataProvider.tsx
+var be = e(null);
+function xe({ children: e, value: t }) {
+	let n = i(() => t, [t]);
+	return /* @__PURE__ */ D(be.Provider, {
+		value: n,
+		children: e
+	});
+}
+function Se() {
+	let e = n(be);
+	if (!e) throw Error("useDataProvider must be used within DataProvider");
+	return e;
+}
+//#endregion
+//#region src/context/PermissionsProvider.tsx
+var Ce = e(null);
+function we({ children: e, can: t }) {
+	let n = i(() => t, [t]);
+	return /* @__PURE__ */ D(Ce.Provider, {
+		value: n,
+		children: e
+	});
+}
+function $() {
+	let e = n(Ce);
+	if (!e) throw Error("usePermissions must be used within PermissionsProvider");
+	return e;
+}
+function Te(e, n) {
+	let r = $();
+	return t(() => r(e, n), [
+		r,
+		e,
+		n
+	]);
+}
+//#endregion
 //#region src/pages/PlaceholderPage.tsx
-function ge({ title: e }) {
-	return /* @__PURE__ */ k(D.Title, {
+function Ee({ title: e }) {
+	return /* @__PURE__ */ D(T.Title, {
 		level: 4,
 		children: e
 	});
 }
 //#endregion
-export { he as AdminApp, Z as AdminLayout, H as AppThemeProvider, G as AuthProvider, q as DensitySwitch, $ as Guard, pe as GuestOnly, Q as LoginPage, ge as PlaceholderPage, fe as Protected, J as ThemeSwitch, Y as ThemeToolbar, me as createAdminRouter, ae as createSessionStorageAuthAdapter, K as useAuth, U as useThemeMode };
+export { ye as AdminApp, me as AdminLayout, B as AppThemeProvider, U as AuthProvider, xe as DataProvider, J as DensitySwitch, Q as Guard, _e as GuestOnly, he as LoginPage, we as PermissionsProvider, Ee as PlaceholderPage, ge as Protected, X as ThemeSwitch, Z as ThemeToolbar, ve as createAdminRouter, K as createSessionStorageAuthAdapter, W as useAuth, Te as useCan, Se as useDataProvider, $ as usePermissions, V as useThemeMode };

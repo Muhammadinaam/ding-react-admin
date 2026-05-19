@@ -1,6 +1,6 @@
 # ding-react-admin
 
-Composable admin shell for React apps: **Ant Design** layout (sidebar + header), **theme/density** controls, **session-style auth** helpers, and **React Router** wiring. Use the **quick-start** `<AdminApp />` or **compose** your own shell with `AuthProvider`, `AppThemeProvider`, guards, and primitives.
+Composable admin shell for React apps: **Ant Design** layout (sidebar + header), **theme/density** controls, **session-style auth** helpers, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers. Prefer **`createBrowserRouter` in your app** with **`AdminLayout`**, `Protected`, and `GuestOnly` (see `examples/playground/src/main.tsx`) so routes stay readable. Use the quick-start `<AdminApp />` or optional `createAdminRouter` shortcut when you do not want the route tree in app code.
 
 ## Install
 
@@ -11,34 +11,145 @@ Peer dependencies (your app must provide them):
 - `antd` (5+)
 - `@ant-design/icons` (5+)
 
-From GitHub (after you publish the repo and tag releases):
+From GitHub, **no Vite alias required** — the package resolves to published `exports` (`dist/index.js` + types). Commit `dist/` in your fork, or run `yarn && yarn build` in this repo before packing / installing.
 
 ```bash
-yarn add github:YOUR_USER/ding-react-admin#v0.1.0
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git
 ```
 
-For local development of the library alongside an app, use a `file:` dependency and point your bundler at `src` (see below).
+(Optional) Pin a tag or commit:
+
+```bash
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v0.1.0
+```
 
 ## Example app in this repo
 
-There is a Vite app under [`examples/playground`](examples/playground) that imports the library from `../../src` (via alias) so you can hack on `src/` and reload immediately.
+There is a Vite app under [`examples/playground`](examples/playground): **in-memory demo API** (auth + products, brands, categories, invoices, lines), **CRUD screens**, wired **`DataProvider` / `PermissionsProvider`**, and **demo users** (`admin`/`admin` vs `user`/`user`).
 
-From the **repository root** (after installing root deps if needed):
+From the **repository root**:
 
 ```bash
 yarn --cwd examples/playground install
 yarn dev:example
 ```
 
-Or work only in the example:
+For day-to-day work on the library, the playground uses a Vite alias to `../../src` so changes hot-reload. **Consumers installing from GitHub do not need that alias.**
 
-```bash
-cd examples/playground
-yarn install
-yarn dev
+## Sidebar navigation (`NavItem`)
+
+`AdminLayout` renders **`navItems`** as an Ant Design **`Menu`**.
+
+- **Flat items** — `{ path, label, Icon? }`: **`path`** is the menu key and the pathname used when a **leaf** row is clicked.
+- **Nested menus** — optional **`children`**: `NavItem[]`. Parent rows open a submenu; navigation runs **only for leaves**. Give parents a **`path`** that acts as submenu key only (for example **`/catalog`**) unless you define that route yourself.
+- **Badges / custom labels** — **`label`** is **`React.ReactNode`**, so you can combine text with **`Badge`** or other markup.
+
+```tsx
+import { AppstoreOutlined, GiftOutlined } from "@ant-design/icons";
+import { Badge, Space } from "antd";
+import type { NavItem } from "ding-react-admin";
+
+const nav: NavItem[] = [
+  {
+    path: "/catalog",
+    label: "Catalog",
+    Icon: AppstoreOutlined,
+    children: [
+      { path: "/products", label: "Products", Icon: GiftOutlined },
+      {
+        path: "/orders",
+        label: (
+          <Space size="small">
+            <span>Orders</span>
+            <Badge count={4} size="small" />
+          </Space>
+        ),
+      },
+    ],
+  },
+];
 ```
 
-The playground declares `"ding-react-admin": "file:../.."` while Vite aliases that package id to the live `../../src` tree, so edits to the library hot-reload without publishing.
+See **`examples/playground/src/navigation.tsx`** for a nested group plus a badge on a leaf row.
+
+## Data layer & permissions (lightweight)
+
+- **`DataProvider` / `useDataProvider`** — supply a `DataProvider` implementation (`getList`, `getOne`, `create`, `update`, `delete`). Types are exported as `DataProviderContract`, `GetListParams`, etc.
+- **`PermissionsProvider` / `usePermissions` / `useCan`** — one function `can(action, resource?)` for UI gating (wire to your roles or ACL).
+
+Example wiring (see `examples/playground/src/main.tsx` for a full stack). The route tree lives in your app so login, guards, and `AdminLayout` stay visible:
+
+```tsx
+import {
+  AdminLayout,
+  AppThemeProvider,
+  AuthProvider,
+  DataProvider,
+  GuestOnly,
+  LoginPage,
+  PermissionsProvider,
+  Protected,
+} from "ding-react-admin";
+import type { DataProviderContract } from "ding-react-admin";
+import type { RouteObject } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+const LOGIN_PATH = "/login";
+const HOME_PATH = "/";
+
+const data: DataProviderContract = {
+  /* call your REST API */
+} as DataProviderContract;
+
+const can = (action: string, resource?: string) => {
+  /* read role from session, etc. */
+  return true;
+};
+
+const router = createBrowserRouter([
+  {
+    path: LOGIN_PATH,
+    element: (
+      <GuestOnly redirectTo={HOME_PATH}>
+        <LoginPage afterLoginPath={HOME_PATH} />
+      </GuestOnly>
+    ),
+  },
+  {
+    path: "/",
+    element: (
+      <Protected redirectTo={LOGIN_PATH}>
+        <AdminLayout
+          navItems={navItems}
+          loginPath={LOGIN_PATH}
+          brand="Acme"
+          collapsedBrand="A"
+        />
+      </Protected>
+    ),
+    children: routes as RouteObject[],
+  },
+  { path: "*", element: <Navigate to={HOME_PATH} replace /> },
+]);
+
+export function Root() {
+  return (
+    <AppThemeProvider>
+      <AuthProvider adapter={authAdapter}>
+        <DataProvider value={data}>
+          <PermissionsProvider can={can}>
+            <RouterProvider router={router} />
+          </PermissionsProvider>
+        </DataProvider>
+      </AuthProvider>
+    </AppThemeProvider>
+  );
+}
+```
 
 ## Quick start (`<AdminApp />`)
 
@@ -173,12 +284,14 @@ Use that as the index route inside whatever shell you prefer.
 
 ## Default shell with more control
 
-`createAdminRouter` matches `<AdminApp />` but lets you build `RouterProvider` yourself:
+The recommended layout is **`createBrowserRouter`** with **`GuestOnly`** on the login path, **`Protected`** around **`AdminLayout`**, and **`children`** for app pages—the same shape as [`examples/playground/src/main.tsx`](examples/playground/src/main.tsx).
+
+**Shortcut:** `createAdminRouter` builds that tree for you and matches `<AdminApp />`’s routing (omit if you prefer an explicit router):
 
 ```tsx
 import {
-  AuthProvider,
   AppThemeProvider,
+  AuthProvider,
   createAdminRouter,
   createSessionStorageAuthAdapter,
 } from "ding-react-admin";
@@ -198,6 +311,8 @@ const router = createAdminRouter({
 ```
 
 ## Developing the package next to your app (Vite)
+
+Only needed when hacking on **this** library from another checkout. Consumes **do not** need this when installing from GitHub.
 
 In your app’s `vite.config.ts`:
 

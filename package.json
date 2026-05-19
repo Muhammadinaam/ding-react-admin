@@ -4,6 +4,10 @@
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Muhammadinaam/ding-react-admin.git"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

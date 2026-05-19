@@ -20,7 +20,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ThemeToolbar } from "../components/ThemeToolbar";
 import { useAuth } from "../context/AuthProvider";
 import { useThemeMode } from "../context/AppThemeProvider";
-import type { AdminLayoutProps } from "../types";
+import type { AdminLayoutProps, NavItem } from "../types";
 
 const LIGHT_SIDEBAR_BG = "#001529";
 const DEFAULT_SIDER_KEY = "ding-react-admin-sider-collapsed";
@@ -38,10 +38,66 @@ function useIsMobileNav(): boolean {
   return screens.lg !== true;
 }
 
+/** Paths that correspond to actual routes (leaf menu rows only). */
+function collectLeafPaths(items: NavItem[]): Set<string> {
+  const set = new Set<string>();
+  function walk(nodes: NavItem[]) {
+    for (const n of nodes) {
+      if (n.children?.length) walk(n.children);
+      else set.add(n.path);
+    }
+  }
+  walk(items);
+  return set;
+}
+
+/** Submenu keys that must stay open for `pathname` to remain visible in the tree. */
+function ancestorKeysForActivePath(
+  items: NavItem[],
+  pathname: string,
+): string[] {
+  function dfs(nodes: NavItem[]): string[] | null {
+    for (const node of nodes) {
+      if (node.children?.length) {
+        const sub = dfs(node.children);
+        if (sub !== null) return [node.path, ...sub];
+      } else if (node.path === pathname) {
+        return [];
+      }
+    }
+    return null;
+  }
+  return dfs(items) ?? [];
+}
+
+function navItemsToAntdItems(
+  items: NavItem[],
+): NonNullable<MenuProps["items"]> {
+  return items.map((item) => {
+    const IconComp = item.Icon;
+    const icon = IconComp ? <IconComp /> : undefined;
+    if (item.children?.length) {
+      return {
+        key: item.path,
+        icon,
+        label: item.label,
+        children: navItemsToAntdItems(item.children),
+      };
+    }
+    return {
+      key: item.path,
+      icon,
+      label: item.label,
+    };
+  });
+}
+
 type NavMenuProps = {
   menuItems: MenuProps["items"];
   selectedKeys: string[];
   inlineCollapsed: boolean;
+  openKeys?: string[];
+  onOpenChange?: (keys: string[]) => void;
   onNavigate: (key: string) => void;
 };
 
@@ -49,6 +105,8 @@ function NavMenu({
   menuItems,
   selectedKeys,
   inlineCollapsed,
+  openKeys,
+  onOpenChange,
   onNavigate,
 }: NavMenuProps) {
   return (
@@ -57,6 +115,9 @@ function NavMenu({
       theme="dark"
       inlineCollapsed={inlineCollapsed}
       selectedKeys={selectedKeys}
+      {...(!inlineCollapsed && openKeys !== undefined && onOpenChange
+        ? { openKeys, onOpenChange }
+        : {})}
       items={menuItems}
       onClick={({ key }) => onNavigate(key)}
       style={{ background: "transparent", borderInlineEnd: "none" }}
@@ -114,15 +175,29 @@ export function AdminLayout({
     setMobileNavOpen(false);
   }, [location.pathname]);
 
+  const leafPaths = useMemo(() => collectLeafPaths(navItems), [navItems]);
+
   const menuItems: MenuProps["items"] = useMemo(
-    () =>
-      navItems.map(({ path, label, Icon }) => ({
-        key: path,
-        icon: <Icon />,
-        label,
-      })),
+    () => navItemsToAntdItems(navItems),
     [navItems],
   );
+
+  const requiredOpenKeys = useMemo(
+    () => ancestorKeysForActivePath(navItems, location.pathname),
+    [navItems, location.pathname],
+  );
+
+  const [openKeys, setOpenKeys] = useState<string[]>(() =>
+    ancestorKeysForActivePath(navItems, location.pathname),
+  );
+
+  useEffect(() => {
+    setOpenKeys((prev) => [...new Set([...prev, ...requiredOpenKeys])]);
+  }, [requiredOpenKeys]);
+
+  const handleOpenChange = useCallback((keys: string[]) => {
+    setOpenKeys(keys);
+  }, []);
 
   const defaultUserMenuItems: MenuProps["items"] = useMemo(
     () => [
@@ -150,6 +225,7 @@ export function AdminLayout({
   const selectedKeys = [location.pathname];
 
   const goNav = (key: string) => {
+    if (!leafPaths.has(key)) return;
     navigate(key);
     if (isMobile) setMobileNavOpen(false);
   };
@@ -195,6 +271,8 @@ export function AdminLayout({
             menuItems={menuItems}
             selectedKeys={selectedKeys}
             inlineCollapsed={collapsed}
+            openKeys={openKeys}
+            onOpenChange={handleOpenChange}
             onNavigate={goNav}
           />
         </Layout.Sider>
@@ -226,6 +304,8 @@ export function AdminLayout({
             menuItems={menuItems}
             selectedKeys={selectedKeys}
             inlineCollapsed={false}
+            openKeys={openKeys}
+            onOpenChange={handleOpenChange}
             onNavigate={goNav}
           />
         </Drawer>

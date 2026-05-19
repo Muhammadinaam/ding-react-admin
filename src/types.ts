@@ -5,11 +5,19 @@ export type ThemeMode = "light" | "dark" | "system";
 
 export type ThemeDensity = "comfortable" | "compact";
 
-/** One primary navigation entry (sidebar / app hub). */
+/**
+ * Sidebar / app-hub navigation row. Maps to Ant Design `Menu` items.
+ *
+ * - **`children`** — nested submenu; parent rows should use a `path` that you **do not** navigate to as a leaf (for example `/catalog`), unless you define that route.
+ * - **`label`** — string or any React node (badges, extra markup).
+ * - **`Icon`** — optional; omit on group-only rows if you prefer text-only labels.
+ */
 export type NavItem = {
+  /** Menu item key and `navigate()` target for leaf items (pathname). Parents use this as submenu key. */
   path: string;
-  label: string;
-  Icon: React.ComponentType;
+  label: ReactNode;
+  Icon?: React.ComponentType;
+  children?: NavItem[];
 };
 
 export type AuthAdapter = {
