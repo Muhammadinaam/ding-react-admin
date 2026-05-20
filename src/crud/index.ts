@@ -58,5 +58,7 @@ export type {
   EditMode,
   FieldRules,
   ResourceListBuiltInActions,
+  ResourceListBulkAction,
+  ResourceListBulkActionHelpers,
   ResourceListRowActionsHelpers,
 } from "./types";

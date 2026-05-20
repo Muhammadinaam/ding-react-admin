@@ -118,6 +118,8 @@ export type {
   EditMode,
   FieldRules,
   ResourceListBuiltInActions,
+  ResourceListBulkAction,
+  ResourceListBulkActionHelpers,
   ResourceListRowActionsHelpers,
   ListQueryState,
   ListQueryActions,

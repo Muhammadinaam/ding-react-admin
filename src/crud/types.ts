@@ -99,6 +99,28 @@ export type ResourceListRowActionsHelpers = {
   openEditModal: (id: string | number) => void;
 };
 
+export type ResourceListBulkActionHelpers = {
+  reload: () => void;
+  clearSelection: () => void;
+};
+
+/** Bulk list action (Django admin–style). Runs on selected row ids. */
+export type ResourceListBulkAction = {
+  key: string;
+  label: string;
+  /** Optional confirmation message. Return false to cancel. */
+  confirm?:
+    | string
+    | ((
+        selectedIds: (string | number)[],
+        helpers: ResourceListBulkActionHelpers,
+      ) => string | false | Promise<string | false>);
+  execute: (
+    selectedIds: (string | number)[],
+    helpers: ResourceListBulkActionHelpers,
+  ) => void | Promise<void>;
+};
+
 export const LIST_QUERY_RESERVED = new Set([
   "page",
   "perPage",

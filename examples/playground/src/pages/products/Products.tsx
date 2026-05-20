@@ -50,6 +50,15 @@ export function ProductListPage() {
       editMode="both"
       formChildren={productFormFields}
       actions={{ delete: false }}
+      bulkActions={[
+        {
+          key: "export",
+          label: "Export selected",
+          execute: (ids) => {
+            window.alert(`Export ${ids.length} product(s) (demo)`);
+          },
+        },
+      ]}
       headerExtra={
         <Button onClick={() => window.alert("Export products (demo)")}>
           Export
