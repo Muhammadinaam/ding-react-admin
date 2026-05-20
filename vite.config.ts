@@ -26,6 +26,8 @@ export default defineConfig({
         "react-dom/client",
         "react-router",
         "react-router-dom",
+        "react-hook-form",
+        "dayjs",
         "antd",
         /^@ant-design\/.*/,
       ],

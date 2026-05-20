@@ -3,6 +3,11 @@ export type Identifier = string | number;
 
 export type SortOrder = "ASC" | "DESC";
 
+export type SortSpec = {
+  field: string;
+  order: SortOrder;
+};
+
 export type PaginationParams = {
   page: number;
   perPage: number;
@@ -10,7 +15,9 @@ export type PaginationParams = {
 
 export type GetListParams = {
   pagination?: PaginationParams;
-  sort?: { field: string; order: SortOrder };
+  /** Single or multi-column sort. */
+  sort?: SortSpec | SortSpec[];
+  /** Filter values; arrays mean "match any of" for that field. */
   filter?: Record<string, unknown>;
 };
 

@@ -31,9 +31,25 @@ export type {
   Identifier,
   PaginationParams,
   SortOrder,
+  SortSpec,
   UpdateParams,
   UpdateResult,
 } from "./data/dataProviderTypes";
+export { combineResourceHandlers } from "./data/resourceHandlers";
+export { createMemoryResourceHandlers } from "./data/createMemoryResourceHandlers";
+export {
+  applyInMemoryListParams,
+  filterRows,
+  getById as getRowById,
+} from "./data/inMemoryList";
+export type {
+  CombineResourceHandlersOptions,
+  ResourceAction,
+  ResourceGuard,
+  ResourceHandlerMap,
+  ResourceHandlers,
+} from "./data/resourceHandlers";
+export type { MemoryResourceHandlersConfig } from "./data/createMemoryResourceHandlers";
 export type { PermissionsChecker } from "./context/PermissionsProvider";
 export { LoginPage } from "./pages/LoginPage";
 export { PlaceholderPage } from "./pages/PlaceholderPage";
@@ -52,3 +68,57 @@ export type {
   ThemeDensity,
   ThemeMode,
 } from "./types";
+export {
+  ResourceList,
+  FilterBar,
+  ResourceForm,
+  ResourceFormModal,
+  InlineFormSet,
+  saveInlineRows,
+  loadInlineRows,
+  TextField,
+  NumberField,
+  BooleanField,
+  DateField,
+  SelectField,
+  ReferenceField,
+  ReferenceManyField,
+  TextColumn,
+  NumberColumn,
+  BooleanColumn,
+  DateColumn,
+  ReferenceColumn,
+  ReferenceManyColumn,
+  CustomColumn,
+  TextFilter,
+  NumberFilter,
+  BooleanFilter,
+  DateFilter,
+  SelectFilter,
+  ReferenceFilter,
+  ReferenceManyFilter,
+  useListQueryState,
+  useChoices,
+  getByPath,
+  useResourceListContext,
+} from "./crud";
+export type {
+  ResourceFormProps,
+  ResourceFormInlineConfig,
+  ResourceFormModalProps,
+  InlineFormSetProps,
+  SaveInlineOptions,
+  InlineFormSetLayout,
+  ResourceListProps,
+  BaseSourceProps,
+  ChoiceOption,
+  ChoicesLoader,
+  ReferenceProps,
+  DisplayProps,
+  EditMode,
+  FieldRules,
+  ResourceListBuiltInActions,
+  ResourceListRowActionsHelpers,
+  ListQueryState,
+  ListQueryActions,
+} from "./crud";

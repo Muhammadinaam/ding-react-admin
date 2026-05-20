@@ -1,11 +1,14 @@
 import type { AdminRouteChild } from "ding-react-admin";
 import { PlaceholderPage } from "ding-react-admin";
-import { BrandFormPage, BrandListPage } from "./pages/Brands";
-import { CategoryFormPage, CategoryListPage } from "./pages/Categories";
+import { BrandFormPage, BrandListPage } from "./pages/brands";
+import { CategoryFormPage, CategoryListPage } from "./pages/categories";
 import { DashboardPage } from "./pages/DashboardPage";
-import { InvoiceLineFormPage, InvoiceLineListPage } from "./pages/InvoiceLines";
-import { InvoiceFormPage, InvoiceListPage } from "./pages/Invoices";
-import { ProductFormPage, ProductListPage } from "./pages/Products";
+import {
+  InvoiceLineFormPage,
+  InvoiceLineListPage,
+} from "./pages/invoice-lines";
+import { InvoiceFormPage, InvoiceListPage } from "./pages/invoices";
+import { ProductFormPage, ProductListPage } from "./pages/products";
 
 export const playgroundRoutes: AdminRouteChild[] = [
   { index: true, element: <DashboardPage /> },
