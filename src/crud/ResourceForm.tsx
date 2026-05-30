@@ -190,7 +190,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
       }
     >
       <FormMetaProvider resource={resource} isNew={isNew}>
-        <div style={{ position: "relative", maxWidth: 720 }}>
+        <div style={{ position: "relative" }}>
           {loading ? (
             <div
               style={{
