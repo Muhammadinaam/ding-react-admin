@@ -56,15 +56,23 @@ export { PlaceholderPage } from "./pages/PlaceholderPage";
 export { DensitySwitch, ThemeSwitch, ThemeToolbar } from "./components";
 export { Guard, GuestOnly, Protected } from "./router/guards";
 export { createAdminRouter } from "./router/createAdminRouter";
+export {
+  deriveAuthPaths,
+  getRouteAccess,
+  partitionAdminRoutes,
+} from "./router/routeAccess";
 export type {
   AdminAppProps,
   AdminLayoutProps,
   AdminRouteChild,
   AppThemeProviderProps,
   AuthAdapter,
+  AuthConfig,
+  AuthRedirects,
   CreateAdminRouterOptions,
   LoginPageProps,
   NavItem,
+  RouteAccess,
   ThemeDensity,
   ThemeMode,
 } from "./types";

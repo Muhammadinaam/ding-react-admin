@@ -1,41 +1,76 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import type { RouteObject } from "react-router-dom";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { LoginPage } from "../pages/LoginPage";
 import type { CreateAdminRouterOptions } from "../types";
 import { GuestOnly, Protected } from "./guards";
+import {
+  deriveAuthPaths,
+  partitionAdminRoutes,
+  toProtectedRouteObject,
+  toRouterSegment,
+} from "./routeAccess";
 
 export function createAdminRouter({
   navItems,
   children,
   layoutProps,
-  loginPath = "/login",
-  homePath = "/",
+  redirects,
   loginElement,
 }: CreateAdminRouterOptions) {
-  const login =
+  const { loginPath, homePath } = deriveAuthPaths(children, redirects);
+  const { guest, public: publicRoutes, protected: protectedRoutes } =
+    partitionAdminRoutes(children);
+
+  const defaultLogin =
     loginElement ?? <LoginPage afterLoginPath={homePath} />;
 
-  return createBrowserRouter([
-    {
-      path: loginPath,
+  const routerRoutes = [];
+
+  for (const route of guest) {
+    if (!("path" in route) || !route.path) continue;
+    routerRoutes.push({
+      path: toRouterSegment(route.path),
       element: (
-        <GuestOnly redirectTo={homePath}>{login}</GuestOnly>
+        <GuestOnly redirectTo={homePath}>{route.element}</GuestOnly>
       ),
-    },
-    {
-      path: "/",
+    });
+  }
+
+  if (guest.length === 0) {
+    routerRoutes.push({
+      path: toRouterSegment(loginPath),
       element: (
-        <Protected redirectTo={loginPath}>
-          <AdminLayout
-            navItems={navItems}
-            loginPath={loginPath}
-            {...layoutProps}
-          />
-        </Protected>
+        <GuestOnly redirectTo={homePath}>{defaultLogin}</GuestOnly>
       ),
-      children: children as RouteObject[],
-    },
-    { path: "*", element: <Navigate to={homePath} replace /> },
-  ]);
+    });
+  }
+
+  for (const route of publicRoutes) {
+    if (!("path" in route) || !route.path) continue;
+    routerRoutes.push({
+      path: toRouterSegment(route.path),
+      element: route.element,
+    });
+  }
+
+  routerRoutes.push({
+    path: "/",
+    element: (
+      <Protected redirectTo={loginPath}>
+        <AdminLayout
+          navItems={navItems}
+          loginPath={loginPath}
+          {...layoutProps}
+        />
+      </Protected>
+    ),
+    children: protectedRoutes.map(toProtectedRouteObject),
+  });
+
+  routerRoutes.push({
+    path: "*",
+    element: <Navigate to={homePath} replace />,
+  });
+
+  return createBrowserRouter(routerRoutes);
 }

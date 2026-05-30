@@ -57,6 +57,6 @@ function YourShell() {
 }
 ```
 
-You can skip `AdminLayout` entirely (no sidebar/top bar), add custom signup routes, etc.
+You can skip `AdminLayout` entirely (no sidebar/top bar), add custom signup routes, etc. For declarative guest/public/protected routes without hand-writing guards, see [routing.md](routing.md) (`AdminApp` / `createAdminRouter`).
 
 [← Back to README](../README.md)

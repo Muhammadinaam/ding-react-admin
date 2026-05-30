@@ -27,6 +27,27 @@ export type AuthAdapter = {
   getToken: () => string | null;
 };
 
+/** How a route participates in auth when using `AdminApp` / `createAdminRouter`. */
+export type RouteAccess =
+  /** Inside `AdminLayout`; requires a session. Default. */
+  | "protected"
+  /** Top-level; no session required (signup, forgot-password, etc.). */
+  | "public"
+  /** Top-level; only for guests (`GuestOnly`). Use for login. */
+  | "guest";
+
+export type AuthRedirects = {
+  /** Where unauthenticated users are sent. Default: first `guest` route, else `/login`. */
+  unauthenticated?: string;
+  /** After login and when visiting guest routes while authenticated. Default: protected index `/`, or first protected path. */
+  afterLogin?: string;
+};
+
+export type AuthConfig = {
+  adapter: AuthAdapter;
+  redirects?: AuthRedirects;
+};
+
 export type AppThemeProviderProps = {
   children: ReactNode;
   /** localStorage key for theme mode. Default `ding-react-admin-theme-mode`. */
@@ -64,31 +85,33 @@ export type LoginPageProps = {
   afterLoginPath?: string;
 };
 
-/** Route list for `AdminApp` / `createAdminRouter` (flat children under the shell). */
+type AdminRouteChildBase = {
+  element: ReactElement;
+  /** Default `protected`. See [docs/routing.md](../docs/routing.md). */
+  access?: RouteAccess;
+};
+
+/** Route list for `AdminApp` / `createAdminRouter`. */
 export type AdminRouteChild =
-  | { index: true; element: ReactElement; path?: undefined }
-  | { path: string; element: ReactElement; index?: undefined };
+  | (AdminRouteChildBase & { index: true; path?: undefined })
+  | (AdminRouteChildBase & { path: string; index?: undefined });
 
 export type CreateAdminRouterOptions = {
   navItems: NavItem[];
-  /** Child routes rendered inside `AdminLayout` (`<Outlet />`). */
+  /** App routes; split by `access` into guest, public, and protected segments. */
   children: AdminRouteChild[];
   layoutProps?: Partial<AdminLayoutProps>;
-  /** Path for the login screen. Default `/login`. */
-  loginPath?: string;
-  /** Where authenticated users are redirected when visiting login. Default `/`. */
-  homePath?: string;
-  /** Element for the login route. Default `<LoginPage />`. */
+  redirects?: AuthRedirects;
+  /** Login UI when no `guest` route is declared. Default `<LoginPage />`. */
   loginElement?: ReactElement;
 };
 
 export type AdminAppProps = {
   navItems: NavItem[];
   routes: AdminRouteChild[];
-  authAdapter: AuthAdapter;
+  auth: AuthConfig;
   layoutProps?: Partial<AdminLayoutProps>;
-  loginPath?: string;
-  homePath?: string;
+  /** Login UI when no `guest` route is declared. Default `<LoginPage />`. */
   loginElement?: ReactElement;
   theme?: Partial<
     Pick<AppThemeProviderProps, "modeStorageKey" | "densityStorageKey">

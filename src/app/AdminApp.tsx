@@ -8,10 +8,8 @@ import type { AdminAppProps } from "../types";
 export function AdminApp({
   navItems,
   routes,
-  authAdapter,
+  auth,
   layoutProps,
-  loginPath,
-  homePath,
   loginElement,
   theme: themeKeys,
 }: AdminAppProps) {
@@ -21,23 +19,15 @@ export function AdminApp({
         navItems,
         children: routes,
         layoutProps,
-        loginPath,
-        homePath,
+        redirects: auth.redirects,
         loginElement,
       }),
-    [
-      navItems,
-      routes,
-      layoutProps,
-      loginPath,
-      homePath,
-      loginElement,
-    ],
+    [navItems, routes, layoutProps, auth.redirects, loginElement],
   );
 
   return (
     <AppThemeProvider {...themeKeys}>
-      <AuthProvider adapter={authAdapter}>
+      <AuthProvider adapter={auth.adapter}>
         <RouterProvider router={router} />
       </AuthProvider>
     </AppThemeProvider>

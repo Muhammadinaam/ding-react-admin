@@ -1,17 +1,22 @@
 # Default shell with `createAdminRouter`
 
-The recommended layout is **`createBrowserRouter`** with **`GuestOnly`** on the login path, **`Protected`** around **`AdminLayout`**, and **`children`** for app pages—the same shape as [`examples/playground/src/main.tsx`](../examples/playground/src/main.tsx).
-
-**Shortcut:** `createAdminRouter` builds that tree for you and matches `<AdminApp />`’s routing (omit if you prefer an explicit router):
+`createAdminRouter` applies the same **`access`** rules as `<AdminApp />`: guest and public routes at the top level, protected routes inside **`AdminLayout`**. See [routing.md](routing.md) for the full table.
 
 ```tsx
 import {
   AppThemeProvider,
   AuthProvider,
+  LoginPage,
   createAdminRouter,
   createSessionStorageAuthAdapter,
+  type AdminRouteChild,
 } from "ding-react-admin";
 import { RouterProvider } from "react-router-dom";
+
+const routes: AdminRouteChild[] = [
+  { path: "login", access: "guest", element: <LoginPage /> },
+  { index: true, element: <Dashboard /> },
+];
 
 const router = createAdminRouter({
   navItems,
@@ -25,5 +30,7 @@ const router = createAdminRouter({
   </AuthProvider>
 </AppThemeProvider>;
 ```
+
+Prefer an explicit **`createBrowserRouter`** when you also wire **`DataProvider`**, **`PermissionsProvider`**, or a non-standard layout — see [composition.md](composition.md) and the [playground](../examples/playground/src/main.tsx).
 
 [← Back to README](../README.md)
