@@ -37,9 +37,9 @@ export type RouteAccess =
   | "guest";
 
 export type AuthRedirects = {
-  /** Where unauthenticated users are sent. Default: first `guest` route, else `/login`. */
+  /** Where unauthenticated users are sent. Required with protected routes unless a guest route is declared. */
   unauthenticated?: string;
-  /** After login and when visiting guest routes while authenticated. Default: protected index `/`, or first protected path. */
+  /** After login and when visiting guest routes while authenticated. Required with guest routes unless a protected route is declared. */
   afterLogin?: string;
 };
 
@@ -102,8 +102,6 @@ export type CreateAdminRouterOptions = {
   children: AdminRouteChild[];
   layoutProps?: Partial<AdminLayoutProps>;
   redirects?: AuthRedirects;
-  /** Login UI when no `guest` route is declared. Default `<LoginPage />`. */
-  loginElement?: ReactElement;
 };
 
 export type AdminAppProps = {
@@ -111,8 +109,6 @@ export type AdminAppProps = {
   routes: AdminRouteChild[];
   auth: AuthConfig;
   layoutProps?: Partial<AdminLayoutProps>;
-  /** Login UI when no `guest` route is declared. Default `<LoginPage />`. */
-  loginElement?: ReactElement;
   theme?: Partial<
     Pick<AppThemeProviderProps, "modeStorageKey" | "densityStorageKey">
   >;

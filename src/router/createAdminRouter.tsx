@@ -1,6 +1,5 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { AdminLayout } from "../layouts/AdminLayout";
-import { LoginPage } from "../pages/LoginPage";
 import type { CreateAdminRouterOptions } from "../types";
 import { GuestOnly, Protected } from "./guards";
 import {
@@ -15,14 +14,10 @@ export function createAdminRouter({
   children,
   layoutProps,
   redirects,
-  loginElement,
 }: CreateAdminRouterOptions) {
   const { loginPath, homePath } = deriveAuthPaths(children, redirects);
   const { guest, public: publicRoutes, protected: protectedRoutes } =
     partitionAdminRoutes(children);
-
-  const defaultLogin =
-    loginElement ?? <LoginPage afterLoginPath={homePath} />;
 
   const routerRoutes = [];
 
@@ -36,15 +31,6 @@ export function createAdminRouter({
     });
   }
 
-  if (guest.length === 0) {
-    routerRoutes.push({
-      path: toRouterSegment(loginPath),
-      element: (
-        <GuestOnly redirectTo={homePath}>{defaultLogin}</GuestOnly>
-      ),
-    });
-  }
-
   for (const route of publicRoutes) {
     if (!("path" in route) || !route.path) continue;
     routerRoutes.push({
@@ -53,19 +39,21 @@ export function createAdminRouter({
     });
   }
 
-  routerRoutes.push({
-    path: "/",
-    element: (
-      <Protected redirectTo={loginPath}>
-        <AdminLayout
-          navItems={navItems}
-          loginPath={loginPath}
-          {...layoutProps}
-        />
-      </Protected>
-    ),
-    children: protectedRoutes.map(toProtectedRouteObject),
-  });
+  if (protectedRoutes.length > 0) {
+    routerRoutes.push({
+      path: "/",
+      element: (
+        <Protected redirectTo={loginPath}>
+          <AdminLayout
+            navItems={navItems}
+            loginPath={loginPath}
+            {...layoutProps}
+          />
+        </Protected>
+      ),
+      children: protectedRoutes.map(toProtectedRouteObject),
+    });
+  }
 
   routerRoutes.push({
     path: "*",

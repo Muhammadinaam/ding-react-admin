@@ -10,7 +10,6 @@ export function AdminApp({
   routes,
   auth,
   layoutProps,
-  loginElement,
   theme: themeKeys,
 }: AdminAppProps) {
   const router = useMemo(
@@ -20,9 +19,8 @@ export function AdminApp({
         children: routes,
         layoutProps,
         redirects: auth.redirects,
-        loginElement,
       }),
-    [navItems, routes, layoutProps, auth.redirects, loginElement],
+    [navItems, routes, layoutProps, auth.redirects],
   );
 
   return (

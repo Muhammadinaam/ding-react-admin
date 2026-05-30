@@ -29,6 +29,10 @@ export function toAbsolutePath(path: string): string {
   return `/${toRouterSegment(path)}`;
 }
 
+/**
+ * Resolve redirect targets from declared routes and optional overrides.
+ * Throws when protected or guest routes exist but paths cannot be determined.
+ */
 export function deriveAuthPaths(
   routes: AdminRouteChild[],
   redirects?: AuthRedirects,
@@ -42,21 +46,39 @@ export function deriveAuthPaths(
     (r) => "path" in r && r.path,
   );
 
-  const loginPath =
-    redirects?.unauthenticated ??
-    (firstGuest && "path" in firstGuest && firstGuest.path
-      ? toAbsolutePath(firstGuest.path)
-      : "/login");
+  let loginPath: string | undefined = redirects?.unauthenticated;
+  if (!loginPath && firstGuest && "path" in firstGuest && firstGuest.path) {
+    loginPath = toAbsolutePath(firstGuest.path);
+  }
 
-  const homePath =
-    redirects?.afterLogin ??
-    (indexProtected
-      ? "/"
-      : firstProtectedPath && "path" in firstProtectedPath && firstProtectedPath.path
-        ? toAbsolutePath(firstProtectedPath.path)
-        : "/");
+  let homePath: string | undefined = redirects?.afterLogin;
+  if (!homePath) {
+    if (indexProtected) homePath = "/";
+    else if (
+      firstProtectedPath &&
+      "path" in firstProtectedPath &&
+      firstProtectedPath.path
+    ) {
+      homePath = toAbsolutePath(firstProtectedPath.path);
+    }
+  }
 
-  return { loginPath, homePath };
+  if (protectedRoutes.length > 0 && !loginPath) {
+    throw new Error(
+      'createAdminRouter: protected routes require redirects.unauthenticated or a guest route (access: "guest").',
+    );
+  }
+
+  if (guest.length > 0 && !homePath) {
+    throw new Error(
+      'createAdminRouter: guest routes require redirects.afterLogin or a protected route (index or path).',
+    );
+  }
+
+  return {
+    loginPath: loginPath ?? "/",
+    homePath: homePath ?? "/",
+  };
 }
 
 export function toProtectedRouteObject(route: AdminRouteChild): RouteObject {

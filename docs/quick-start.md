@@ -18,7 +18,7 @@ const nav: NavItem[] = [
 ];
 
 const routes: AdminRouteChild[] = [
-  { path: "login", access: "guest", element: <LoginPage /> },
+  { path: "login", access: "guest", element: <LoginPage afterLoginPath="/" /> },
   { index: true, element: <PlaceholderPage title="Dashboard" /> },
 ];
 
@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")!).render(
 ```
 
 - **`auth.adapter`** — how login/logout/token work. `createSessionStorageAuthAdapter(key?)` stores a dummy token in `sessionStorage`; swap for an adapter that calls your API.
-- **`access: "guest"`** — login route (`GuestOnly`). Omit it and a default **`/login`** screen is added automatically.
-- **`access: "public"`** — optional top-level pages without auth (signup, etc.). See [routing.md](routing.md).
+- **`routes`** — the full route list. Declare login with **`access: "guest"`**; app pages default to **`protected`**. Nothing is added for you — see [routing.md](routing.md).
+- **`access: "public"`** — optional top-level pages without auth (signup, etc.).
 
 [← Back to README](../README.md)

@@ -2,7 +2,7 @@
 
 Composable admin shell for React apps: **Ant Design** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **session-style auth** helpers, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
-Prefer **`createBrowserRouter` in your app** with **`AdminLayout`**, `Protected`, and `GuestOnly` (see `examples/playground/src/main.tsx`) when you need full control. Use **`<AdminApp />`** or **`createAdminRouter`** for a declarative route list with **`access`** (`protected` / `guest` / `public`) — see [docs/routing.md](docs/routing.md).
+Prefer **`createBrowserRouter` in your app** with **`AdminLayout`**, `Protected`, and `GuestOnly` (see `examples/playground/src/main.tsx`) when you need full control. Use **`<AdminApp />`** or **`createAdminRouter`** for a declarative, explicit route list with **`access`** (`protected` / `guest` / `public`) — you declare every route; nothing is auto-added — see [docs/routing.md](docs/routing.md).
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 # Routing & auth guards
 
-`AdminApp` and `createAdminRouter` build the same route tree from one **`routes`** array. Each route has an optional **`access`** field; redirects are derived automatically (override with **`auth.redirects`** when needed).
+`AdminApp` and `createAdminRouter` wire up **only the routes you declare** — no hidden login screen or extra paths. Each route has an optional **`access`** field; redirect targets are taken from those routes or from **`auth.redirects`**.
 
 ## Route access
 
@@ -20,7 +20,7 @@ import {
 } from "ding-react-admin";
 
 const routes: AdminRouteChild[] = [
-  { path: "login", access: "guest", element: <LoginPage /> },
+  { path: "login", access: "guest", element: <LoginPage afterLoginPath="/" /> },
   { path: "signup", access: "public", element: <PlaceholderPage title="Sign up" /> },
   { index: true, element: <PlaceholderPage title="Dashboard" /> },
   { path: "settings", element: <PlaceholderPage title="Settings" /> },
@@ -33,13 +33,23 @@ const routes: AdminRouteChild[] = [
 />;
 ```
 
-### Defaults (no extra config)
+Your **`routes` array is the full route list** — declare login, signup, and app pages yourself.
 
-- **No `guest` route?** A login screen is added at **`/login`** using `<LoginPage />`.
-- **`loginPath`** → first `guest` route path, else **`/login`**.
-- **`homePath`** → protected index route (**`/`**), else first protected path, else **`/`**.
-- **`Protected`** sends unauthenticated users to `loginPath`.
-- **`GuestOnly`** sends authenticated users to `homePath`.
+## Redirect paths
+
+Guards need a login URL and a post-login URL. They are resolved in this order:
+
+| Target | From routes | Or override with |
+|--------|-------------|------------------|
+| **Login** (`Protected` redirect, logout) | First `guest` route path | `auth.redirects.unauthenticated` |
+| **Home** (`GuestOnly` redirect, catch-all) | Protected index → `/`, else first protected path | `auth.redirects.afterLogin` |
+
+If resolution fails, `createAdminRouter` throws a clear error:
+
+- Protected routes but no guest route and no `redirects.unauthenticated`
+- Guest routes but no protected route and no `redirects.afterLogin`
+
+Set **`afterLoginPath`** on `<LoginPage />` to match the home path (defaults to `/` when the dashboard is the index route).
 
 ### Override redirects
 
@@ -67,15 +77,21 @@ Use when paths cannot be inferred (e.g. role-based landing page):
 import {
   AppThemeProvider,
   AuthProvider,
+  LoginPage,
   createAdminRouter,
   createSessionStorageAuthAdapter,
+  type AdminRouteChild,
 } from "ding-react-admin";
 import { RouterProvider } from "react-router-dom";
+
+const routes: AdminRouteChild[] = [
+  { path: "login", access: "guest", element: <LoginPage afterLoginPath="/" /> },
+  { index: true, element: <Dashboard /> },
+];
 
 const router = createAdminRouter({
   navItems,
   children: routes,
-  redirects: { afterLogin: "/" },
   layoutProps: { brand: "Acme" },
 });
 

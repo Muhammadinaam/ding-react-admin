@@ -1,6 +1,6 @@
 # Default shell with `createAdminRouter`
 
-`createAdminRouter` applies the same **`access`** rules as `<AdminApp />`: guest and public routes at the top level, protected routes inside **`AdminLayout`**. See [routing.md](routing.md) for the full table.
+`createAdminRouter` applies the same **`access`** rules as `<AdminApp />`: only routes you pass in are mounted — guest and public at the top level, protected inside **`AdminLayout`**. See [routing.md](routing.md) for the full table.
 
 ```tsx
 import {
@@ -14,7 +14,7 @@ import {
 import { RouterProvider } from "react-router-dom";
 
 const routes: AdminRouteChild[] = [
-  { path: "login", access: "guest", element: <LoginPage /> },
+  { path: "login", access: "guest", element: <LoginPage afterLoginPath="/" /> },
   { index: true, element: <Dashboard /> },
 ];
 
