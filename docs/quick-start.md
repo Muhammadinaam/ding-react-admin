@@ -12,13 +12,34 @@ import {
   type NavItem,
 } from "ding-react-admin";
 import { DashboardOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+
+const authBrand = (
+  <Typography.Title level={3} style={{ margin: 0 }}>
+    My App
+  </Typography.Title>
+);
 
 const nav: NavItem[] = [
   { path: "/", label: "Dashboard", Icon: DashboardOutlined },
 ];
 
 const routes: AdminRouteChild[] = [
-  { path: "login", access: "guest", element: <LoginPage afterLoginPath="/" /> },
+  {
+    path: "login",
+    access: "guest",
+    element: (
+      <LoginPage
+        brand={authBrand}
+        afterLoginPath="/"
+        alternateAuth={{
+          prompt: "Don't have an account?",
+          linkText: "Sign up",
+          to: "/register",
+        }}
+      />
+    ),
+  },
   { index: true, element: <PlaceholderPage title="Dashboard" /> },
 ];
 

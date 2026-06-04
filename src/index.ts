@@ -53,7 +53,13 @@ export type { MemoryResourceHandlersConfig } from "./data/createMemoryResourceHa
 export type { PermissionsChecker } from "./context/PermissionsProvider";
 export { LoginPage } from "./pages/LoginPage";
 export { PlaceholderPage } from "./pages/PlaceholderPage";
-export { DensitySwitch, ThemeSwitch, ThemeToolbar } from "./components";
+export { AuthPageLayout } from "./layouts/AuthPageLayout";
+export {
+  AuthAlternateLink,
+  DensitySwitch,
+  ThemeSwitch,
+  ThemeToolbar,
+} from "./components";
 export { Guard, GuestOnly, Protected } from "./router/guards";
 export { createAdminRouter } from "./router/createAdminRouter";
 export {
@@ -70,6 +76,8 @@ export type {
   AuthConfig,
   AuthRedirects,
   CreateAdminRouterOptions,
+  AuthAlternateLinkProps,
+  AuthPageLayoutProps,
   LoginPageProps,
   NavItem,
   RouteAccess,

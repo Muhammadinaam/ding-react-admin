@@ -2,6 +2,8 @@
 
 `AdminApp` and `createAdminRouter` wire up **only the routes you declare** — no hidden login screen or extra paths. Each route has an optional **`access`** field; redirect targets are taken from those routes or from **`auth.redirects`**.
 
+For shared login/register chrome (brand above the card, theme toolbar, links between login and signup), see [auth-pages.md](auth-pages.md).
+
 ## Route access
 
 | `access` | Meaning | Rendered as |

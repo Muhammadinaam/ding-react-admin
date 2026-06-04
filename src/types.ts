@@ -74,15 +74,29 @@ export type AdminLayoutProps = {
   siderCollapsedStorageKey?: string;
 };
 
+export type { AuthPageLayoutProps } from "./layouts/AuthPageLayout";
+export type { AuthAlternateLinkProps } from "./components/AuthAlternateLink";
+
 export type LoginPageProps = {
   title?: ReactNode;
   description?: ReactNode;
+  /** @deprecated Use `brand` — shown above the card, not in the card header. */
   logo?: ReactNode;
+  /** Brand mark centered above the card. */
+  brand?: ReactNode;
   /** Extra form items rendered before the submit button. */
   extraFields?: ReactNode;
   showThemeToolbar?: boolean;
   /** Navigate here after successful login. Default `/`. */
   afterLoginPath?: string;
+  /** Row below the card linking to registration (or another auth flow). */
+  alternateAuth?: {
+    prompt?: string;
+    linkText: string;
+    to: string;
+  };
+  /** Custom footer below the card; overrides `alternateAuth` when set. */
+  footer?: ReactNode;
 };
 
 type AdminRouteChildBase = {

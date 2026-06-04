@@ -20,6 +20,7 @@ Prefer **`createBrowserRouter` in your app** with **`AdminLayout`**, `Protected`
 | Custom field types | [docs/crud/custom-fields.md](docs/crud/custom-fields.md) |
 | Data layer & permissions | [docs/data-permissions.md](docs/data-permissions.md) |
 | **Routing & auth guards** | [docs/routing.md](docs/routing.md) |
+| Login / register layout | [docs/auth-pages.md](docs/auth-pages.md) |
 | Quick start (`<AdminApp />`) | [docs/quick-start.md](docs/quick-start.md) |
 | Composition (your own router) | [docs/composition.md](docs/composition.md) |
 | Odoo-style app hub | [docs/app-hub.md](docs/app-hub.md) |
