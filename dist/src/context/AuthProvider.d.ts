@@ -1,0 +1,18 @@
+import { ReactNode } from 'react';
+import { AuthAdapter } from '../types';
+type AuthContextValue = {
+    isAuthenticated: boolean;
+    login: (username: string, password: string) => Promise<void>;
+    logout: () => void;
+};
+export type AuthProviderProps = {
+    children: ReactNode;
+    /** How login, logout, and token reads are implemented (API, sessionStorage, etc.). */
+    adapter: AuthAdapter;
+};
+export declare function AuthProvider({ children, adapter }: AuthProviderProps): import("react/jsx-runtime").JSX.Element;
+export declare function useAuth(): AuthContextValue;
+/** Store a non-empty token string in `sessionStorage` when “logged in”. */
+export declare function createSessionStorageAuthAdapter(storageKey?: string): AuthAdapter;
+export {};
+//# sourceMappingURL=AuthProvider.d.ts.map

@@ -57,6 +57,6 @@ function YourShell() {
 }
 ```
 
-You can skip `AdminLayout` entirely (no sidebar/top bar), add custom signup routes, etc. For declarative guest/public/protected routes without hand-writing guards, see [routing.md](routing.md) (`AdminApp` / `createAdminRouter`).
+You can skip `AdminLayout` entirely (no sidebar/top bar), add custom signup routes, etc. For CRUD, wrap **`DataProvider`** and **`PermissionsProvider`** inside **`AuthProvider`** — see [data-permissions.md](data-permissions.md) and the [playground](../examples/playground/src/main.tsx). For declarative guest/public/protected routes without hand-writing guards, see [routing.md](routing.md) (`AdminApp` / `createAdminRouter`).
 
 [← Back to README](../README.md)

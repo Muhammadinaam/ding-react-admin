@@ -1,0 +1,1 @@
+{"version":3,"file":"BooleanFilter.d.ts","sourceRoot":"","sources":["../../../../src/crud/filters/BooleanFilter.tsx"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,UAAU,CAAC;AAGhD,MAAM,MAAM,kBAAkB,GAAG,eAAe,CAAC;AAEjD,wBAAgB,aAAa,CAAC,EAAE,MAAM,EAAE,KAAK,EAAE,EAAE,kBAAkB,QA8BlE"}

@@ -19,7 +19,7 @@
   },
   "files": ["dist", "src"],
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && node -e \"require('fs').writeFileSync('dist/index.d.ts','export * from \\\"./src/index\\\";\\n')\"",
     "dev:example": "yarn --cwd examples/playground dev",
     "build:example": "yarn --cwd examples/playground build",
     "prepublishOnly": "yarn build"

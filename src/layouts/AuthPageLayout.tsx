@@ -44,23 +44,31 @@ export function AuthPageLayout({
           <ThemeToolbar />
         </Flex>
       ) : null}
+      {brand ? (
+        <div
+          style={{
+            flexShrink: 0,
+            textAlign: "center",
+            padding: "0 24px 16px",
+          }}
+        >
+          {brand}
+        </div>
+      ) : null}
       <Flex
         flex={1}
         vertical
         align="center"
-        justify="center"
+        justify="flex-start"
         style={{
           width: "100%",
           minHeight: 0,
-          padding: 24,
+          padding: "0 24px 24px",
           overflow: "auto",
           overflowX: "hidden",
           background: token.colorBgLayout,
         }}
       >
-        {brand ? (
-          <div style={{ marginBottom: 24, textAlign: "center" }}>{brand}</div>
-        ) : null}
         {children}
         {footer ? (
           <div style={{ marginTop: 16, width: "100%", maxWidth: 520 }}>

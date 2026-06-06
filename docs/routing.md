@@ -1,6 +1,8 @@
 # Routing & auth guards
 
-`AdminApp` and `createAdminRouter` wire up **only the routes you declare** — no hidden login screen or extra paths. Each route has an optional **`access`** field; redirect targets are taken from those routes or from **`auth.redirects`**.
+`AdminApp` and `createAdminRouter` wire up **only the routes you declare** — no hidden login screen or extra paths. Each route has an optional **`access`** field; redirect targets are taken from those routes or from **`authRedirects`**.
+
+Wrap **`AdminApp`** (or your router) in **`AuthProvider`** so guards and `useAuth` work — see [quick-start.md](quick-start.md). Add **`DataProvider`** / **`PermissionsProvider`** separately when using CRUD — see [data-permissions.md](data-permissions.md).
 
 For shared login/register chrome (brand above the card, theme toolbar, links between login and signup), see [auth-pages.md](auth-pages.md).
 
@@ -15,6 +17,7 @@ For shared login/register chrome (brand above the card, theme toolbar, links bet
 ```tsx
 import {
   AdminApp,
+  AuthProvider,
   LoginPage,
   PlaceholderPage,
   createSessionStorageAuthAdapter,
@@ -28,11 +31,9 @@ const routes: AdminRouteChild[] = [
   { path: "settings", element: <PlaceholderPage title="Settings" /> },
 ];
 
-<AdminApp
-  auth={{ adapter: createSessionStorageAuthAdapter() }}
-  navItems={nav}
-  routes={routes}
-/>;
+<AuthProvider adapter={createSessionStorageAuthAdapter()}>
+  <AdminApp navItems={nav} routes={routes} />
+</AuthProvider>;
 ```
 
 Your **`routes` array is the full route list** — declare login, signup, and app pages yourself.
@@ -43,8 +44,8 @@ Guards need a login URL and a post-login URL. They are resolved in this order:
 
 | Target | From routes | Or override with |
 |--------|-------------|------------------|
-| **Login** (`Protected` redirect, logout) | First `guest` route path | `auth.redirects.unauthenticated` |
-| **Home** (`GuestOnly` redirect, catch-all) | Protected index → `/`, else first protected path | `auth.redirects.afterLogin` |
+| **Login** (`Protected` redirect, logout) | First `guest` route path | `authRedirects.unauthenticated` |
+| **Home** (`GuestOnly` redirect, catch-all) | Protected index → `/`, else first protected path | `authRedirects.afterLogin` |
 
 If resolution fails, `createAdminRouter` throws a clear error:
 
@@ -58,20 +59,19 @@ Set **`afterLoginPath`** on `<LoginPage />` to match the home path (defaults to 
 Use when paths cannot be inferred (e.g. role-based landing page):
 
 ```tsx
-<AdminApp
-  auth={{
-    adapter: createSessionStorageAuthAdapter(),
-    redirects: {
+<AuthProvider adapter={createSessionStorageAuthAdapter()}>
+  <AdminApp
+    navItems={nav}
+    routes={routes}
+    authRedirects={{
       unauthenticated: "/login",
       afterLogin: "/dashboard",
-    },
-  }}
-  navItems={nav}
-  routes={routes}
-/>
+    }}
+  />
+</AuthProvider>
 ```
 
-`AuthAdapter` stays focused on **session/token** only (`login`, `logout`, `getToken`). URLs belong on routes and optional `redirects`, not on the adapter.
+`AuthAdapter` stays focused on **session/token** only (`login`, `logout`, `getToken`). URLs belong on routes and optional `authRedirects`, not on the adapter.
 
 ## `createAdminRouter` (same rules)
 

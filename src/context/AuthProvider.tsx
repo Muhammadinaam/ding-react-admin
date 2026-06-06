@@ -18,6 +18,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export type AuthProviderProps = {
   children: ReactNode;
+  /** How login, logout, and token reads are implemented (API, sessionStorage, etc.). */
   adapter: AuthAdapter;
 };
 

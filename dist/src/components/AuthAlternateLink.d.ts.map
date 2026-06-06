@@ -1,0 +1,1 @@
+{"version":3,"file":"AuthAlternateLink.d.ts","sourceRoot":"","sources":["../../../src/components/AuthAlternateLink.tsx"],"names":[],"mappings":"AAGA,MAAM,MAAM,sBAAsB,GAAG;IACnC,MAAM,EAAE,MAAM,CAAC;IACf,QAAQ,EAAE,MAAM,CAAC;IACjB,EAAE,EAAE,MAAM,CAAC;CACZ,CAAC;AAEF,wBAAgB,iBAAiB,CAAC,EAChC,MAAM,EACN,QAAQ,EACR,EAAE,GACH,EAAE,sBAAsB,2CASxB"}

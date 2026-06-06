@@ -1,8 +1,44 @@
 # ding-react-admin
 
-Composable admin shell for React apps: **Ant Design** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **session-style auth** helpers, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
+Composable admin shell for React apps: **Ant Design** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
-Prefer **`createBrowserRouter` in your app** with **`AdminLayout`**, `Protected`, and `GuestOnly` (see `examples/playground/src/main.tsx`) when you need full control. Use **`<AdminApp />`** or **`createAdminRouter`** for a declarative, explicit route list with **`access`** (`protected` / `guest` / `public`) — you declare every route; nothing is auto-added — see [docs/routing.md](docs/routing.md).
+## Providers (manual composition)
+
+Nothing is wired automatically except theme inside `<AdminApp />`. Wrap providers yourself:
+
+| Provider | Required for |
+|----------|----------------|
+| **`AuthProvider`** | Login, logout, route guards (`Protected`, `GuestOnly`), `useAuth` |
+| **`DataProvider`** | CRUD components (`ResourceList`, `ResourceForm`, …) |
+| **`PermissionsProvider`** | Permission gating in CRUD (`usePermissions`, `useCan`) |
+
+**Auth only** (custom pages, no CRUD yet):
+
+```tsx
+<AuthProvider adapter={createSessionStorageAuthAdapter()}>
+  <AdminApp navItems={nav} routes={routes} />
+</AuthProvider>
+```
+
+**Full stack** (CRUD + permissions) — see [docs/data-permissions.md](docs/data-permissions.md) and [`examples/playground/src/main.tsx`](examples/playground/src/main.tsx):
+
+```tsx
+<AuthProvider adapter={authAdapter}>
+  <DataProvider value={dataProvider}>
+    <PermissionsProvider can={permissions}>
+      <AdminApp navItems={nav} routes={routes} />
+    </PermissionsProvider>
+  </DataProvider>
+</AuthProvider>
+```
+
+Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter that calls your API in production.
+
+## Getting started
+
+**Quick path:** [docs/quick-start.md](docs/quick-start.md) — `<AuthProvider>` + `<AdminApp />` with declarative routes.
+
+**Full control:** [docs/composition.md](docs/composition.md) and the [playground](examples/playground/src/main.tsx) — your own `createBrowserRouter` with `AdminLayout`, `Protected`, `GuestOnly`, `DataProvider`, and `PermissionsProvider`.
 
 ## Documentation
 

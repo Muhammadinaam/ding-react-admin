@@ -1,14 +1,17 @@
 import { useMemo } from "react";
 import { RouterProvider } from "react-router-dom";
 import { AppThemeProvider } from "../context/AppThemeProvider";
-import { AuthProvider } from "../context/AuthProvider";
 import { createAdminRouter } from "../router/createAdminRouter";
 import type { AdminAppProps } from "../types";
 
+/**
+ * Declarative admin shell: theme, router, and layout from your route list.
+ * Wrap in `<AuthProvider adapter={...}>` — auth is not configured on this component.
+ */
 export function AdminApp({
   navItems,
   routes,
-  auth,
+  authRedirects,
   layoutProps,
   theme: themeKeys,
 }: AdminAppProps) {
@@ -18,16 +21,14 @@ export function AdminApp({
         navItems,
         children: routes,
         layoutProps,
-        redirects: auth.redirects,
+        redirects: authRedirects,
       }),
-    [navItems, routes, layoutProps, auth.redirects],
+    [navItems, routes, layoutProps, authRedirects],
   );
 
   return (
     <AppThemeProvider {...themeKeys}>
-      <AuthProvider adapter={auth.adapter}>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
     </AppThemeProvider>
   );
 }

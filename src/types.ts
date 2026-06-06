@@ -20,6 +20,7 @@ export type NavItem = {
   children?: NavItem[];
 };
 
+/** Pluggable login/logout/token backend (e.g. sessionStorage, your REST API). */
 export type AuthAdapter = {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -41,11 +42,6 @@ export type AuthRedirects = {
   unauthenticated?: string;
   /** After login and when visiting guest routes while authenticated. Required with guest routes unless a protected route is declared. */
   afterLogin?: string;
-};
-
-export type AuthConfig = {
-  adapter: AuthAdapter;
-  redirects?: AuthRedirects;
 };
 
 export type AppThemeProviderProps = {
@@ -121,7 +117,8 @@ export type CreateAdminRouterOptions = {
 export type AdminAppProps = {
   navItems: NavItem[];
   routes: AdminRouteChild[];
-  auth: AuthConfig;
+  /** Override login / post-login redirect paths when they cannot be inferred from routes. */
+  authRedirects?: AuthRedirects;
   layoutProps?: Partial<AdminLayoutProps>;
   theme?: Partial<
     Pick<AppThemeProviderProps, "modeStorageKey" | "densityStorageKey">

@@ -3,6 +3,8 @@
 - **`DataProvider` / `useDataProvider`** — supply a `DataProvider` implementation (`getList`, `getOne`, `create`, `update`, `delete`). Types are exported as `DataProviderContract`, `GetListParams`, etc.
 - **`PermissionsProvider` / `usePermissions` / `useCan`** — one function `can(action, resource?)` for UI gating (wire to your roles or ACL).
 
+**Not automatic** — wrap these yourself (inside `AuthProvider`), same as auth. Required only when using CRUD components.
+
 Example wiring (see `examples/playground/src/main.tsx` for a full stack). The route tree lives in your app so login, guards, and `AdminLayout` stay visible:
 
 ```tsx
@@ -15,6 +17,7 @@ import {
   LoginPage,
   PermissionsProvider,
   Protected,
+  createSessionStorageAuthAdapter,
 } from "ding-react-admin";
 import type { DataProviderContract } from "ding-react-admin";
 import type { RouteObject } from "react-router-dom";
@@ -26,6 +29,7 @@ import {
 
 const LOGIN_PATH = "/login";
 const HOME_PATH = "/";
+const authAdapter = createSessionStorageAuthAdapter();
 
 const data: DataProviderContract = {
   /* call your REST API */
