@@ -813,7 +813,7 @@ function _t({ title: e = "Sign in", description: t = "Use any username and passw
 //#region src/pages/PlaceholderPage.tsx
 function vt({ title: e }) {
 	return /* @__PURE__ */ B(L.Title, {
-		level: 4,
+		level: 3,
 		children: e
 	});
 }

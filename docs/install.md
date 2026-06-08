@@ -1,24 +1,84 @@
 # Install
 
-Peer dependencies (your app must provide them):
+`ding-react-admin` ships as a prebuilt library (`dist/index.js`). **No Vite alias or other bundler config is required** when installing from GitHub or npm — import it like any other package.
 
-- `react`, `react-dom` (18+)
-- `react-router-dom` (6+)
-- `react-hook-form` (7+)
-- `dayjs` (1+)
-- `antd` (5+)
-- `@ant-design/icons` (5+)
+## One-shot install (recommended)
 
-From GitHub, **no Vite alias required** — the package resolves to published `exports` (`dist/index.js` + types). Commit `dist/` in your fork, or run `yarn && yarn build` in this repo before packing / installing.
+Your app must install **peer dependencies** yourself. Yarn 1 and many setups do **not** install peers automatically when you add only this package.
+
+If you already have a React app (`react`, `react-dom`), run:
 
 ```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+  antd@^5.24.0 \
+  @ant-design/icons@^5.6.1 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
 ```
 
-(Optional) Pin a tag or commit:
+New app (includes React):
 
 ```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v0.1.0
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+  react@^19.2.5 \
+  react-dom@^19.2.5 \
+  antd@^5.24.0 \
+  @ant-design/icons@^5.6.1 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
 ```
+
+These versions match the [playground](../examples/playground/package.json) and are the versions this repo is tested against. Newer versions within the ranges below usually work; if something breaks, align with the playground first.
+
+Pin a release tag or commit:
+
+```bash
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v0.1.0 \
+  antd@^5.24.0 \
+  @ant-design/icons@^5.6.1 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
+```
+
+npm equivalent:
+
+```bash
+npm install https://github.com/Muhammadinaam/ding-react-admin.git \
+  antd@^5.24.0 \
+  @ant-design/icons@^5.6.1 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
+```
+
+## Peer dependencies (minimum versions)
+
+| Package | Minimum | Tested in playground |
+|---------|---------|----------------------|
+| `react` | 18+ | `^19.2.5` |
+| `react-dom` | 18+ | `^19.2.5` |
+| `react-router-dom` | 6+ | `^7.14.2` |
+| `react-hook-form` | 7+ | `^7.56.4` |
+| `dayjs` | 1+ | `^1.11.13` |
+| `antd` | 5+ | `^5.24.0` |
+| `@ant-design/icons` | 5+ | `^5.6.1` |
+
+Ant Design is a **peer**, not bundled inside this library — your app installs one copy of `antd` and shares it with `ding-react-admin`. That avoids duplicate React/Ant Design instances and keeps bundle size down.
+
+## What you do **not** need
+
+- **Vite alias** to library source — only for [developing the package next to your app](developing.md).
+- **Separate Ant Design install workaround** — just add `antd` and `@ant-design/icons` as shown above.
+
+## Next steps
+
+Wire providers and routes: [quick-start.md](quick-start.md).
+
+## Installing from a fork
+
+Commit `dist/` in your fork, or run `yarn && yarn build` in the repo before installing. Consumers resolve `exports` → `dist/index.js` + types.
 
 [← Back to README](../README.md)
