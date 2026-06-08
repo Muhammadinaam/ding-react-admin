@@ -97,7 +97,7 @@ createRoot(document.getElementById("root")!).render(
 
 ## Notes
 
-- **`AuthProvider`** + **`adapter`** — `createSessionStorageAuthAdapter(key?)` stores a dummy token in `sessionStorage` for demos; swap for an adapter that calls your API.
+- **`AuthProvider`** + **`adapter`** — `createSessionStorageAuthAdapter(key?)` stores a dummy token in `sessionStorage` for demos; swap for an adapter that calls your API. **`login`** receives a **`LoginCredentials`** object (`username`, `password`, and optional extra fields such as `businessId` for multi-tenant apps).
 - **`DataProvider`** — replace the stub with your REST client or `combineResourceHandlers`; see [data-permissions.md](data-permissions.md).
 - **`PermissionsProvider`** — wire `can(action, resource?)` to your roles/ACL; return `true` until you need gating.
 - **`routes`** — the full route list. Login uses **`access: "guest"`**; app pages default to **`protected`**. See [routing.md](routing.md).

@@ -44,11 +44,12 @@ export function LoginPage({
         ) : null}
         <Form
           layout="vertical"
-          onFinish={async (values: {
-            username: string;
-            password: string;
-          }) => {
-            await login(values.username, values.password);
+          onFinish={async (values: Record<string, unknown>) => {
+            await login({
+              username: String(values.username ?? ""),
+              password: String(values.password ?? ""),
+              ...values,
+            });
             navigate(afterLoginPath, { replace: true });
           }}
         >

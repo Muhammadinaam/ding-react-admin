@@ -6,11 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { AuthAdapter } from "../types";
+import type { AuthAdapter, LoginCredentials } from "../types";
 
 type AuthContextValue = {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
 };
 
@@ -26,8 +26,8 @@ export function AuthProvider({ children, adapter }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(() => adapter.getToken());
 
   const login = useCallback(
-    async (username: string, password: string) => {
-      await adapter.login(username, password);
+    async (credentials: LoginCredentials) => {
+      await adapter.login(credentials);
       setToken(adapter.getToken());
     },
     [adapter],
@@ -63,7 +63,7 @@ export function createSessionStorageAuthAdapter(
   storageKey: string = DEFAULT_SESSION_KEY,
 ): AuthAdapter {
   return {
-    async login(username: string, password: string) {
+    async login({ username, password }: LoginCredentials) {
       if (!username.trim() || !password) throw new Error("Invalid credentials");
       sessionStorage.setItem(storageKey, "1");
     },

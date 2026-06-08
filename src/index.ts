@@ -73,6 +73,7 @@ export type {
   AdminRouteChild,
   AppThemeProviderProps,
   AuthAdapter,
+  LoginCredentials,
   AuthRedirects,
   CreateAdminRouterOptions,
   AuthAlternateLinkProps,

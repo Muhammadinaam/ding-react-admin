@@ -8,7 +8,7 @@ export function createPlaygroundAuthAdapter(
   storageKey: string = PLAYGROUND_SESSION_KEY,
 ): AuthAdapter {
   return {
-    async login(username: string, password: string) {
+    async login({ username, password }) {
       const { token } = api.login(username, password);
       sessionStorage.setItem(storageKey, token);
     },

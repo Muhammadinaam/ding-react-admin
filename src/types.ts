@@ -20,9 +20,16 @@ export type NavItem = {
   children?: NavItem[];
 };
 
+/** Credentials passed from login forms to `AuthAdapter.login` and `useAuth().login`. */
+export type LoginCredentials = {
+  username: string;
+  password: string;
+  [key: string]: unknown;
+};
+
 /** Pluggable login/logout/token backend (e.g. sessionStorage, your REST API). */
 export type AuthAdapter = {
-  login: (username: string, password: string) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
   /** Synchronous read of session (e.g. token). Used after mount and after login/logout. */
   getToken: () => string | null;

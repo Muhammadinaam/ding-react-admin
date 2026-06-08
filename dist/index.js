@@ -147,8 +147,8 @@ function Ae() {
 //#region src/context/AuthProvider.tsx
 var je = e(null);
 function Me({ children: e, adapter: t }) {
-	let [r, i] = s(() => t.getToken()), o = n(async (e, n) => {
-		await t.login(e, n), i(t.getToken());
+	let [r, i] = s(() => t.getToken()), o = n(async (e) => {
+		await t.login(e), i(t.getToken());
 	}, [t]), c = n(() => {
 		t.logout(), i(t.getToken());
 	}, [t]), l = a(() => ({
@@ -173,7 +173,7 @@ function K() {
 var Ne = "ding-react-admin-auth";
 function Pe(e = Ne) {
 	return {
-		async login(t, n) {
+		async login({ username: t, password: n }) {
 			if (!t.trim() || !n) throw Error("Invalid credentials");
 			sessionStorage.setItem(e, "1");
 		},
@@ -769,7 +769,11 @@ function _t({ title: e = "Sign in", description: t = "Use any username and passw
 			}) : null, /* @__PURE__ */ V(E, {
 				layout: "vertical",
 				onFinish: async (e) => {
-					await l(e.username, e.password), u(o, { replace: !0 });
+					await l({
+						username: String(e.username ?? ""),
+						password: String(e.password ?? ""),
+						...e
+					}), u(o, { replace: !0 });
 				},
 				children: [
 					/* @__PURE__ */ B(E.Item, {

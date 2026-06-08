@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { AuthAdapter } from '../types';
+import { AuthAdapter, LoginCredentials } from '../types';
 type AuthContextValue = {
     isAuthenticated: boolean;
-    login: (username: string, password: string) => Promise<void>;
+    login: (credentials: LoginCredentials) => Promise<void>;
     logout: () => void;
 };
 export type AuthProviderProps = {

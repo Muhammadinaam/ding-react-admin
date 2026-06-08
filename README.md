@@ -32,7 +32,7 @@ Nothing is wired automatically except theme inside `<AdminApp />`. Wrap provider
 </AuthProvider>
 ```
 
-Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter that calls your API in production.
+Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter that calls your API in production. Implement **`AuthAdapter.login`** with a **`LoginCredentials`** object (`username`, `password`, plus any extra fields your login form needs, e.g. `businessId`).
 
 ## Getting started
 

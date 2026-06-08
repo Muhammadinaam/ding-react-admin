@@ -71,7 +71,7 @@ Use when paths cannot be inferred (e.g. role-based landing page):
 </AuthProvider>
 ```
 
-`AuthAdapter` stays focused on **session/token** only (`login`, `logout`, `getToken`). URLs belong on routes and optional `authRedirects`, not on the adapter.
+`AuthAdapter` stays focused on **session/token** only (`login(credentials)`, `logout`, `getToken`). Pass **`LoginCredentials`** from your login form — at minimum `username` and `password`, plus any app-specific fields (e.g. `businessId`). URLs belong on routes and optional `authRedirects`, not on the adapter.
 
 ## `createAdminRouter` (same rules)
 
