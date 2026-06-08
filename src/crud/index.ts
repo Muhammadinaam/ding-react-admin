@@ -48,6 +48,8 @@ export type {
 } from "./utils/useListQueryState";
 export { useChoices } from "./utils/useChoices";
 export { getByPath } from "./utils/getByPath";
+export { pickBySources } from "./utils/pickBySources";
+export { setByPath } from "./utils/setByPath";
 
 export type {
   BaseSourceProps,

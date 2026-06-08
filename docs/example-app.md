@@ -1,5 +1,7 @@
 # Example app in this repo
 
+**First time?** Follow [tutorial-one-entity.md](tutorial-one-entity.md) Part 1 for a full REST walkthrough. This playground is the same folder layout with an **in-memory** API instead of `fetch`.
+
 There is a Vite app under [`examples/playground`](../examples/playground): **in-memory demo API** (auth + products, brands, categories, invoices, lines), **CRUD screens**, wired **`DataProvider` / `PermissionsProvider`**, and **demo users** (`admin`/`admin` vs `user`/`user`).
 
 From the **repository root**:
@@ -36,12 +38,14 @@ return combineResourceHandlers(
 
 **Removing a resource:** delete its folder, remove one line from the composer, and drop routes + nav entries.
 
-For a **generated API client**, implement the same `ResourceHandlers` in `productData.ts` by calling `apiClient.fetchProducts(...)` inside `getList`, etc. Pages keep `resource={PRODUCT_RESOURCE}` and `pathPrefix="/products"` unchanged.
+For a **REST API**, use the same folder layout with `createRestResourceHandlers` — see [tutorial-one-entity.md](tutorial-one-entity.md). Pages keep `resource={PRODUCT_RESOURCE}` and `pathPrefix="/products"` unchanged.
 
 Library helpers:
 
 - **`combineResourceHandlers`** — compose entity handlers into a `DataProvider`
-- **`createMemoryResourceHandlers`** — generic in-memory CRUD for demos (override hooks for special rules)
+- **`createRestResourceHandlers`** — thin CRUD glue; form `source` defines the payload
+- **`createMemoryResourceHandlers`** — in-memory CRUD for demos (defaults spread form data + `id`)
+- **`toDjangoRestOrdering` / `toODataOrderBy` / `toJsonApiSort`** — optional sort helpers for `list`
 - **`applyInMemoryListParams`** — filter / sort / paginate in-memory rows
 
 [← Back to README](../README.md)

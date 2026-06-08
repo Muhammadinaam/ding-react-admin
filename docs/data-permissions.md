@@ -17,23 +17,27 @@ import {
   LoginPage,
   PermissionsProvider,
   Protected,
+  combineResourceHandlers,
   createSessionStorageAuthAdapter,
 } from "ding-react-admin";
-import type { DataProviderContract } from "ding-react-admin";
 import type { RouteObject } from "react-router-dom";
 import {
   Navigate,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import { createUserHandlers, USER_RESOURCE } from "./pages/users";
 
 const LOGIN_PATH = "/login";
 const HOME_PATH = "/";
 const authAdapter = createSessionStorageAuthAdapter();
 
-const data: DataProviderContract = {
-  /* call your REST API */
-} as DataProviderContract;
+const data = combineResourceHandlers({
+  [USER_RESOURCE]: createUserHandlers(() => apiClient),
+});
+```
+
+See [tutorial-one-entity.md](tutorial-one-entity.md) for the full Users example (fetch + typed client). Until you add entities, use a stub `DataProviderContract` with empty `getList` / `getOne` / etc.
 
 const can = (action: string, resource?: string) => {
   /* read role from session, etc. */

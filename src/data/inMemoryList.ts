@@ -1,11 +1,17 @@
 import type { GetListParams, Identifier, SortSpec } from "./dataProviderTypes";
 
-export function getById<T extends { id: number }>(
+export function rowIdMatches(
+  rowId: string | number,
+  id: Identifier,
+): boolean {
+  return rowId === id || String(rowId) === String(id);
+}
+
+export function getById<T extends { id: string | number }>(
   rows: T[],
   id: Identifier,
 ): T {
-  const n = typeof id === "string" ? Number(id) : id;
-  const row = rows.find((r) => r.id === n);
+  const row = rows.find((r) => rowIdMatches(r.id, id));
   if (!row) throw new Error("Not found");
   return row;
 }

@@ -6,10 +6,12 @@ import {
   type DefaultValues,
   type FieldValues,
 } from "react-hook-form";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
+import { FormFieldsProvider } from "./context/FormFieldsContext";
+import { pickBySources } from "./utils/pickBySources";
 import {
   loadInlineRows,
   saveInlineRows,
@@ -62,6 +64,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   const form = useForm<T>({
     defaultValues: defaultValues as DefaultValues<T>,
   });
+  const fieldSourcesRef = useRef(new Set<string>());
 
   const loadInlines = useCallback(
     async (parentId: string | number) => {
@@ -132,7 +135,8 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
 
   async function onSubmit(values: T) {
     try {
-      const payload = { ...values } as Record<string, unknown>;
+      const raw = values as Record<string, unknown>;
+      let payload = pickBySources(raw, Array.from(fieldSourcesRef.current));
       if (inlines?.length) {
         for (const cfg of inlines) {
           delete payload[resolveInlineArrayName(cfg)];
@@ -190,6 +194,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
       }
     >
       <FormMetaProvider resource={resource} isNew={isNew}>
+        <FormFieldsProvider sourcesRef={fieldSourcesRef}>
         <div style={{ position: "relative" }}>
           {loading ? (
             <div
@@ -228,6 +233,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
             </Form>
           </FormProvider>
         </div>
+        </FormFieldsProvider>
       </FormMetaProvider>
     </Card>
   );

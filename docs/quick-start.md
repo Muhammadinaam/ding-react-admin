@@ -1,5 +1,9 @@
 # Quick start (`<AdminApp />`)
 
+**Want a full step-by-step guide?** Start with [tutorial-one-entity.md](tutorial-one-entity.md) (create project → install → Users CRUD → `data-provider.ts`).
+
+This page is a **minimal** shell without a real data layer.
+
 Providers are composed explicitly — nothing is hidden except theme inside `<AdminApp />` (via its `theme` prop, which wraps `AppThemeProvider`).
 
 ## Providers you wrap
@@ -98,7 +102,7 @@ createRoot(document.getElementById("root")!).render(
 ## Notes
 
 - **`AuthProvider`** + **`adapter`** — `createSessionStorageAuthAdapter(key?)` stores a dummy token in `sessionStorage` for demos; swap for an adapter that calls your API. **`login`** receives a **`LoginCredentials`** object (`username`, `password`, and optional extra fields such as `businessId` for multi-tenant apps).
-- **`DataProvider`** — replace the stub with your REST client or `combineResourceHandlers`; see [data-permissions.md](data-permissions.md).
+- **`DataProvider`** — replace the stub with `combineResourceHandlers` + per-entity handlers; start with [tutorial-one-entity.md](tutorial-one-entity.md).
 - **`PermissionsProvider`** — wire `can(action, resource?)` to your roles/ACL; return `true` until you need gating.
 - **`routes`** — the full route list. Login uses **`access: "guest"`**; app pages default to **`protected`**. See [routing.md](routing.md).
 - **`access: "public"`** — optional top-level pages without auth (signup, etc.).

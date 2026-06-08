@@ -3,6 +3,7 @@ import { Controller, useFormContext, type FieldValues } from "react-hook-form";
 import type { ReactNode } from "react";
 import type { FieldRules } from "../types";
 import { useFormMetaOptional } from "../context/FormContext";
+import { useRegisterFormSource } from "../context/FormFieldsContext";
 
 export type FieldWrapperProps = {
   source: string;
@@ -27,6 +28,7 @@ export function FieldWrapper({
   const { control } = useFormContext<FieldValues>();
   const meta = useFormMetaOptional();
   const fieldLabel = label ?? source;
+  useRegisterFormSource(source);
 
   return (
     <Controller

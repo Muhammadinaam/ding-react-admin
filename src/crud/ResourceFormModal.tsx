@@ -5,9 +5,11 @@ import {
   type DefaultValues,
   type FieldValues,
 } from "react-hook-form";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
+import { FormFieldsProvider } from "./context/FormFieldsContext";
+import { pickBySources } from "./utils/pickBySources";
 
 export type ResourceFormModalProps = {
   resource: string;
@@ -31,6 +33,7 @@ export function ResourceFormModal({
   const [loading, setLoading] = useState(!isNew);
 
   const form = useForm<FieldValues>();
+  const fieldSourcesRef = useRef(new Set<string>());
 
   const load = useCallback(async () => {
     if (isNew || !editId) {
@@ -55,11 +58,15 @@ export function ResourceFormModal({
 
   async function onSubmit(values: FieldValues) {
     try {
+      const payload = pickBySources(
+        values as Record<string, unknown>,
+        Array.from(fieldSourcesRef.current),
+      );
       if (isNew) {
-        await dp.create(resource, values);
+        await dp.create(resource, payload);
         message.success("Created");
       } else if (editId) {
-        await dp.update(resource, { id: editId, data: values });
+        await dp.update(resource, { id: editId, data: payload });
         message.success("Updated");
       }
       onClose();
@@ -84,6 +91,7 @@ export function ResourceFormModal({
         <Spin />
       ) : (
         <FormMetaProvider resource={resource} isNew={isNew}>
+          <FormFieldsProvider sourcesRef={fieldSourcesRef}>
           <FormProvider {...form}>
             <Form
               layout="vertical"
@@ -98,6 +106,7 @@ export function ResourceFormModal({
               </Form.Item>
             </Form>
           </FormProvider>
+          </FormFieldsProvider>
         </FormMetaProvider>
       )}
     </Modal>

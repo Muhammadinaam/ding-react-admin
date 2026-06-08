@@ -22,6 +22,7 @@
     "build": "vite build && node -e \"require('fs').writeFileSync('dist/index.d.ts','export * from \\\"./src/index\\\";\\n')\"",
     "dev:example": "yarn --cwd examples/playground dev",
     "build:example": "yarn --cwd examples/playground build",
+    "test": "vitest run",
     "prepublishOnly": "yarn build"
   },
   "peerDependencies": {
@@ -46,6 +47,7 @@
     "react-router-dom": "^7.14.2",
     "typescript": "~6.0.2",
     "vite": "^8.0.9",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.4"
   }
 }

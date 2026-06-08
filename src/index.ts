@@ -37,6 +37,13 @@ export type {
 } from "./data/dataProviderTypes";
 export { combineResourceHandlers } from "./data/resourceHandlers";
 export { createMemoryResourceHandlers } from "./data/createMemoryResourceHandlers";
+export { createRestResourceHandlers } from "./data/createRestResourceHandlers";
+export type { RestResourceHandlersConfig } from "./data/createRestResourceHandlers";
+export {
+  toDjangoRestOrdering,
+  toODataOrderBy,
+  toJsonApiSort,
+} from "./data/sortHelpers";
 export {
   applyInMemoryListParams,
   filterRows,
@@ -116,6 +123,7 @@ export {
   useListQueryState,
   useChoices,
   getByPath,
+  pickBySources,
   useResourceListContext,
 } from "./crud";
 export type {

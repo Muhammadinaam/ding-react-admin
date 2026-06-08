@@ -1,3 +1,7 @@
+// WHAT YOU IMPLEMENT: store access + any delete side effects (see afterDelete below).
+// WHAT THE LIBRARY HANDLES: in-memory list filter/sort/paginate; form payload from field `source`.
+// SEE: docs/tutorial-one-entity.md
+
 import {
   createMemoryResourceHandlers,
   type ResourceHandlers,
@@ -24,19 +28,6 @@ export function createInvoiceHandlers(
       issuedAt: String(
         data.issuedAt ?? new Date().toISOString().slice(0, 10),
       ),
-    }),
-    applyUpdate: (current, patch) => ({
-      ...current,
-      number:
-        patch.number !== undefined ? String(patch.number) : current.number,
-      customer:
-        patch.customer !== undefined
-          ? String(patch.customer)
-          : current.customer,
-      issuedAt:
-        patch.issuedAt !== undefined
-          ? String(patch.issuedAt)
-          : current.issuedAt,
     }),
     afterDelete: (removed) => {
       api.invoiceLines = api.invoiceLines.filter(

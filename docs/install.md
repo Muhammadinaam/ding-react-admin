@@ -75,7 +75,8 @@ Ant Design is a **peer**, not bundled inside this library — your app installs 
 
 ## Next steps
 
-Wire providers and routes: [quick-start.md](quick-start.md).
+- **Full CRUD walkthrough:** [tutorial-one-entity.md](tutorial-one-entity.md) — create a Vite app, install this package, add a Users page step by step.
+- **Minimal shell only:** [quick-start.md](quick-start.md).
 
 ## Installing from a fork
 

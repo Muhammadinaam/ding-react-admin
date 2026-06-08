@@ -1,3 +1,7 @@
+// WHAT YOU IMPLEMENT: store access + any delete side effects (see afterDelete below).
+// WHAT THE LIBRARY HANDLES: in-memory list filter/sort/paginate; form payload from field `source`.
+// SEE: docs/tutorial-one-entity.md
+
 import {
   createMemoryResourceHandlers,
   type ResourceHandlers,
@@ -21,10 +25,6 @@ export function createBrandHandlers(
       id,
       name: String(data.name ?? ""),
       productId: null,
-    }),
-    applyUpdate: (current, patch) => ({
-      ...current,
-      name: patch.name !== undefined ? String(patch.name) : current.name,
     }),
     afterDelete: (removed) => {
       api.products.forEach((p: Product) => {

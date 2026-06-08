@@ -1,3 +1,7 @@
+// ADVANCED: manual handlers when create/update/delete have cross-entity side effects.
+// For simple entities use createMemoryResourceHandlers or createRestResourceHandlers instead.
+// SEE: docs/data-layer-advanced.md
+
 import {
   applyInMemoryListParams,
   getRowById,

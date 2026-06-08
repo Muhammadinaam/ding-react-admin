@@ -31,5 +31,7 @@ export { useListQueryState } from './utils/useListQueryState';
 export type { ListQueryState, ListQueryActions, } from './utils/useListQueryState';
 export { useChoices } from './utils/useChoices';
 export { getByPath } from './utils/getByPath';
+export { pickBySources } from './utils/pickBySources';
+export { setByPath } from './utils/setByPath';
 export type { BaseSourceProps, ChoiceOption, ChoicesLoader, ReferenceProps, DisplayProps, EditMode, FieldRules, ResourceListBuiltInActions, ResourceListBulkAction, ResourceListBulkActionHelpers, ResourceListRowActionsHelpers, } from './types';
 //# sourceMappingURL=index.d.ts.map

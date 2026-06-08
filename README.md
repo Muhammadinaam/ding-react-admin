@@ -36,6 +36,8 @@ Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter tha
 
 ## Getting started
 
+**New to CRUD:** [docs/tutorial-one-entity.md](docs/tutorial-one-entity.md) — full walkthrough from `yarn create vite` through Users list/form, `data-provider.ts`, and routes.
+
 **Quick path:** [docs/quick-start.md](docs/quick-start.md) — `<AuthProvider>` + `<AdminApp />` with declarative routes.
 
 **Full control:** [docs/composition.md](docs/composition.md) and the [playground](examples/playground/src/main.tsx) — your own `createBrowserRouter` with `AdminLayout`, `Protected`, `GuestOnly`, `DataProvider`, and `PermissionsProvider`.
@@ -45,6 +47,7 @@ Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter tha
 | Topic | Guide |
 |-------|--------|
 | Install & peer deps | [docs/install.md](docs/install.md) |
+| **Tutorial: add one CRUD entity** | [docs/tutorial-one-entity.md](docs/tutorial-one-entity.md) |
 | Example playground app | [docs/example-app.md](docs/example-app.md) |
 | Sidebar navigation | [docs/navigation.md](docs/navigation.md) |
 | CRUD overview | [docs/crud/overview.md](docs/crud/overview.md) |
