@@ -16,7 +16,7 @@ import {
 } from "ding-react-admin";
 import { Button } from "antd";
 import type { Product } from "../../api/memoryApi";
-import { PRODUCT_RESOURCE } from "./productData";
+import { PRODUCT_RESOURCE, PRODUCT_PERMS } from "./productData";
 
 type ProductRow = Product & Record<string, unknown>;
 
@@ -48,6 +48,11 @@ export function ProductListPage() {
       title="Products"
       pathPrefix="/products"
       editMode="both"
+      permissions={{
+        add: PRODUCT_PERMS.add,
+        change: PRODUCT_PERMS.change,
+        delete: PRODUCT_PERMS.delete,
+      }}
       formChildren={productFormFields}
       actions={{ delete: false }}
       bulkActions={[
@@ -116,6 +121,10 @@ export function ProductFormPage() {
       resource={PRODUCT_RESOURCE}
       title="Product"
       listPath="/products"
+      permissions={{
+        add: PRODUCT_PERMS.add,
+        change: PRODUCT_PERMS.change,
+      }}
     >
       {productFormFields}
     </ResourceForm>

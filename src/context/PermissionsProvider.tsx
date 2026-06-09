@@ -7,19 +7,16 @@ import {
 } from "react";
 
 /**
- * Lightweight permission check. Map to roles, ACLs, or flags from your backend.
- * Example: `can("write", "products")` or `can("delete")`.
+ * Check whether the current user has a permission string from your backend.
+ * Example: `can("users.create")` or `can("main.add_user")`.
  */
-export type PermissionsChecker = (
-  action: string,
-  resource?: string,
-) => boolean;
+export type PermissionsChecker = (permission: string) => boolean;
 
 const PermissionsContext = createContext<PermissionsChecker | null>(null);
 
 export type PermissionsProviderProps = {
   children: ReactNode;
-  /** Return true if the current user may perform `action` on optional `resource`. */
+  /** Return true if the current user has this permission string. */
   can: PermissionsChecker;
 };
 
@@ -45,8 +42,16 @@ export function usePermissions(): PermissionsChecker {
   return ctx;
 }
 
-/** Convenience: `const canWrite = useCan("write", "products");` */
-export function useCan(action: string, resource?: string) {
+/** Build a `can(permission)` checker from the user's permission strings (e.g. from login). */
+export function createPermissionsChecker(
+  getPermissions: () => string[] | undefined,
+): PermissionsChecker {
+  return (permission: string) =>
+    getPermissions()?.includes(permission) ?? false;
+}
+
+/** Convenience: `const allowed = useCan("users.create")();` */
+export function useCan(permission: string) {
   const can = usePermissions();
-  return useCallback(() => can(action, resource), [can, action, resource]);
+  return useCallback(() => can(permission), [can, permission]);
 }

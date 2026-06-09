@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { ResourcePermissions } from '../permissions/resourcePermissions';
 import { EditMode, ResourceListBuiltInActions, ResourceListBulkAction, ResourceListRowActionsHelpers } from './types';
 type ResourceListContextValue = {
     filterValues: Record<string, unknown>;
@@ -29,7 +30,9 @@ export type ResourceListProps = {
     bulkDelete?: boolean;
     /** Set false to hide row checkboxes and the bulk action bar. Default true. */
     bulkActionsEnabled?: boolean;
+    /** Permission strings for built-in actions. Omit to allow all (demos only). */
+    permissions?: ResourcePermissions;
 };
-export declare function ResourceList({ resource, title, pathPrefix, newPath, staticFilter, editMode, syncQueryParams, children, formChildren, actions, rowActions, headerExtra, bulkActions, bulkDelete, bulkActionsEnabled, }: ResourceListProps): import("react/jsx-runtime").JSX.Element;
+export declare function ResourceList({ resource, title, pathPrefix, newPath, staticFilter, editMode, syncQueryParams, children, formChildren, actions, rowActions, headerExtra, bulkActions, bulkDelete, bulkActionsEnabled, permissions, }: ResourceListProps): import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=ResourceList.d.ts.map

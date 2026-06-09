@@ -12,4 +12,9 @@ export declare function GuestOnly({ children, redirectTo, }: {
     children: ReactElement;
     redirectTo?: string;
 }): import("react/jsx-runtime").JSX.Element;
+export declare function RequirePermission({ permission, redirect, children, }: {
+    permission: string;
+    redirect: string;
+    children: ReactElement;
+}): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=guards.d.ts.map

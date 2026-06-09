@@ -13,6 +13,7 @@ export {
 } from "./context/DataProvider";
 export {
   PermissionsProvider,
+  createPermissionsChecker,
   useCan,
   usePermissions,
   type PermissionsProviderProps,
@@ -53,9 +54,12 @@ export type {
   CombineResourceHandlersOptions,
   ResourceAction,
   ResourceGuard,
+  ResourceHandlerEntry,
   ResourceHandlerMap,
   ResourceHandlers,
 } from "./data/resourceHandlers";
+export type { ResourcePermissions } from "./permissions/resourcePermissions";
+export { filterNavByPermission } from "./permissions/resourcePermissions";
 export type { MemoryResourceHandlersConfig } from "./data/createMemoryResourceHandlers";
 export type { PermissionsChecker } from "./context/PermissionsProvider";
 export { LoginPage } from "./pages/LoginPage";
@@ -67,7 +71,7 @@ export {
   ThemeSwitch,
   ThemeToolbar,
 } from "./components";
-export { Guard, GuestOnly, Protected } from "./router/guards";
+export { Guard, GuestOnly, Protected, RequirePermission } from "./router/guards";
 export { createAdminRouter } from "./router/createAdminRouter";
 export {
   deriveAuthPaths,

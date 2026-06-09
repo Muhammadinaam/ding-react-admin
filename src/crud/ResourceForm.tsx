@@ -9,6 +9,9 @@ import {
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDataProvider } from "../context/DataProvider";
+import { usePermissions } from "../context/PermissionsProvider";
+import type { ResourcePermissions } from "../permissions/resourcePermissions";
+import { checkResourcePermission } from "../permissions/resourcePermissions";
 import { FormMetaProvider } from "./context/FormContext";
 import { FormFieldsProvider } from "./context/FormFieldsContext";
 import { pickBySources } from "./utils/pickBySources";
@@ -33,6 +36,8 @@ export type ResourceFormProps<T extends FieldValues> = {
   onSaved?: (record: T) => void;
   stayOnPage?: boolean;
   inlines?: ResourceFormInlineConfig[];
+  /** Permission strings for create vs edit. Omit to allow all (demos only). */
+  permissions?: Pick<ResourcePermissions, "add" | "change">;
 };
 
 function resolveInlineArrayName(config: ResourceFormInlineConfig) {
@@ -48,10 +53,12 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   onSaved,
   stayOnPage,
   inlines,
+  permissions,
 }: ResourceFormProps<T>) {
   const { id } = useParams();
   const isNew = id === "new" || !id;
   const dp = useDataProvider();
+  const can = usePermissions();
   const navigate = useNavigate();
   const { message } = App.useApp();
   const { token } = theme.useToken();
@@ -132,6 +139,18 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    if (!permissions) return;
+    const slot = isNew ? "add" : "change";
+    if (!checkResourcePermission(can, permissions, slot)) {
+      navigate(listPath, { replace: true });
+    }
+  }, [permissions, isNew, can, navigate, listPath]);
+
+  const canSave = permissions
+    ? checkResourcePermission(can, permissions, isNew ? "add" : "change")
+    : true;
 
   async function onSubmit(values: T) {
     try {
@@ -222,7 +241,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
               {children}
               <Form.Item style={{ marginTop: 16 }}>
                 <Space>
-                  <Button type="primary" htmlType="submit" disabled={loading}>
+                  <Button type="primary" htmlType="submit" disabled={loading || !canSave}>
                     Save
                   </Button>
                   <Link to={listPath}>

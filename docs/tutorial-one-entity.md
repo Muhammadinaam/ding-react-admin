@@ -85,7 +85,7 @@ const dataProvider: DataProviderContract = {
   delete: async () => ({ data: {} }),
 };
 
-const can = (_action: string, _resource?: string) => true;
+const can = (_permission: string) => true; // temporary — fixed in Step 16 (Part 1B)
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -465,6 +465,137 @@ yarn dev
 3. Click **Users** in the sidebar.
 4. Create, edit, and delete users against your API.
 
+---
+
+## Part 1B — Permissions (Steps 15–20)
+
+> When you log in, your backend sends a list of permission **strings** — like `"users.read"` or `"main.view_user"`. Think of it as a **key ring**: if your key is on the ring, you see the button; if not, it stays hidden. The library does not care what the strings look like — Django, .NET, and Node apps all work the same way.
+
+Complete Steps 1–14 first so Users CRUD works. Then add permissions below.
+
+### Step 15 — Save permission strings next to Users
+
+**File:** `src/pages/users/userData.ts`
+
+Add (use whatever strings **your** API returns):
+
+```ts
+export const USER_PERMS = {
+  list: "users.read",       // see the Users page
+  add: "users.create",      // New button
+  change: "users.update",   // Edit button
+  delete: "users.delete",   // Delete button
+};
+```
+
+| What the user clicks | Slot | Example string |
+|----------------------|------|----------------|
+| Users in sidebar | `list` | `users.read` |
+| New | `add` | `users.create` |
+| Edit | `change` | `users.update` |
+| Delete | `delete` | `users.delete` |
+
+Export `USER_PERMS` from `src/pages/users/index.ts` too.
+
+### Step 16 — One function to check permissions
+
+**File:** `src/main.tsx`
+
+Replace the temporary `can = () => true` stub:
+
+```tsx
+import { createPermissionsChecker } from "ding-react-admin";
+import { getUser } from "./lib/api-client"; // however you store the logged-in user
+
+const can = createPermissionsChecker(() => getUser()?.permissions);
+```
+
+Your auth adapter should save `user.permissions` from the login response (a `string[]`).
+
+`can("users.create")` returns `true` when that string is in the array.
+
+### Step 17 — Hide buttons on list and form pages
+
+**File:** `src/pages/users/Users.tsx`
+
+```tsx
+import { USER_RESOURCE, USER_PERMS } from "./userData";
+
+<ResourceList
+  permissions={{
+    add: USER_PERMS.add,
+    change: USER_PERMS.change,
+    delete: USER_PERMS.delete,
+  }}
+  ...
+/>
+
+<ResourceForm
+  permissions={{
+    add: USER_PERMS.add,
+    change: USER_PERMS.change,
+  }}
+  ...
+/>
+```
+
+A user with only `users.read` sees the table but no New / Edit / Delete.
+
+### Step 18 — Hide sidebar link and block direct URLs
+
+**File:** `src/navigation.tsx`
+
+```tsx
+import { USER_PERMS } from "./pages/users";
+
+{ path: "/users", label: "Users", Icon: UserOutlined, permission: USER_PERMS.list },
+```
+
+**File:** `src/routes.tsx`
+
+```tsx
+import { RequirePermission } from "ding-react-admin";
+import { USER_PERMS } from "./pages/users";
+
+{ path: "users", element: (
+  <RequirePermission permission={USER_PERMS.list} redirect="/">
+    <UserListPage />
+  </RequirePermission>
+) },
+```
+
+Nav hides the link; the route guard catches users who bookmark `/users`.
+
+### Step 19 — Block API calls (recommended)
+
+**File:** `src/lib/data-provider.ts`
+
+```tsx
+import { USER_PERMS } from "../pages/users";
+
+export function createDataProvider(): DataProviderContract {
+  return combineResourceHandlers(
+    {
+      [USER_RESOURCE]: {
+        handlers: createUserHandlers(() => getApiClient()),
+        permissions: USER_PERMS,
+      },
+    },
+    { can }, // same `can` from main.tsx — pass via a shared module if needed
+  );
+}
+```
+
+If someone bypasses the UI, the data layer throws Forbidden.
+
+### Step 20 — Try it
+
+1. Log in as a user with all permissions → New / Edit / Delete visible.
+2. Log in as read-only → list only.
+3. Playground demo: **admin** / **admin** vs **user** / **user** (`yarn dev:example` in the package repo).
+
+---
+
 ### Optional — Vite dev proxy (only if frontend and API are on different ports)
 
 **You can skip this step** if:
@@ -508,7 +639,7 @@ src/
   pages/
     users/
       Users.tsx            # ResourceList + ResourceForm (field source = payload)
-      userData.ts          # createUserHandlers — five API functions
+      userData.ts          # createUserHandlers + USER_PERMS (Step 15)
       index.ts             # re-exports
 ```
 
@@ -519,6 +650,7 @@ src/
 | Folders and files above | `AdminApp`, layout, theme |
 | Field `source` in `Users.tsx` | Submit object from sources (`pickBySources`) |
 | Five API functions in `userData.ts` | `createRestResourceHandlers` CRUD glue |
+| Permission strings in `USER_PERMS` | `ResourceList` / nav / routes hide UI |
 | `createDataProvider` + one line per entity | `combineResourceHandlers` |
 | Sort/pagination in `list` | Optional `toDjangoRestOrdering` etc. |
 | Routes and nav entries | `ResourceList`, `ResourceForm`, filters, bulk actions |
@@ -684,6 +816,7 @@ if (ordering) qs.set("ordering", ordering);
 
 - [install.md](install.md) — peer dependencies
 - [quick-start.md](quick-start.md) — minimal shell without CRUD
+- [data-permissions.md](data-permissions.md) — short permissions reference
 - [data-layer-advanced.md](data-layer-advanced.md) — manual handlers, cross-entity rules
 - [example-app.md](example-app.md) — in-memory playground
 

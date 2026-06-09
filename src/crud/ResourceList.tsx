@@ -18,6 +18,8 @@ import {
 import { Link } from "react-router-dom";
 import { useDataProvider } from "../context/DataProvider";
 import { usePermissions } from "../context/PermissionsProvider";
+import type { ResourcePermissions } from "../permissions/resourcePermissions";
+import { checkResourcePermission } from "../permissions/resourcePermissions";
 import { ListContextProvider, useListContext } from "./context/ListContext";
 import { FilterContextProvider } from "./context/FilterContext";
 import { ResourceFormModal } from "./ResourceFormModal";
@@ -71,6 +73,8 @@ export type ResourceListProps = {
   bulkDelete?: boolean;
   /** Set false to hide row checkboxes and the bulk action bar. Default true. */
   bulkActionsEnabled?: boolean;
+  /** Permission strings for built-in actions. Omit to allow all (demos only). */
+  permissions?: ResourcePermissions;
 };
 
 function ResourceListTable<T extends Record<string, unknown>>({
@@ -86,6 +90,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
   bulkActions: bulkActionsProp,
   bulkDelete = true,
   bulkActionsEnabled = true,
+  permissions,
   queryState,
   queryActions,
 }: {
@@ -104,6 +109,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
   bulkActions?: ResourceListBulkAction[];
   bulkDelete?: boolean;
   bulkActionsEnabled?: boolean;
+  permissions?: ResourcePermissions;
   queryState: ReturnType<typeof useListQueryState>[0];
   queryActions: ReturnType<typeof useListQueryState>[1];
 }) {
@@ -120,17 +126,18 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const [bulkRunning, setBulkRunning] = useState(false);
 
   const createHref = newPath ?? `${pathPrefix}/new`;
-  const write = can("write", resource);
-  const del = can("delete", resource);
+  const canAdd = checkResourcePermission(can, permissions, "add");
+  const canChange = checkResourcePermission(can, permissions, "change");
+  const canDelete = checkResourcePermission(can, permissions, "delete");
   const showEdit =
-    write &&
+    canChange &&
     (editMode === "page" || editMode === "both") &&
     actionsConfig?.edit !== false;
   const showQuickEdit =
-    write &&
+    canChange &&
     (editMode === "modal" || editMode === "both") &&
     actionsConfig?.quickEdit !== false;
-  const showDelete = del && actionsConfig?.delete !== false;
+  const showDelete = canDelete && actionsConfig?.delete !== false;
   const showActionsColumn = showEdit || showQuickEdit || showDelete || rowActions;
 
   const clearSelection = useCallback(() => {
@@ -140,7 +147,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const availableBulkActions = useMemo((): ResourceListBulkAction[] => {
     if (!bulkActionsEnabled) return [];
     const built: ResourceListBulkAction[] = [];
-    if (bulkDelete && del) {
+    if (bulkDelete && canDelete) {
       built.push({
         key: "__delete",
         label: "Delete selected",
@@ -160,7 +167,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
   }, [
     bulkActionsEnabled,
     bulkDelete,
-    del,
+    canDelete,
     bulkActionsProp,
     dp,
     resource,
@@ -324,7 +331,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
 
   const handleDelete = useCallback(
     async (row: T) => {
-      if (!can("delete", resource)) return;
+      if (!canDelete) return;
       try {
         await dp.delete(resource, row.id as string | number);
         message.success("Deleted");
@@ -333,7 +340,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
         message.error(e instanceof Error ? e.message : "Delete failed");
       }
     },
-    [can, dp, resource, load, message],
+    [canDelete, dp, resource, load, message],
   );
 
   const tableColumns = useMemo((): ColumnsType<T> => {
@@ -463,10 +470,10 @@ function ResourceListTable<T extends Record<string, unknown>>({
           </Typography.Title>
         }
         extra={
-          (headerExtra || write) ? (
+          (headerExtra || canAdd) ? (
             <Space>
               {headerExtra}
-              {write ? (
+              {canAdd ? (
                 editMode === "modal" || editMode === "both" ? (
                   <>
                     {editMode === "both" ? (
@@ -566,6 +573,7 @@ export function ResourceList({
   bulkActions,
   bulkDelete,
   bulkActionsEnabled,
+  permissions,
 }: ResourceListProps) {
   const [queryState, queryActions] = useListQueryState(staticFilter);
 
@@ -614,6 +622,7 @@ export function ResourceList({
             bulkActions={bulkActions}
             bulkDelete={bulkDelete}
             bulkActionsEnabled={bulkActionsEnabled}
+            permissions={permissions}
             queryState={queryState}
             queryActions={queryActions}
           />

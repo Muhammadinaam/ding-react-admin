@@ -19,7 +19,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ThemeToolbar } from "../components/ThemeToolbar";
 import { useAuth } from "../context/AuthProvider";
+import { usePermissions } from "../context/PermissionsProvider";
 import { useThemeMode } from "../context/AppThemeProvider";
+import { filterNavByPermission } from "../permissions/resourcePermissions";
 import type { AdminLayoutProps, NavItem } from "../types";
 
 const LIGHT_SIDEBAR_BG = "#001529";
@@ -141,6 +143,7 @@ export function AdminLayout({
   const { resolved } = useThemeMode();
   const isAppDark = resolved === "dark";
   const { logout } = useAuth();
+  const can = usePermissions();
   const [collapsed, setCollapsed] = useState(() =>
     readSiderCollapsed(siderCollapsedStorageKey),
   );
@@ -175,20 +178,28 @@ export function AdminLayout({
     setMobileNavOpen(false);
   }, [location.pathname]);
 
-  const leafPaths = useMemo(() => collectLeafPaths(navItems), [navItems]);
+  const visibleNavItems = useMemo(
+    () => filterNavByPermission(navItems, can),
+    [navItems, can],
+  );
+
+  const leafPaths = useMemo(
+    () => collectLeafPaths(visibleNavItems),
+    [visibleNavItems],
+  );
 
   const menuItems: MenuProps["items"] = useMemo(
-    () => navItemsToAntdItems(navItems),
-    [navItems],
+    () => navItemsToAntdItems(visibleNavItems),
+    [visibleNavItems],
   );
 
   const requiredOpenKeys = useMemo(
-    () => ancestorKeysForActivePath(navItems, location.pathname),
-    [navItems, location.pathname],
+    () => ancestorKeysForActivePath(visibleNavItems, location.pathname),
+    [visibleNavItems, location.pathname],
   );
 
   const [openKeys, setOpenKeys] = useState<string[]>(() =>
-    ancestorKeysForActivePath(navItems, location.pathname),
+    ancestorKeysForActivePath(visibleNavItems, location.pathname),
   );
 
   useEffect(() => {

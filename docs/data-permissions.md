@@ -1,88 +1,64 @@
 # Data layer & permissions
 
-- **`DataProvider` / `useDataProvider`** — supply a `DataProvider` implementation (`getList`, `getOne`, `create`, `update`, `delete`). Types are exported as `DataProviderContract`, `GetListParams`, etc.
-- **`PermissionsProvider` / `usePermissions` / `useCan`** — one function `can(action, resource?)` for UI gating (wire to your roles or ACL).
+- **`DataProvider` / `useDataProvider`** — supply CRUD handlers via `combineResourceHandlers`.
+- **`PermissionsProvider` / `usePermissions` / `useCan`** — check opaque permission **strings** from your backend.
 
-**Not automatic** — wrap these yourself (inside `AuthProvider`), same as auth. Required only when using CRUD components.
+**Full walkthrough:** [tutorial-one-entity.md](tutorial-one-entity.md) — Steps 15–20 (Part 1B).
 
-Example wiring (see `examples/playground/src/main.tsx` for a full stack). The route tree lives in your app so login, guards, and `AdminLayout` stay visible:
+## Quick setup
+
+After login, your backend returns `user.permissions: string[]`. The library does **not** parse format — Django (`main.view_user`), .NET (`Users.Read`), Node (`users:read`), all work the same.
 
 ```tsx
-import {
-  AdminLayout,
-  AppThemeProvider,
-  AuthProvider,
-  DataProvider,
-  GuestOnly,
-  LoginPage,
-  PermissionsProvider,
-  Protected,
-  combineResourceHandlers,
-  createSessionStorageAuthAdapter,
-} from "ding-react-admin";
-import type { RouteObject } from "react-router-dom";
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
-import { createUserHandlers, USER_RESOURCE } from "./pages/users";
+import { createPermissionsChecker, PermissionsProvider } from "ding-react-admin";
+import { getUser } from "./api-client";
 
-const LOGIN_PATH = "/login";
-const HOME_PATH = "/";
-const authAdapter = createSessionStorageAuthAdapter();
+const can = createPermissionsChecker(() => getUser()?.permissions);
 
-const data = combineResourceHandlers({
-  [USER_RESOURCE]: createUserHandlers(() => apiClient),
-});
+<PermissionsProvider can={can}>
+  <AdminApp ... />
+</PermissionsProvider>
 ```
 
-See [tutorial-one-entity.md](tutorial-one-entity.md) for the full Users example (fetch + typed client). Until you add entities, use a stub `DataProviderContract` with empty `getList` / `getOne` / etc.
+## Per entity (4 strings in `userData.ts`)
 
-const can = (action: string, resource?: string) => {
-  /* read role from session, etc. */
-  return true;
+```ts
+export const USER_PERMS = {
+  list: "users.read",
+  add: "users.create",
+  change: "users.update",
+  delete: "users.delete",
 };
+```
 
-const router = createBrowserRouter([
-  {
-    path: LOGIN_PATH,
-    element: (
-      <GuestOnly redirectTo={HOME_PATH}>
-        <LoginPage afterLoginPath={HOME_PATH} />
-      </GuestOnly>
-    ),
-  },
-  {
-    path: "/",
-    element: (
-      <Protected redirectTo={LOGIN_PATH}>
-        <AdminLayout
-          navItems={navItems}
-          loginPath={LOGIN_PATH}
-          brand="Acme"
-          collapsedBrand="A"
-        />
-      </Protected>
-    ),
-    children: routes as RouteObject[],
-  },
-  { path: "*", element: <Navigate to={HOME_PATH} replace /> },
-]);
+| Slot | UI / API |
+|------|----------|
+| `list` | Sidebar, route guard, list page |
+| `add` | New button, create form, POST |
+| `change` | Edit / Quick edit, edit form, PATCH |
+| `delete` | Delete row, bulk delete |
 
-export function Root() {
-  return (
-    <AppThemeProvider>
-      <AuthProvider adapter={authAdapter}>
-        <DataProvider value={data}>
-          <PermissionsProvider can={can}>
-            <RouterProvider router={router} />
-          </PermissionsProvider>
-        </DataProvider>
-      </AuthProvider>
-    </AppThemeProvider>
-  );
-}
+```tsx
+<ResourceList permissions={{ add: USER_PERMS.add, change: USER_PERMS.change, delete: USER_PERMS.delete }} ... />
+<ResourceForm permissions={{ add: USER_PERMS.add, change: USER_PERMS.change }} ... />
+```
+
+Nav: `{ path: "/users", label: "Users", permission: USER_PERMS.list }`
+
+Routes: `<RequirePermission permission={USER_PERMS.list} redirect="/"><UserListPage /></RequirePermission>`
+
+Data provider:
+
+```ts
+combineResourceHandlers(
+  {
+    users: {
+      handlers: createUserHandlers(getApi),
+      permissions: USER_PERMS,
+    },
+  },
+  { can },
+);
 ```
 
 [← Back to README](../README.md)

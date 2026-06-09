@@ -12,6 +12,13 @@ import type { PlaygroundHandlerContext } from "../playgroundHandlerContext";
 
 export const PRODUCT_RESOURCE = "products" as const;
 
+export const PRODUCT_PERMS = {
+  list: "products.list",
+  add: "products.add",
+  change: "products.change",
+  delete: "products.delete",
+} as const;
+
 type ProductRow = Product & Record<string, unknown>;
 type Row = Record<string, unknown>;
 

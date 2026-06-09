@@ -17,6 +17,8 @@ export type NavItem = {
   path: string;
   label: ReactNode;
   Icon?: React.ComponentType;
+  /** Hide this item when the user lacks this permission string. */
+  permission?: string;
   children?: NavItem[];
 };
 

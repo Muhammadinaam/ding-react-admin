@@ -14,6 +14,8 @@ export type NavItem = {
     path: string;
     label: ReactNode;
     Icon?: React.ComponentType;
+    /** Hide this item when the user lacks this permission string. */
+    permission?: string;
     children?: NavItem[];
 };
 /** Credentials passed from login forms to `AuthAdapter.login` and `useAuth().login`. */

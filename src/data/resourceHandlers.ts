@@ -1,3 +1,6 @@
+import type { PermissionsChecker } from "../context/PermissionsProvider";
+import type { ResourcePermissions } from "../permissions/resourcePermissions";
+import { checkResourcePermission } from "../permissions/resourcePermissions";
 import type {
   CreateResult,
   DataProvider,
@@ -10,8 +13,9 @@ import type {
   UpdateResult,
 } from "./dataProviderTypes";
 
-export type ResourceAction = "list" | "read" | "write" | "delete";
+export type ResourceAction = "list" | "read" | "add" | "change" | "delete";
 
+/** @deprecated Use per-resource `permissions` with `can` in combineResourceHandlers options. */
 export type ResourceGuard = (
   resource: string,
   action: ResourceAction,
@@ -30,12 +34,40 @@ export type ResourceHandlers<
   delete: (id: Identifier) => Promise<DeleteResult<RecordType>>;
 };
 
-export type ResourceHandlerMap = Record<string, ResourceHandlers>;
+export type ResourceHandlerEntry =
+  | ResourceHandlers
+  | {
+      handlers: ResourceHandlers;
+      permissions?: ResourcePermissions;
+    };
+
+export type ResourceHandlerMap = Record<string, ResourceHandlerEntry>;
 
 export type CombineResourceHandlersOptions = {
-  /** Optional auth / logging hook before each operation. */
+  /** Permission checker from PermissionsProvider wiring. */
+  can?: PermissionsChecker;
+  /** @deprecated Use per-resource `permissions` entries instead. */
   guard?: ResourceGuard;
 };
+
+function resolveEntry(entry: ResourceHandlerEntry): {
+  handlers: ResourceHandlers;
+  permissions?: ResourcePermissions;
+} {
+  if ("handlers" in entry) return entry;
+  return { handlers: entry };
+}
+
+function assertPermission(
+  can: PermissionsChecker | undefined,
+  permissions: ResourcePermissions | undefined,
+  slot: keyof ResourcePermissions,
+) {
+  if (!can || !permissions) return;
+  if (!checkResourcePermission(can, permissions, slot)) {
+    throw new Error("Forbidden");
+  }
+}
 
 /**
  * Compose per-entity handlers into a react-admin-style `DataProvider`.
@@ -45,34 +77,44 @@ export function combineResourceHandlers(
   handlers: ResourceHandlerMap,
   options?: CombineResourceHandlersOptions,
 ): DataProvider {
-  const guard = options?.guard;
+  const { can, guard } = options ?? {};
 
-  const resolve = (resource: string): ResourceHandlers => {
-    const h = handlers[resource];
-    if (!h) throw new Error(`Unknown resource: ${resource}`);
-    return h;
+  const resolve = (resource: string) => {
+    const entry = handlers[resource];
+    if (!entry) throw new Error(`Unknown resource: ${resource}`);
+    return resolveEntry(entry);
   };
 
   return {
     async getList(resource, params) {
+      const { handlers: h, permissions } = resolve(resource);
       guard?.(resource, "list");
-      return resolve(resource).getList(params);
+      assertPermission(can, permissions, "list");
+      return h.getList(params);
     },
     async getOne(resource, id) {
+      const { handlers: h, permissions } = resolve(resource);
       guard?.(resource, "read");
-      return resolve(resource).getOne(id);
+      assertPermission(can, permissions, "read");
+      return h.getOne(id);
     },
     async create(resource, data) {
-      guard?.(resource, "write");
-      return resolve(resource).create(data);
+      const { handlers: h, permissions } = resolve(resource);
+      guard?.(resource, "add");
+      assertPermission(can, permissions, "add");
+      return h.create(data);
     },
     async update(resource, params) {
-      guard?.(resource, "write");
-      return resolve(resource).update(params);
+      const { handlers: h, permissions } = resolve(resource);
+      guard?.(resource, "change");
+      assertPermission(can, permissions, "change");
+      return h.update(params);
     },
     async delete(resource, id) {
+      const { handlers: h, permissions } = resolve(resource);
       guard?.(resource, "delete");
-      return resolve(resource).delete(id);
+      assertPermission(can, permissions, "delete");
+      return h.delete(id);
     },
   };
 }

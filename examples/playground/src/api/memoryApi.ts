@@ -1,3 +1,8 @@
+import {
+  adminPermissions,
+  readOnlyPermissions,
+} from "./playgroundPermissions";
+
 export type PlaygroundRole = "admin" | "user";
 
 export type MemoryUser = {
@@ -44,7 +49,9 @@ export type InvoiceLine = {
   unitPrice: number;
 };
 
-export type PublicUser = Omit<MemoryUser, "password">;
+export type PublicUser = Omit<MemoryUser, "password"> & {
+  permissions: string[];
+};
 
 /**
  * Stateless session: survives page refresh while in-memory rows reset.
@@ -186,7 +193,9 @@ export class PlaygroundMemoryApi {
     if (!u) throw new Error("Invalid credentials");
     const token = encodePlaygroundToken(u.id);
     const { password: _p, ...pub } = u;
-    return { token, user: pub };
+    const permissions =
+      u.role === "admin" ? adminPermissions() : readOnlyPermissions();
+    return { token, user: { ...pub, permissions } };
   }
 
   logoutToken(_token: string | null) {
@@ -202,25 +211,12 @@ export class PlaygroundMemoryApi {
     return pub;
   }
 
-  can(token: string | null, action: string, resource?: string): boolean {
+  getPermissions(token: string | null): string[] {
     try {
       const u = this.requireUser(token);
-      if (u.role === "admin") return true;
-      if (action === "read" || action === "list") {
-        return (
-          resource === undefined ||
-          (RESOURCES as readonly string[]).includes(resource)
-        );
-      }
-      return false;
+      return u.permissions;
     } catch {
-      return false;
-    }
-  }
-
-  assertCan(token: string | null, action: string, resource?: string) {
-    if (!this.can(token, action, resource)) {
-      throw new Error("Forbidden");
+      return [];
     }
   }
 

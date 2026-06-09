@@ -20,7 +20,6 @@ import {
 import {
   createPlaygroundAuthAdapter,
   createPlaygroundPermissions,
-  playgroundGetToken,
   PLAYGROUND_SESSION_KEY,
 } from "./api/playgroundAuth";
 import { createPlaygroundDataProvider } from "./api/playgroundDataProvider";
@@ -33,11 +32,8 @@ const HOME_PATH = "/";
 
 const api = new PlaygroundMemoryApi();
 const authAdapter = createPlaygroundAuthAdapter(api, PLAYGROUND_SESSION_KEY);
-const dataProvider = createPlaygroundDataProvider(
-  api,
-  playgroundGetToken(PLAYGROUND_SESSION_KEY),
-);
-const permissions = createPlaygroundPermissions(api, PLAYGROUND_SESSION_KEY);
+const can = createPlaygroundPermissions();
+const dataProvider = createPlaygroundDataProvider(api, can);
 
 const loginElement = (
   <LoginPage
@@ -81,7 +77,7 @@ createRoot(document.getElementById("root")!).render(
       <AppThemeProvider>
         <AuthProvider adapter={authAdapter}>
           <DataProvider value={dataProvider}>
-            <PermissionsProvider can={permissions}>
+            <PermissionsProvider can={can}>
               <RouterProvider router={router} />
             </PermissionsProvider>
           </DataProvider>
