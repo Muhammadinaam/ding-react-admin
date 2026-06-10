@@ -2100,7 +2100,7 @@ function Sn({ name: e, label: t, required: n, rules: r, hideLabel: i, children: 
 }
 //#endregion
 //#region src/crud/fields/useInlineOrFormField.tsx
-function Cn(e, t, n, r, s, c) {
+function $(e, t, n, r, s, c) {
 	let l = dn(), u = l?.registerField, d = u != null, f = o(s);
 	f.current = s;
 	let p = a(() => u ? {
@@ -2155,8 +2155,8 @@ function Cn(e, t, n, r, s, c) {
 }
 //#endregion
 //#region src/crud/fields/TextField.tsx
-function wn({ source: e, label: t, required: n, rules: r, placeholder: i, width: a, minWidth: o, inputStyle: s }) {
-	let c = Cn(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(O, {
+function Cn({ source: e, label: t, required: n, rules: r, placeholder: i, width: a, minWidth: o, inputStyle: s }) {
+	let c = $(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(O, {
 		value: e,
 		onChange: (e) => t(e.target.value),
 		onBlur: n,
@@ -2171,8 +2171,8 @@ function wn({ source: e, label: t, required: n, rules: r, placeholder: i, width:
 }
 //#endregion
 //#region src/crud/fields/NumberField.tsx
-function Tn({ source: e, label: t, required: n, rules: r, min: i, max: a, step: o, width: s, minWidth: c, inputStyle: l }) {
-	let u = Cn(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(k, {
+function wn({ source: e, label: t, required: n, rules: r, min: i, max: a, step: o, width: s, minWidth: c, inputStyle: l }) {
+	let u = $(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(k, {
 		value: e,
 		onChange: (e) => t(e),
 		onBlur: n,
@@ -2192,8 +2192,8 @@ function Tn({ source: e, label: t, required: n, rules: r, min: i, max: a, step: 
 }
 //#endregion
 //#region src/crud/fields/BooleanField.tsx
-function En({ source: e, label: t, required: n, rules: r }) {
-	let i = Cn(e, t, n, r, ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ V(L, {
+function Tn({ source: e, label: t, required: n, rules: r }) {
+	let i = $(e, t, n, r, ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ V(L, {
 		checked: !!e,
 		onChange: t,
 		disabled: n
@@ -2202,22 +2202,22 @@ function En({ source: e, label: t, required: n, rules: r }) {
 }
 //#endregion
 //#region src/crud/fields/DateField.tsx
-var Dn = "YYYY-MM-DD";
-function On({ source: e, label: t, required: n, rules: r, showTime: i }) {
-	let a = Cn(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(S, {
+var En = "YYYY-MM-DD";
+function Dn({ source: e, label: t, required: n, rules: r, showTime: i }) {
+	let a = $(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(S, {
 		value: e ? he(String(e)) : null,
-		onChange: (e) => t(e ? e.format(i ? `${Dn} HH:mm:ss` : Dn) : null),
+		onChange: (e) => t(e ? e.format(i ? `${En} HH:mm:ss` : En) : null),
 		onBlur: n,
 		showTime: i,
 		disabled: r,
-		format: i ? `${Dn} HH:mm:ss` : Dn,
+		format: i ? `${En} HH:mm:ss` : En,
 		style: { width: "100%" }
 	}));
 	return a.mode === "inline" ? null : a.element;
 }
 //#endregion
 //#region src/crud/fields/SelectField.tsx
-function kn({ source: e, label: t, required: n, rules: r, choices: i, mode: a, allowClear: o }) {
+function On({ source: e, label: t, required: n, rules: r, choices: i, mode: a, allowClear: o }) {
 	return /* @__PURE__ */ V(xn, {
 		source: e,
 		label: t,
@@ -2235,15 +2235,61 @@ function kn({ source: e, label: t, required: n, rules: r, choices: i, mode: a, a
 	});
 }
 //#endregion
+//#region src/crud/fields/PasswordField.tsx
+function kn({ source: e, label: t, required: n, rules: r, autoComplete: i, width: a, minWidth: o }) {
+	let s = $(e, t, n, r, ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ V(O.Password, {
+		value: e,
+		onChange: (e) => t(e.target.value),
+		onBlur: n,
+		disabled: r,
+		autoComplete: i
+	}), {
+		width: a,
+		minWidth: o
+	});
+	return s.mode === "inline" ? null : s.element;
+}
+function An({ source: e, label: t, required: n, rules: r, confirmSource: i, confirmLabel: a = "Confirm password", autoComplete: o = "new-password", width: s, minWidth: c }) {
+	let l = me({
+		name: e,
+		disabled: !i
+	});
+	return i ? /* @__PURE__ */ H(B, { children: [/* @__PURE__ */ V(kn, {
+		source: e,
+		label: t,
+		required: n,
+		rules: r,
+		autoComplete: o,
+		width: s,
+		minWidth: c
+	}), /* @__PURE__ */ V(kn, {
+		source: i,
+		label: a,
+		required: n,
+		autoComplete: o,
+		width: s,
+		minWidth: c,
+		rules: { validate: (e) => !l || e === l || "Passwords do not match" }
+	})] }) : /* @__PURE__ */ V(kn, {
+		source: e,
+		label: t,
+		required: n,
+		rules: r,
+		autoComplete: o,
+		width: s,
+		minWidth: c
+	});
+}
+//#endregion
 //#region src/crud/utils/useChoices.ts
-var An = /* @__PURE__ */ new Map(), jn = /* @__PURE__ */ new Map();
-function Mn(e, t) {
+var jn = /* @__PURE__ */ new Map(), Mn = /* @__PURE__ */ new Map();
+function Nn(e, t) {
 	return typeof e == "function" ? `fn:${t ?? ""}` : Array.isArray(e) ? `static:${e.length}` : `res:${e.resource}:${JSON.stringify(e.filter ?? {})}:${t ?? ""}`;
 }
-function Nn(e, t) {
+function Pn(e, t) {
 	return typeof t == "function" ? t(e) : String(e[t] ?? "");
 }
-async function Pn(e, t, n, r, i) {
+async function Fn(e, t, n, r, i) {
 	return typeof e == "function" ? e({
 		dataProvider: t,
 		search: i
@@ -2257,22 +2303,22 @@ async function Pn(e, t, n, r, i) {
 			perPage: 500
 		}
 	})).data.map((e) => ({
-		label: Nn(e, n),
+		label: Pn(e, n),
 		value: e[r],
 		record: e
 	}));
 }
-function Fn(e, t, n, r, i) {
-	let a = Mn(e, i), o = An.get(a);
+function In(e, t, n, r, i) {
+	let a = Nn(e, i), o = jn.get(a);
 	if (o && !i) return Promise.resolve(o);
-	let s = jn.get(a);
+	let s = Mn.get(a);
 	if (s) return s;
-	let c = Pn(e, t, n, r, i).then((e) => (i || An.set(a, e), e)).finally(() => {
-		jn.delete(a);
+	let c = Fn(e, t, n, r, i).then((e) => (i || jn.set(a, e), e)).finally(() => {
+		Mn.delete(a);
 	});
-	return jn.set(a, c), c;
+	return Mn.set(a, c), c;
 }
-function $(e, t, r = "name", o = "id", c) {
+function Ln(e, t, r = "name", o = "id", c) {
 	let l = st(), u = a(() => {
 		if (e) return e;
 		if (t) return {
@@ -2283,19 +2329,19 @@ function $(e, t, r = "name", o = "id", c) {
 		e,
 		t,
 		c
-	]), d = u ? Mn(u, c) : void 0, [f, p] = s(() => !d || c ? [] : An.get(d) ?? []), [m, h] = s(() => !d || c ? !!u : !An.has(d)), g = n(async () => {
+	]), d = u ? Nn(u, c) : void 0, [f, p] = s(() => !d || c ? [] : jn.get(d) ?? []), [m, h] = s(() => !d || c ? !!u : !jn.has(d)), g = n(async () => {
 		if (!u) {
 			p([]), h(!1);
 			return;
 		}
-		let e = Mn(u, c), t = An.get(e);
+		let e = Nn(u, c), t = jn.get(e);
 		if (t && !c) {
 			p(t), h(!1);
 			return;
 		}
 		h(!0);
 		try {
-			p(await Fn(u, l, r, o, c));
+			p(await In(u, l, r, o, c));
 		} catch {
 			p([]);
 		} finally {
@@ -2323,11 +2369,11 @@ function $(e, t, r = "name", o = "id", c) {
 }
 //#endregion
 //#region src/crud/fields/ReferenceField.tsx
-function In({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", required: c, rules: l, search: u, allowClear: d, disabled: f, width: p, minWidth: m, inputStyle: h, onValueChange: g }) {
-	let [_, v] = s(), { options: y, loading: b, optionForValue: x } = $(r, n, i, o, u ? _ : void 0), S = a(() => y.map((e) => ({
+function Rn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", required: c, rules: l, search: u, allowClear: d, disabled: f, width: p, minWidth: m, inputStyle: h, onValueChange: g }) {
+	let [_, v] = s(), { options: y, loading: b, optionForValue: x } = Ln(r, n, i, o, u ? _ : void 0), S = a(() => y.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [y]), C = Cn(e, t, c, l, ({ value: e, onChange: t, disabled: n, name: r, index: i }) => /* @__PURE__ */ V(P, {
+	})), [y]), C = $(e, t, c, l, ({ value: e, onChange: t, disabled: n, name: r, index: i }) => /* @__PURE__ */ V(P, {
 		value: e,
 		onChange: (e) => {
 			t(e), g?.(e, x(e), {
@@ -2356,11 +2402,11 @@ function In({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/fields/ReferenceManyField.tsx
-function Ln({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", required: c, rules: l, search: u, allowClear: d = !0 }) {
-	let [f, p] = s(), { options: m, loading: h } = $(r, n, i, o, u ? f : void 0), g = a(() => m.map((e) => ({
+function zn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", required: c, rules: l, search: u, allowClear: d = !0 }) {
+	let [f, p] = s(), { options: m, loading: h } = Ln(r, n, i, o, u ? f : void 0), g = a(() => m.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [m]), _ = Cn(e, t, c, l, ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ V(P, {
+	})), [m]), _ = $(e, t, c, l, ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ V(P, {
 		mode: "multiple",
 		value: e ?? [],
 		onChange: t,
@@ -2378,7 +2424,7 @@ function Ln({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/TextColumn.tsx
-function Rn({ source: e, label: t, sortable: n = !0 }) {
+function Bn({ source: e, label: t, sortable: n = !0 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2396,12 +2442,12 @@ function Rn({ source: e, label: t, sortable: n = !0 }) {
 		n
 	])), null;
 }
-function zn(e, t, n) {
+function Vn(e, t, n) {
 	return typeof n == "function" ? n(e) : n ? Wt(e, n) : e[t];
 }
 //#endregion
 //#region src/crud/columns/NumberColumn.tsx
-function Bn({ source: e, label: t, sortable: n = !0 }) {
+function Hn({ source: e, label: t, sortable: n = !0 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2421,7 +2467,7 @@ function Bn({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/BooleanColumn.tsx
-function Vn({ source: e, label: t, sortable: n = !0 }) {
+function Un({ source: e, label: t, sortable: n = !0 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2442,7 +2488,7 @@ function Vn({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/DateColumn.tsx
-function Hn({ source: e, label: t, sortable: n = !0 }) {
+function Wn({ source: e, label: t, sortable: n = !0 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2463,16 +2509,16 @@ function Hn({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/ReferenceColumn.tsx
-function Un({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
-	let { labelForValue: s } = $(i, r, a, o), c = e[t];
+function Gn({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
+	let { labelForValue: s } = Ln(i, r, a, o), c = e[t];
 	if (typeof n == "function") return /* @__PURE__ */ V(B, { children: n(e) });
 	if (n && n !== t) {
-		let r = zn(e, t, n);
+		let r = Vn(e, t, n);
 		return /* @__PURE__ */ V(B, { children: r == null ? "—" : String(r) });
 	}
 	return /* @__PURE__ */ V(B, { children: s(c) });
 }
-function Wn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", display: s, sortable: c = !0 }) {
+function Kn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", display: s, sortable: c = !0 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2483,7 +2529,7 @@ function Wn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: c ? !0 : void 0,
-			render: (a, c) => /* @__PURE__ */ V(Un, {
+			render: (a, c) => /* @__PURE__ */ V(Gn, {
 				record: c,
 				source: e,
 				label: t,
@@ -2507,11 +2553,11 @@ function Wn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ReferenceManyColumn.tsx
-function Gn({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
-	let { labelsForValues: o } = $(r, n, i, a), s = e[t];
+function qn({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
+	let { labelsForValues: o } = Ln(r, n, i, a), s = e[t];
 	return /* @__PURE__ */ V(B, { children: o(Array.isArray(s) ? s : []) });
 }
-function Kn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", sortable: s = !1 }) {
+function Jn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", sortable: s = !1 }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2522,7 +2568,7 @@ function Kn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: s ? !0 : void 0,
-			render: (t, a) => /* @__PURE__ */ V(Gn, {
+			render: (t, a) => /* @__PURE__ */ V(qn, {
 				record: a,
 				source: e,
 				reference: n,
@@ -2543,7 +2589,7 @@ function Kn({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/CustomColumn.tsx
-function qn({ source: e, label: t, sortable: n = !1, render: r }) {
+function Yn({ source: e, label: t, sortable: n = !1, render: r }) {
 	return Z(a(() => ({
 		key: e,
 		source: e,
@@ -2563,7 +2609,7 @@ function qn({ source: e, label: t, sortable: n = !1, render: r }) {
 }
 //#endregion
 //#region src/crud/filters/TextFilter.tsx
-function Jn({ source: e, label: t, placeholder: n }) {
+function Xn({ source: e, label: t, placeholder: n }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
@@ -2583,7 +2629,7 @@ function Jn({ source: e, label: t, placeholder: n }) {
 }
 //#endregion
 //#region src/crud/filters/NumberFilter.tsx
-function Yn({ source: e, label: t }) {
+function Zn({ source: e, label: t }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
@@ -2598,7 +2644,7 @@ function Yn({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/BooleanFilter.tsx
-function Xn({ source: e, label: t }) {
+function Qn({ source: e, label: t }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
@@ -2621,7 +2667,7 @@ function Xn({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/DateFilter.tsx
-function Zn({ source: e, label: t }) {
+function $n({ source: e, label: t }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
@@ -2637,7 +2683,7 @@ function Zn({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/SelectFilter.tsx
-function Qn({ source: e, label: t, choices: n, multiple: r }) {
+function er({ source: e, label: t, choices: n, multiple: r }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
@@ -2660,8 +2706,8 @@ function Qn({ source: e, label: t, choices: n, multiple: r }) {
 }
 //#endregion
 //#region src/crud/filters/ReferenceFilter.tsx
-function $n({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: c, value: l, onChange: u }) {
-	let [d, f] = s(), { options: p, loading: m } = $(r, n, i, a, c ? d : void 0);
+function tr({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: c, value: l, onChange: u }) {
+	let [d, f] = s(), { options: p, loading: m } = Ln(r, n, i, a, c ? d : void 0);
 	return /* @__PURE__ */ V(P, {
 		allowClear: !0,
 		mode: o ? "multiple" : void 0,
@@ -2680,12 +2726,12 @@ function $n({ source: e, label: t, reference: n, choices: r, optionLabel: i, opt
 		style: { minWidth: 180 }
 	});
 }
-function er({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", multiple: s, search: c }) {
+function nr({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: o = "id", multiple: s, search: c }) {
 	return Q(a(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: a, onChange: l }) => /* @__PURE__ */ V($n, {
+		render: ({ value: a, onChange: l }) => /* @__PURE__ */ V(tr, {
 			source: e,
 			label: t,
 			reference: n,
@@ -2708,11 +2754,11 @@ function er({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 		c
 	])), null;
 }
-function tr(e) {
-	return /* @__PURE__ */ V(er, {
+function rr(e) {
+	return /* @__PURE__ */ V(nr, {
 		...e,
 		multiple: !0
 	});
 }
 //#endregion
-export { it as AdminApp, Ke as AdminLayout, xe as AppThemeProvider, wt as AuthAlternateLink, Tt as AuthPageLayout, ke as AuthProvider, Vn as BooleanColumn, En as BooleanField, Xn as BooleanFilter, qn as CustomColumn, ot as DataProvider, Hn as DateColumn, On as DateField, Zn as DateFilter, we as DensitySwitch, sn as FilterBar, qe as Guard, Ye as GuestOnly, gn as InlineFormSet, Et as LoginPage, Bn as NumberColumn, Tn as NumberField, Yn as NumberFilter, Pe as PermissionsProvider, Dt as PlaceholderPage, Je as Protected, Wn as ReferenceColumn, In as ReferenceField, er as ReferenceFilter, Kn as ReferenceManyColumn, Ln as ReferenceManyField, tr as ReferenceManyFilter, Xe as RequirePermission, bn as ResourceForm, qt as ResourceFormModal, an as ResourceList, kn as SelectField, Qn as SelectFilter, Rn as TextColumn, wn as TextField, Jn as TextFilter, Ee as ThemeSwitch, De as ThemeToolbar, _t as applyInMemoryListParams, ut as combineResourceHandlers, rt as createAdminRouter, vt as createMemoryResourceHandlers, Fe as createPermissionsChecker, yt as createRestResourceHandlers, Me as createSessionStorageAuthAdapter, tt as deriveAuthPaths, Le as filterNavByPermission, ht as filterRows, Wt as getByPath, Ze as getRouteAccess, ft as getRowById, vn as loadInlineRows, Qe as partitionAdminRoutes, Kt as pickBySources, _n as saveInlineRows, xt as toDjangoRestOrdering, Ct as toJsonApiSort, St as toODataOrderBy, Ae as useAuth, Ie as useCan, $ as useChoices, st as useDataProvider, en as useListQueryState, Y as usePermissions, nn as useResourceListContext, Se as useThemeMode };
+export { it as AdminApp, Ke as AdminLayout, xe as AppThemeProvider, wt as AuthAlternateLink, Tt as AuthPageLayout, ke as AuthProvider, Un as BooleanColumn, Tn as BooleanField, Qn as BooleanFilter, Yn as CustomColumn, ot as DataProvider, Wn as DateColumn, Dn as DateField, $n as DateFilter, we as DensitySwitch, sn as FilterBar, qe as Guard, Ye as GuestOnly, gn as InlineFormSet, Et as LoginPage, Hn as NumberColumn, wn as NumberField, Zn as NumberFilter, An as PasswordField, Pe as PermissionsProvider, Dt as PlaceholderPage, Je as Protected, Kn as ReferenceColumn, Rn as ReferenceField, nr as ReferenceFilter, Jn as ReferenceManyColumn, zn as ReferenceManyField, rr as ReferenceManyFilter, Xe as RequirePermission, bn as ResourceForm, qt as ResourceFormModal, an as ResourceList, On as SelectField, er as SelectFilter, Bn as TextColumn, Cn as TextField, Xn as TextFilter, Ee as ThemeSwitch, De as ThemeToolbar, _t as applyInMemoryListParams, ut as combineResourceHandlers, rt as createAdminRouter, vt as createMemoryResourceHandlers, Fe as createPermissionsChecker, yt as createRestResourceHandlers, Me as createSessionStorageAuthAdapter, tt as deriveAuthPaths, Le as filterNavByPermission, ht as filterRows, Wt as getByPath, Ze as getRouteAccess, ft as getRowById, vn as loadInlineRows, Qe as partitionAdminRoutes, Kt as pickBySources, _n as saveInlineRows, xt as toDjangoRestOrdering, Ct as toJsonApiSort, St as toODataOrderBy, Ae as useAuth, Ie as useCan, Ln as useChoices, st as useDataProvider, en as useListQueryState, Y as usePermissions, Ut as useRegisterFormSource, nn as useResourceListContext, Se as useThemeMode };

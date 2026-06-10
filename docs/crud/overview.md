@@ -20,6 +20,7 @@ Django-admin-style CRUD built from JSX components. List pages, forms, filters, r
 | Type | Form | Column | Filter |
 |------|------|--------|--------|
 | Text | `TextField` | `TextColumn` | `TextFilter` |
+| Password | `PasswordField` | — | — |
 | Number | `NumberField` | `NumberColumn` | `NumberFilter` |
 | Boolean | `BooleanField` | `BooleanColumn` | `BooleanFilter` |
 | Date | `DateField` | `DateColumn` | `DateFilter` |

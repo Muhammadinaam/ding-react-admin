@@ -20,6 +20,7 @@ export { NumberField } from "./fields/NumberField";
 export { BooleanField } from "./fields/BooleanField";
 export { DateField } from "./fields/DateField";
 export { SelectField } from "./fields/SelectField";
+export { PasswordField } from "./fields/PasswordField";
 export { ReferenceField } from "./fields/ReferenceField";
 export { ReferenceManyField } from "./fields/ReferenceManyField";
 
@@ -50,6 +51,7 @@ export { useChoices } from "./utils/useChoices";
 export { getByPath } from "./utils/getByPath";
 export { pickBySources } from "./utils/pickBySources";
 export { setByPath } from "./utils/setByPath";
+export { useRegisterFormSource } from "./context/FormFieldsContext";
 
 export type {
   BaseSourceProps,

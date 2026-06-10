@@ -108,6 +108,7 @@ export {
   BooleanField,
   DateField,
   SelectField,
+  PasswordField,
   ReferenceField,
   ReferenceManyField,
   TextColumn,
@@ -129,6 +130,7 @@ export {
   getByPath,
   pickBySources,
   useResourceListContext,
+  useRegisterFormSource,
 } from "./crud";
 export type {
   ResourceFormProps,
