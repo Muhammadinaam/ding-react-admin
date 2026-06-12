@@ -10,6 +10,7 @@ import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
 import { FormFieldsProvider } from "./context/FormFieldsContext";
 import { pickBySources } from "./utils/pickBySources";
+import { parseAndApplyFormErrors } from "./utils/formErrors";
 
 export type ResourceFormModalProps = {
   resource: string;
@@ -71,7 +72,13 @@ export function ResourceFormModal({
       }
       onClose();
     } catch (e) {
-      message.error(e instanceof Error ? e.message : "Save failed");
+      const handled = parseAndApplyFormErrors(dp, form, message, e, {
+        resource,
+        mutation: isNew ? "create" : "update",
+      });
+      if (!handled) {
+        message.error(e instanceof Error ? e.message : "Save failed");
+      }
     }
   }
 

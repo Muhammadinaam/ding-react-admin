@@ -810,6 +810,49 @@ if (ordering) qs.set("ordering", ordering);
 
 `params.pagination` has `page` and `perPage` from the table. Map them in `list` to what your API uses (`page`, `$skip`/`$top`, `offset`/`limit`, etc.). There is no universal helper — each backend differs, like sort.
 
+### Section D — Form validation errors (optional)
+
+Skip until basic save works. Use this when save **fails** and you want **red text under fields**, not only a toast.
+
+Pick the helper that matches your API, then pass it to `combineResourceHandlers`:
+
+```ts
+// src/lib/data-provider.ts
+import {
+  combineResourceHandlers,
+  parseDjangoDRFFormErrors, // Django REST
+  // parseDotNetFormErrors,   // ASP.NET Core ValidationProblemDetails
+  // parseNodeFormErrors,     // Express / Joi-style bodies
+} from "ding-react-admin";
+
+export function createDataProvider() {
+  return combineResourceHandlers(
+    { [USER_RESOURCE]: createUserHandlers() },
+    { can, parseFormError: parseDjangoDRFFormErrors },
+  );
+}
+```
+
+| Helper | When to use |
+|--------|-------------|
+| `parseDjangoDRFFormErrors` | `{ "email": ["Invalid"], "non_field_errors": ["…"] }` |
+| `parseDotNetFormErrors` | `{ "errors": { "Email": ["…"] } }` |
+| `parseNodeFormErrors` | `{ errors: { email: ["…"] } }`, express-validator arrays, Joi `details` |
+
+In **`create` / `update`**, attach the API JSON on failure:
+
+```ts
+if (!res.ok) {
+  throw { body: await res.json() };
+}
+```
+
+Built-in parsers also read axios-style `error.response.data`.
+
+**Different API shape?** See [form-validation-errors.md](form-validation-errors.md) — custom `parseFormError`, inline prefixes, nested row errors.
+
+**Playground:** duplicate product SKU or invoice line quantity `0` (`parseDjangoDRFFormErrors`).
+
 ---
 
 ## See also
@@ -817,6 +860,7 @@ if (ordering) qs.set("ordering", ordering);
 - [install.md](install.md) — peer dependencies
 - [quick-start.md](quick-start.md) — minimal shell without CRUD
 - [data-permissions.md](data-permissions.md) — short permissions reference
+- [form-validation-errors.md](form-validation-errors.md) — custom validation error mapping
 - [data-layer-advanced.md](data-layer-advanced.md) — manual handlers, cross-entity rules
 - [example-app.md](example-app.md) — in-memory playground
 

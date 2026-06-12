@@ -9,6 +9,7 @@ import type {
   GetListResult,
   GetOneResult,
   Identifier,
+  ParseFormError,
   UpdateParams,
   UpdateResult,
 } from "./dataProviderTypes";
@@ -48,6 +49,8 @@ export type CombineResourceHandlersOptions = {
   can?: PermissionsChecker;
   /** @deprecated Use per-resource `permissions` entries instead. */
   guard?: ResourceGuard;
+  /** Wired to `ResourceForm` / `ResourceFormModal` save error handling. */
+  parseFormError?: ParseFormError;
 };
 
 function resolveEntry(entry: ResourceHandlerEntry): {
@@ -77,7 +80,7 @@ export function combineResourceHandlers(
   handlers: ResourceHandlerMap,
   options?: CombineResourceHandlersOptions,
 ): DataProvider {
-  const { can, guard } = options ?? {};
+  const { can, guard, parseFormError } = options ?? {};
 
   const resolve = (resource: string) => {
     const entry = handlers[resource];
@@ -116,5 +119,6 @@ export function combineResourceHandlers(
       assertPermission(can, permissions, "delete");
       return h.delete(id);
     },
+    parseFormError,
   };
 }

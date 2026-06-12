@@ -57,8 +57,10 @@ combineResourceHandlers(
       permissions: USER_PERMS,
     },
   },
-  { can },
+  { can, parseFormError }, // optional — maps API errors to form fields
 );
 ```
+
+Optional **`parseFormError`** on the data provider maps save validation errors to form field paths. Built-in helpers: `parseDjangoDRFFormErrors`, `parseDotNetFormErrors`, `parseNodeFormErrors`. See [tutorial-one-entity.md](tutorial-one-entity.md#section-d--form-validation-errors) and [form-validation-errors.md](form-validation-errors.md).
 
 [← Back to README](../README.md)

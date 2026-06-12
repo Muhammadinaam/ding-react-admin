@@ -1,6 +1,6 @@
 import { PermissionsChecker } from '../context/PermissionsProvider';
 import { ResourcePermissions } from '../permissions/resourcePermissions';
-import { CreateResult, DataProvider, DeleteResult, GetListParams, GetListResult, GetOneResult, Identifier, UpdateParams, UpdateResult } from './dataProviderTypes';
+import { CreateResult, DataProvider, DeleteResult, GetListParams, GetListResult, GetOneResult, Identifier, ParseFormError, UpdateParams, UpdateResult } from './dataProviderTypes';
 export type ResourceAction = "list" | "read" | "add" | "change" | "delete";
 /** @deprecated Use per-resource `permissions` with `can` in combineResourceHandlers options. */
 export type ResourceGuard = (resource: string, action: ResourceAction) => void;
@@ -22,6 +22,8 @@ export type CombineResourceHandlersOptions = {
     can?: PermissionsChecker;
     /** @deprecated Use per-resource `permissions` entries instead. */
     guard?: ResourceGuard;
+    /** Wired to `ResourceForm` / `ResourceFormModal` save error handling. */
+    parseFormError?: ParseFormError;
 };
 /**
  * Compose per-entity handlers into a react-admin-style `DataProvider`.

@@ -8,6 +8,7 @@ import {
   type ResourceHandlers,
 } from "ding-react-admin";
 import type { Brand, Product } from "../../api/memoryApi";
+import { validationError } from "../../api/formValidation";
 import type { PlaygroundHandlerContext } from "../playgroundHandlerContext";
 
 export const PRODUCT_RESOURCE = "products" as const;
@@ -21,6 +22,16 @@ export const PRODUCT_PERMS = {
 
 type ProductRow = Product & Record<string, unknown>;
 type Row = Record<string, unknown>;
+
+function assertProduct(api: PlaygroundHandlerContext["api"], row: Row, excludeId?: number) {
+  const sku = String(row.sku ?? "").trim();
+  if (!sku) {
+    throw validationError({ fields: { sku: "SKU is required" } });
+  }
+  if (api.products.some((p) => p.sku === sku && p.id !== excludeId)) {
+    throw validationError({ fields: { sku: "SKU already exists" } });
+  }
+}
 
 export function createProductHandlers(
   ctx: PlaygroundHandlerContext,
@@ -43,6 +54,7 @@ export function createProductHandlers(
 
     async create(data) {
       const row = data as Row;
+      assertProduct(api, row);
       const brandId = Number(row.brandId);
       const p: Product = {
         id: nextId(),
@@ -62,6 +74,8 @@ export function createProductHandlers(
     async update({ id, data }) {
       const patch = data as Row;
       const cur = getRowById(api.products, id) as Product;
+      const merged = { ...cur, ...patch };
+      assertProduct(api, merged as Row, cur.id);
       const prevBrand = cur.brandId;
       const next: Product = {
         ...cur,

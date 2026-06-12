@@ -21,6 +21,7 @@ import {
   type InlineFormSetProps,
 } from "./InlineFormSet";
 import { inlineArrayName } from "./utils/inlineArrayName";
+import { parseAndApplyFormErrors } from "./utils/formErrors";
 
 export type ResourceFormInlineConfig = Pick<
   InlineFormSetProps,
@@ -182,20 +183,41 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
           const rows =
             ((form.getValues(arrayName as never) as unknown) as
               Record<string, unknown>[] | undefined) ?? [];
-          await saveInlineRows(dp, {
+          const inlineOk = await saveInlineRows(dp, {
             resource: cfg.resource,
             foreignKey: cfg.foreignKey,
             parentId,
             rows,
             existingIds: existingInlineIds[arrayName] ?? [],
+            onRowError: (e, index) => {
+              const row = rows[index];
+              const rowId = row?.id as string | number | undefined;
+              return parseAndApplyFormErrors(dp, form, message, e, {
+                resource: cfg.resource,
+                mutation:
+                  rowId != null &&
+                  (existingInlineIds[arrayName] ?? []).some((id) => id === rowId)
+                    ? "update"
+                    : "create",
+                inlineArrayName: arrayName,
+                rowIndex: index,
+              });
+            },
           });
+          if (!inlineOk) return;
         }
       }
 
       onSaved?.(saved);
       if (!stayOnPage) navigate(listPath);
     } catch (e) {
-      message.error(e instanceof Error ? e.message : "Save failed");
+      const handled = parseAndApplyFormErrors(dp, form, message, e, {
+        resource,
+        mutation: isNew ? "create" : "update",
+      });
+      if (!handled) {
+        message.error(e instanceof Error ? e.message : "Save failed");
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import {
   combineResourceHandlers,
+  parseDjangoDRFFormErrors,
   type DataProviderContract,
   type PermissionsChecker,
 } from "ding-react-admin";
@@ -54,6 +55,6 @@ export function createPlaygroundDataProvider(
         permissions: INVOICE_LINE_PERMS,
       },
     },
-    { can },
+    { can, parseFormError: parseDjangoDRFFormErrors },
   );
 }

@@ -180,26 +180,35 @@ export type SaveInlineOptions = {
   parentId: Identifier;
   rows: Record<string, unknown>[];
   existingIds?: Identifier[];
+  /** Return true when the error was handled (field errors applied). Stops saving further rows. */
+  onRowError?: (error: unknown, index: number) => boolean;
 };
 
 export async function saveInlineRows(
   dp: DataProvider,
   opts: SaveInlineOptions,
-) {
-  const { resource, foreignKey, parentId, rows, existingIds = [] } = opts;
+): Promise<boolean> {
+  const { resource, foreignKey, parentId, rows, existingIds = [], onRowError } =
+    opts;
   const keptIds: Identifier[] = [];
 
-  for (const row of rows) {
-    const { id: _id, ...rest } = row;
-    const data = { ...rest, [foreignKey]: parentId };
-    const rowId = row.id as Identifier | undefined;
-    if (rowId != null && existingIds.some((e) => e === rowId)) {
-      await dp.update(resource, { id: rowId, data });
-      keptIds.push(rowId);
-    } else {
-      const res = await dp.create(resource, data);
-      const created = res.data as { id: Identifier };
-      keptIds.push(created.id);
+  for (let index = 0; index < rows.length; index++) {
+    const row = rows[index];
+    try {
+      const { id: _id, ...rest } = row;
+      const data = { ...rest, [foreignKey]: parentId };
+      const rowId = row.id as Identifier | undefined;
+      if (rowId != null && existingIds.some((e) => e === rowId)) {
+        await dp.update(resource, { id: rowId, data });
+        keptIds.push(rowId);
+      } else {
+        const res = await dp.create(resource, data);
+        const created = res.data as { id: Identifier };
+        keptIds.push(created.id);
+      }
+    } catch (e) {
+      if (onRowError?.(e, index)) return false;
+      throw e;
     }
   }
 
@@ -208,6 +217,8 @@ export async function saveInlineRows(
       await dp.delete(resource, oldId);
     }
   }
+
+  return true;
 }
 
 export async function loadInlineRows(

@@ -7,6 +7,7 @@ import {
   type ResourceHandlers,
 } from "ding-react-admin";
 import type { InvoiceLine } from "../../api/memoryApi";
+import { validationError } from "../../api/formValidation";
 import type { PlaygroundHandlerContext } from "../playgroundHandlerContext";
 
 export const INVOICE_LINE_RESOURCE = "invoice-lines" as const;
@@ -26,35 +27,51 @@ export function createInvoiceLineHandlers(
       if (invId === undefined || invId === "" || invId === null) return rows;
       return rows.filter((l) => l.invoiceId === Number(invId));
     },
-    mapCreate: (data, id) => ({
-      id,
-      invoiceId: Number(data.invoiceId),
-      productId: data.productId == null ? null : Number(data.productId),
-      label: String(data.label ?? ""),
-      quantity: Number(data.quantity ?? 0),
-      unitPrice: Number(data.unitPrice ?? 0),
-    }),
-    applyUpdate: (current, patch) => ({
-      ...current,
-      invoiceId:
-        patch.invoiceId !== undefined
-          ? Number(patch.invoiceId)
-          : current.invoiceId,
-      productId:
-        patch.productId !== undefined
-          ? patch.productId === null
-            ? null
-            : Number(patch.productId)
-          : current.productId,
-      label: patch.label !== undefined ? String(patch.label) : current.label,
-      quantity:
+    mapCreate: (data, id) => {
+      const quantity = Number(data.quantity ?? 0);
+      if (quantity <= 0) {
+        throw validationError({
+          fields: { quantity: "Quantity must be greater than zero" },
+        });
+      }
+      return {
+        id,
+        invoiceId: Number(data.invoiceId),
+        productId: data.productId == null ? null : Number(data.productId),
+        label: String(data.label ?? ""),
+        quantity,
+        unitPrice: Number(data.unitPrice ?? 0),
+      };
+    },
+    applyUpdate: (current, patch) => {
+      const quantity =
         patch.quantity !== undefined
           ? Number(patch.quantity)
-          : current.quantity,
-      unitPrice:
-        patch.unitPrice !== undefined
-          ? Number(patch.unitPrice)
-          : current.unitPrice,
-    }),
+          : current.quantity;
+      if (quantity <= 0) {
+        throw validationError({
+          fields: { quantity: "Quantity must be greater than zero" },
+        });
+      }
+      return {
+        ...current,
+        invoiceId:
+          patch.invoiceId !== undefined
+            ? Number(patch.invoiceId)
+            : current.invoiceId,
+        productId:
+          patch.productId !== undefined
+            ? patch.productId === null
+              ? null
+              : Number(patch.productId)
+            : current.productId,
+        label: patch.label !== undefined ? String(patch.label) : current.label,
+        quantity,
+        unitPrice:
+          patch.unitPrice !== undefined
+            ? Number(patch.unitPrice)
+            : current.unitPrice,
+      };
+    },
   }) as ResourceHandlers<LineRow>;
 }

@@ -4,8 +4,10 @@ export { AuthProvider, createSessionStorageAuthAdapter, useAuth, type AuthProvid
 export { DataProvider, useDataProvider, type DataProviderProps, } from './context/DataProvider';
 export { PermissionsProvider, createPermissionsChecker, useCan, usePermissions, type PermissionsProviderProps, } from './context/PermissionsProvider';
 export { AppThemeProvider, useThemeMode, } from './context/AppThemeProvider';
-export type { CreateResult, DataProvider as DataProviderContract, DeleteResult, GetListParams, GetListResult, GetOneResult, Identifier, PaginationParams, SortOrder, SortSpec, UpdateParams, UpdateResult, } from './data/dataProviderTypes';
+export type { CreateResult, DataProvider as DataProviderContract, DeleteResult, GetListParams, GetListResult, GetOneResult, Identifier, PaginationParams, SortOrder, SortSpec, UpdateParams, UpdateResult, FormMutation, FormValidationErrors, ParseFormError, ParseFormErrorContext, } from './data/dataProviderTypes';
 export { combineResourceHandlers } from './data/resourceHandlers';
+export { parseDjangoDRFFormErrors, parseDotNetFormErrors, parseNodeFormErrors, getErrorBody, applyInlineFieldPaths, asStringMessages, finalizeFormErrors, } from './data/parseFormErrorHelpers';
+export type { DotNetFormErrorOptions, NodeFormErrorOptions, } from './data/parseFormErrorHelpers';
 export { createMemoryResourceHandlers } from './data/createMemoryResourceHandlers';
 export { createRestResourceHandlers } from './data/createRestResourceHandlers';
 export type { RestResourceHandlersConfig } from './data/createRestResourceHandlers';
@@ -24,6 +26,6 @@ export { Guard, GuestOnly, Protected, RequirePermission } from './router/guards'
 export { createAdminRouter } from './router/createAdminRouter';
 export { deriveAuthPaths, getRouteAccess, partitionAdminRoutes, } from './router/routeAccess';
 export type { AdminAppProps, AdminLayoutProps, AdminRouteChild, AppThemeProviderProps, AuthAdapter, LoginCredentials, AuthRedirects, CreateAdminRouterOptions, AuthAlternateLinkProps, AuthPageLayoutProps, LoginPageProps, NavItem, RouteAccess, ThemeDensity, ThemeMode, } from './types';
-export { ResourceList, FilterBar, ResourceForm, ResourceFormModal, InlineFormSet, saveInlineRows, loadInlineRows, TextField, NumberField, BooleanField, DateField, SelectField, PasswordField, ReferenceField, ReferenceManyField, TextColumn, NumberColumn, BooleanColumn, DateColumn, ReferenceColumn, ReferenceManyColumn, CustomColumn, TextFilter, NumberFilter, BooleanFilter, DateFilter, SelectFilter, ReferenceFilter, ReferenceManyFilter, useListQueryState, useChoices, getByPath, pickBySources, useResourceListContext, useRegisterFormSource, } from './crud';
+export { ResourceList, FilterBar, ResourceForm, ResourceFormModal, InlineFormSet, saveInlineRows, loadInlineRows, TextField, NumberField, BooleanField, DateField, SelectField, PasswordField, ReferenceField, ReferenceManyField, TextColumn, NumberColumn, BooleanColumn, DateColumn, ReferenceColumn, ReferenceManyColumn, CustomColumn, TextFilter, NumberFilter, BooleanFilter, DateFilter, SelectFilter, ReferenceFilter, ReferenceManyFilter, useListQueryState, useChoices, getByPath, pickBySources, inlineArrayName, useResourceListContext, useRegisterFormSource, } from './crud';
 export type { ResourceFormProps, ResourceFormInlineConfig, ResourceFormModalProps, InlineFormSetProps, SaveInlineOptions, InlineFormSetLayout, ResourceListProps, BaseSourceProps, ChoiceOption, ChoicesLoader, ReferenceProps, DisplayProps, EditMode, FieldRules, ResourceListBuiltInActions, ResourceListBulkAction, ResourceListBulkActionHelpers, ResourceListRowActionsHelpers, ListQueryState, ListQueryActions, } from './crud';
 //# sourceMappingURL=index.d.ts.map

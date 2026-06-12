@@ -33,6 +33,7 @@ export type { ListQueryState, ListQueryActions, } from './utils/useListQueryStat
 export { useChoices } from './utils/useChoices';
 export { getByPath } from './utils/getByPath';
 export { pickBySources } from './utils/pickBySources';
+export { inlineArrayName } from './utils/inlineArrayName';
 export { setByPath } from './utils/setByPath';
 export { useRegisterFormSource } from './context/FormFieldsContext';
 export type { BaseSourceProps, ChoiceOption, ChoicesLoader, ReferenceProps, DisplayProps, EditMode, FieldRules, ResourceListBuiltInActions, ResourceListBulkAction, ResourceListBulkActionHelpers, ResourceListRowActionsHelpers, } from './types';

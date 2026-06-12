@@ -36,6 +36,21 @@ export type UpdateResult<RecordType extends Record<string, unknown>> = {
 export type DeleteResult<RecordType extends Record<string, unknown>> = {
     data: RecordType | null;
 };
+export type FormMutation = "create" | "update";
+export type ParseFormErrorContext = {
+    resource: string;
+    mutation: FormMutation;
+    /** Set when saving an inline row — prefix field paths for that row. */
+    inlineArrayName?: string;
+    rowIndex?: number;
+};
+/** Field paths match react-hook-form `name` (form `source` or inline `arrayName.index.source`). */
+export type FormValidationErrors = {
+    fields?: Record<string, string | string[]>;
+    /** Errors not tied to a single field (e.g. non_field_errors). */
+    global?: string | string[];
+};
+export type ParseFormError = (error: unknown, context: ParseFormErrorContext) => FormValidationErrors | null | undefined;
 /**
  * Small, framework-agnostic data layer (react-admin–style names).
  * Implement with REST, GraphQL, or an in-memory mock.
@@ -46,5 +61,7 @@ export type DataProvider<RecordType extends Record<string, unknown> = Record<str
     create: (resource: string, data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
     update: (resource: string, params: UpdateParams<RecordType>) => Promise<UpdateResult<RecordType>>;
     delete: (resource: string, id: Identifier) => Promise<DeleteResult<RecordType>>;
+    /** Map API validation errors to form field paths. Optional. */
+    parseFormError?: ParseFormError;
 };
 //# sourceMappingURL=dataProviderTypes.d.ts.map

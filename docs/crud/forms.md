@@ -35,4 +35,16 @@ Use **`PasswordField`** for a single write-only password input. Pass **`confirmS
 
 Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap fields in Ant Design `Row` / `Col` as needed.
 
+## Validation errors from the API
+
+On save failure, pass a built-in parser to `combineResourceHandlers`:
+
+```ts
+import { parseDjangoDRFFormErrors } from "ding-react-admin";
+
+combineResourceHandlers(handlers, { can, parseFormError: parseDjangoDRFFormErrors });
+```
+
+Also: `parseDotNetFormErrors`, `parseNodeFormErrors`. Custom APIs: [form-validation-errors.md](../form-validation-errors.md).
+
 [← CRUD overview](overview.md) · [← README](../../README.md)

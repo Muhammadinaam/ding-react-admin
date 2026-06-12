@@ -32,9 +32,11 @@ import { createProductHandlers, PRODUCT_RESOURCE } from "../pages/products";
 
 return combineResourceHandlers(
   { [PRODUCT_RESOURCE]: createProductHandlers(ctx), /* … */ },
-  { guard: (resource, action) => api.assertCan(getToken(), action, resource) },
+  { can, parseFormError: parsePlaygroundFormError },
 );
 ```
+
+Form validation demo: duplicate product SKU or invoice line quantity `0` (`parseDjangoDRFFormErrors` in `playgroundDataProvider.ts`).
 
 **Removing a resource:** delete its folder, remove one line from the composer, and drop routes + nav entries.
 

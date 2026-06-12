@@ -35,6 +35,8 @@ import { InlineFormSet, ResourceForm, TextField, NumberField } from "ding-react-
 
 Pass matching `inlines={[...]}` on `ResourceForm` so child rows load/save with the parent.
 
+Inline row validation uses the same **`parseFormError`** as the parent form (built-in parsers handle inline row context automatically). Custom mapping: [form-validation-errors.md](../form-validation-errors.md).
+
 ## Inline column width and input styling
 
 In tabular inlines, set **`minWidth`** / **`width`** on field components to size table columns (e.g. `minWidth={220}` on a `ReferenceField`). Use **`inputStyle`** for the control itself (`style` on the underlying Ant Design input/select).

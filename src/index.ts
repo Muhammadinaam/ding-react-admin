@@ -35,8 +35,25 @@ export type {
   SortSpec,
   UpdateParams,
   UpdateResult,
+  FormMutation,
+  FormValidationErrors,
+  ParseFormError,
+  ParseFormErrorContext,
 } from "./data/dataProviderTypes";
 export { combineResourceHandlers } from "./data/resourceHandlers";
+export {
+  parseDjangoDRFFormErrors,
+  parseDotNetFormErrors,
+  parseNodeFormErrors,
+  getErrorBody,
+  applyInlineFieldPaths,
+  asStringMessages,
+  finalizeFormErrors,
+} from "./data/parseFormErrorHelpers";
+export type {
+  DotNetFormErrorOptions,
+  NodeFormErrorOptions,
+} from "./data/parseFormErrorHelpers";
 export { createMemoryResourceHandlers } from "./data/createMemoryResourceHandlers";
 export { createRestResourceHandlers } from "./data/createRestResourceHandlers";
 export type { RestResourceHandlersConfig } from "./data/createRestResourceHandlers";
@@ -129,6 +146,7 @@ export {
   useChoices,
   getByPath,
   pickBySources,
+  inlineArrayName,
   useResourceListContext,
   useRegisterFormSource,
 } from "./crud";

@@ -50,6 +50,7 @@ export type {
 export { useChoices } from "./utils/useChoices";
 export { getByPath } from "./utils/getByPath";
 export { pickBySources } from "./utils/pickBySources";
+export { inlineArrayName } from "./utils/inlineArrayName";
 export { setByPath } from "./utils/setByPath";
 export { useRegisterFormSource } from "./context/FormFieldsContext";
 

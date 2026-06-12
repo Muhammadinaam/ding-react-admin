@@ -58,6 +58,7 @@ Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter tha
 | Inline nested forms | [docs/crud/inlines.md](docs/crud/inlines.md) |
 | Custom field types | [docs/crud/custom-fields.md](docs/crud/custom-fields.md) |
 | Data layer & permissions | [docs/data-permissions.md](docs/data-permissions.md) |
+| **Form validation errors** | [docs/form-validation-errors.md](docs/form-validation-errors.md) |
 | **Routing & auth guards** | [docs/routing.md](docs/routing.md) |
 | Login / register layout | [docs/auth-pages.md](docs/auth-pages.md) |
 | Quick start (`<AdminApp />`) | [docs/quick-start.md](docs/quick-start.md) |
