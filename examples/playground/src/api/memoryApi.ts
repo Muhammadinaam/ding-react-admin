@@ -49,6 +49,47 @@ export type InvoiceLine = {
   unitPrice: number;
 };
 
+export type Customer = {
+  id: number;
+  code: string;
+  name: string;
+  industry: string;
+  website: string;
+  active: boolean;
+  contactName: string;
+  email: string;
+  phone: string;
+  secondaryPhone: string;
+  billingStreet: string;
+  billingCity: string;
+  billingCountry: string;
+  taxId: string;
+  paymentTerms: string;
+  creditLimit: number;
+  currency: string;
+  notes: string;
+};
+
+export type PurchaseOrder = {
+  id: number;
+  number: string;
+  supplierName: string;
+  orderDate: string;
+  expectedDelivery: string;
+  shipTo: string;
+  shippingMethod: string;
+  warehouse: string;
+  incoterms: string;
+  currency: string;
+  subtotal: number;
+  taxRate: number;
+  notes: string;
+  status: string;
+  approvedBy: string;
+  approvedAt: string;
+  internalNotes: string;
+};
+
 export type PublicUser = Omit<MemoryUser, "password"> & {
   permissions: string[];
 };
@@ -77,6 +118,8 @@ const RESOURCES = [
   "products",
   "brands",
   "categories",
+  "customers",
+  "purchase-orders",
   "invoices",
   "invoice-lines",
 ] as const;
@@ -145,6 +188,75 @@ function seedProducts(
   return { products: [p1, p2], brands: b };
 }
 
+function seedCustomers(): Customer[] {
+  return [
+    {
+      id: nextId(),
+      code: "CUST-001",
+      name: "Northwind Traders",
+      industry: "retail",
+      website: "https://northwind.example",
+      active: true,
+      contactName: "Jane Cooper",
+      email: "jane@northwind.example",
+      phone: "+1 555 0100",
+      secondaryPhone: "",
+      billingStreet: "123 Market St",
+      billingCity: "Seattle",
+      billingCountry: "USA",
+      taxId: "US-123456",
+      paymentTerms: "net_30",
+      creditLimit: 50_000,
+      currency: "USD",
+      notes: "Preferred customer — priority support.",
+    },
+    {
+      id: nextId(),
+      code: "CUST-002",
+      name: "Contoso Ltd",
+      industry: "technology",
+      website: "https://contoso.example",
+      active: true,
+      contactName: "Alex Martin",
+      email: "alex@contoso.example",
+      phone: "+44 20 7946 0958",
+      secondaryPhone: "",
+      billingStreet: "45 High Street",
+      billingCity: "London",
+      billingCountry: "UK",
+      taxId: "GB-987654",
+      paymentTerms: "net_60",
+      creditLimit: 25_000,
+      currency: "GBP",
+      notes: "",
+    },
+  ];
+}
+
+function seedPurchaseOrders(): PurchaseOrder[] {
+  return [
+    {
+      id: nextId(),
+      number: "PO-2001",
+      supplierName: "Acme Supplies",
+      orderDate: new Date().toISOString().slice(0, 10),
+      expectedDelivery: "",
+      shipTo: "Main warehouse",
+      shippingMethod: "standard",
+      warehouse: "main",
+      incoterms: "FOB",
+      currency: "USD",
+      subtotal: 1_250,
+      taxRate: 8.5,
+      notes: "Restock USB cables and notebooks.",
+      status: "approved",
+      approvedBy: "admin",
+      approvedAt: new Date().toISOString().slice(0, 10),
+      internalNotes: "",
+    },
+  ];
+}
+
 function seedInvoices(): { invoices: Invoice[]; lines: InvoiceLine[] } {
   const inv: Invoice = {
     id: nextId(),
@@ -170,6 +282,8 @@ export class PlaygroundMemoryApi {
   brands: Brand[];
   categories: Category[];
   products: Product[];
+  customers: Customer[];
+  purchaseOrders: PurchaseOrder[];
   invoices: Invoice[];
   invoiceLines: InvoiceLine[];
 
@@ -179,6 +293,8 @@ export class PlaygroundMemoryApi {
     const { products, brands } = seedProducts(this.brands, this.categories);
     this.products = products;
     this.brands = brands;
+    this.customers = seedCustomers();
+    this.purchaseOrders = seedPurchaseOrders();
     const { invoices, lines } = seedInvoices();
     this.invoices = invoices;
     this.invoiceLines = lines;

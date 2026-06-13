@@ -1,7 +1,3 @@
-// WHAT YOU IMPLEMENT: store access + list scoping (invoiceId filter) + typed FK fields.
-// WHAT THE LIBRARY HANDLES: in-memory list filter/sort/paginate; form payload from field `source`.
-// SEE: docs/tutorial-one-entity.md
-
 import {
   createMemoryResourceHandlers,
   type ResourceHandlers,

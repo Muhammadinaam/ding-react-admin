@@ -1,5 +1,4 @@
 import {
-  CustomColumn,
   DateColumn,
   DateField,
   InlineFormSet,
@@ -10,11 +9,10 @@ import {
   TextColumn,
   TextField,
 } from "ding-react-admin";
-import { Link } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import type { Invoice } from "../../api/memoryApi";
 import { INVOICE_RESOURCE } from "./invoiceData";
-import { INVOICE_LINE_RESOURCE } from "../invoice-lines/invoiceLineData";
+import { INVOICE_LINE_RESOURCE } from "./invoiceLineData";
 
 type InvoiceRow = Invoice & Record<string, unknown>;
 
@@ -28,15 +26,6 @@ export function InvoiceListPage() {
       <TextColumn source="number" label="Number" />
       <TextColumn source="customer" label="Customer" />
       <DateColumn source="issuedAt" label="Issued" />
-      <CustomColumn
-        source="__lines"
-        label="Lines"
-        render={(row) => (
-          <Link to={`/invoice-lines?invoiceId=${String(row.id)}`}>
-            View lines
-          </Link>
-        )}
-      />
     </ResourceList>
   );
 }

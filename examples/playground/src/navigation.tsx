@@ -5,17 +5,19 @@ import {
   GiftOutlined,
   GoldOutlined,
   SettingOutlined,
+  ShoppingCartOutlined,
+  ShoppingOutlined,
   TagsOutlined,
-  UnorderedListOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
-import { Badge } from "antd";
 import type { NavItem } from "ding-react-admin";
 import {
   BRAND_PERMS,
   CATEGORY_PERMS,
-  INVOICE_LINE_PERMS,
+  CUSTOMER_PERMS,
   INVOICE_PERMS,
   PRODUCT_PERMS,
+  PURCHASE_ORDER_PERMS,
 } from "./api/playgroundPermissions";
 
 export const PLAYGROUND_NAV: NavItem[] = [
@@ -46,32 +48,29 @@ export const PLAYGROUND_NAV: NavItem[] = [
     ],
   },
   {
-    path: "/invoices",
-    label: "Invoices",
-    Icon: FileTextOutlined,
-    permission: INVOICE_PERMS.list,
-  },
-  {
-    path: "/invoice-lines",
-    label: (
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          justifyContent: "space-between",
-          width: "100%",
-          minWidth: 0,
-        }}
-      >
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-          Invoice lines
-        </span>
-        <Badge count={3} size="small" />
-      </span>
-    ),
-    Icon: UnorderedListOutlined,
-    permission: INVOICE_LINE_PERMS.list,
+    path: "/sales",
+    label: "Sales",
+    Icon: ShoppingOutlined,
+    children: [
+      {
+        path: "/customers",
+        label: "Customers",
+        Icon: TeamOutlined,
+        permission: CUSTOMER_PERMS.list,
+      },
+      {
+        path: "/purchase-orders",
+        label: "Purchase orders",
+        Icon: ShoppingCartOutlined,
+        permission: PURCHASE_ORDER_PERMS.list,
+      },
+      {
+        path: "/invoices",
+        label: "Invoices",
+        Icon: FileTextOutlined,
+        permission: INVOICE_PERMS.list,
+      },
+    ],
   },
   { path: "/settings", label: "Settings", Icon: SettingOutlined },
 ];

@@ -13,6 +13,8 @@ export const PLAYGROUND_RESOURCES = [
   "products",
   "brands",
   "categories",
+  "customers",
+  "purchase-orders",
   "invoices",
   "invoice-lines",
 ] as const;
@@ -20,6 +22,8 @@ export const PLAYGROUND_RESOURCES = [
 export const PRODUCT_PERMS = resourcePerms("products");
 export const BRAND_PERMS = resourcePerms("brands");
 export const CATEGORY_PERMS = resourcePerms("categories");
+export const CUSTOMER_PERMS = resourcePerms("customers");
+export const PURCHASE_ORDER_PERMS = resourcePerms("purchase-orders");
 export const INVOICE_PERMS = resourcePerms("invoices");
 export const INVOICE_LINE_PERMS = resourcePerms("invoice-lines");
 
