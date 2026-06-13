@@ -2,12 +2,20 @@ import { Button, Space, Steps, type StepsProps } from "antd";
 import {
   Children,
   isValidElement,
+  useCallback,
   useMemo,
   useState,
   type CSSProperties,
   type ReactElement,
   type ReactNode,
 } from "react";
+import { useFormContext, useFormState } from "react-hook-form";
+import { FormSectionSourcesProvider } from "./context/FormSectionContext";
+import {
+  sectionHasError,
+  useActivateFirstErrorSection,
+  useSectionSourceRefs,
+} from "./utils/formSectionErrors";
 
 export type FormStepProps = {
   title: ReactNode;
@@ -50,16 +58,38 @@ export function FormSteps({
     () => Children.toArray(children).filter(isFormStep),
     [children],
   );
+  const sectionRefs = useSectionSourceRefs(steps.length);
   const [current, setCurrent] = useState(initialStep);
   const lastIndex = steps.length - 1;
 
+  useActivateFirstErrorSection(sectionRefs, setCurrent);
+
+  const { control, getFieldState } = useFormContext();
+  const formState = useFormState({ control });
+
   const stepItems = useMemo(
     () =>
-      steps.map((step) => ({
-        title: step.props.title,
-        description: step.props.description,
-      })),
-    [steps],
+      steps.map((step, index) => {
+        const hasError = sectionHasError(
+          sectionRefs[index].current,
+          getFieldState,
+          formState,
+        );
+
+        return {
+          title: step.props.title,
+          description: step.props.description,
+          status: hasError ? ("error" as const) : undefined,
+        };
+      }),
+    [formState, getFieldState, sectionRefs, steps],
+  );
+
+  const handleStepSelect = useCallback(
+    (next: number) => {
+      setCurrent(next);
+    },
+    [],
   );
 
   return (
@@ -68,7 +98,7 @@ export function FormSteps({
         current={current}
         items={stepItems}
         style={{ marginBottom: 24, ...stepsStyle }}
-        onChange={allowStepSelect ? setCurrent : undefined}
+        onChange={allowStepSelect ? handleStepSelect : undefined}
         size={size}
         direction={direction}
         type={type}
@@ -80,7 +110,9 @@ export function FormSteps({
           key={(step.key as string | undefined) ?? String(index)}
           style={{ display: current === index ? undefined : "none" }}
         >
-          {step.props.children}
+          <FormSectionSourcesProvider sourcesRef={sectionRefs[index]}>
+            {step.props.children}
+          </FormSectionSourcesProvider>
         </div>
       ))}
 

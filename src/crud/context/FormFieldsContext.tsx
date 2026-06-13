@@ -8,6 +8,7 @@ import {
   type MutableRefObject,
   type ReactNode,
 } from "react";
+import { useFormSectionSourcesOptional } from "./FormSectionContext";
 
 type FormFieldsContextValue = {
   registerSource: (source: string) => () => void;
@@ -61,9 +62,15 @@ export function useFormFieldsOptional() {
 export function useRegisterFormSource(source: string) {
   const ctx = useFormFieldsOptional();
   const registerSource = ctx?.registerSource;
+  const sectionSourcesRef = useFormSectionSourcesOptional();
 
   useEffect(() => {
     if (!registerSource) return;
-    return registerSource(source);
-  }, [registerSource, source]);
+    const unregister = registerSource(source);
+    sectionSourcesRef?.current.add(source);
+    return () => {
+      unregister();
+      sectionSourcesRef?.current.delete(source);
+    };
+  }, [registerSource, sectionSourcesRef, source]);
 }

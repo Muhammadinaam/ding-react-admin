@@ -45,6 +45,8 @@ export function ColorField({ source, label, required, rules }: ColorFieldProps) 
 
 Export it from `src/crud/index.ts` and `src/index.ts`.
 
+Fields registered through **`FieldWrapper`** (or **`useInlineOrFormField`**, which uses it in normal forms) are also tracked inside **`FormTabs`** / **`FormSteps`** for error highlighting and jumping to the first invalid section on Save. If you wire **`Controller`** yourself, call **`useRegisterFormSource(source)`** so submit, tab/step errors, and section grouping all work.
+
 ## 2. Table column
 
 Register with `useRegisterColumn` inside a null-rendering component:
