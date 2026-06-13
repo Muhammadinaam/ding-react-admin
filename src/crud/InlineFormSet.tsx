@@ -1,6 +1,6 @@
 import { Button, Card, Space, Table, Typography } from "antd";
-import { useFieldArray, useFormContext, useWatch, type FieldValues } from "react-hook-form";
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useFieldArray, useFormContext, type FieldValues } from "react-hook-form";
+import { useMemo, type ReactNode } from "react";
 import {
   InlineFormSetProvider,
   useInlineFormSetContext,
@@ -25,17 +25,10 @@ export type InlineFormSetProps = {
 function useInlineRows(arrayName: string) {
   const ctx = useInlineFormSetContext();
   const { control } = useFormContext<FieldValues>();
-  const watchedRows = useWatch({ control, name: arrayName });
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: arrayName,
   });
-
-  useEffect(() => {
-    if (!Array.isArray(watchedRows) || watchedRows.length === 0) return;
-    if (fields.length === watchedRows.length) return;
-    replace(watchedRows);
-  }, [watchedRows, fields.length, replace]);
 
   const appendEmpty = () => {
     if (!ctx) return;
@@ -123,7 +116,7 @@ function InlineFormSetStacked({
   return (
     <div style={{ marginTop: 24 }}>
       <Typography.Title level={5}>{label ?? "Related items"}</Typography.Title>
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+      <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
         {fields.map((field, index) => (
           <Card
             key={field.id}

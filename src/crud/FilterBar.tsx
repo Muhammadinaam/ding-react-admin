@@ -9,7 +9,7 @@ function FilterBarUI() {
   return (
     <Space wrap size="middle" style={{ marginBottom: 16 }}>
       {ctx.filters.map((f) => (
-        <Space key={f.key} direction="vertical" size={2}>
+        <Space key={f.key} orientation="vertical" size={2}>
           {f.label ? (
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>
               {f.label}

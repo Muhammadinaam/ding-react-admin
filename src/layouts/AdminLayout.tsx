@@ -299,7 +299,7 @@ export function AdminLayout({
             </Typography.Text>
           }
           placement="left"
-          width={280}
+          size={280}
           onClose={() => setMobileNavOpen(false)}
           open={mobileNavOpen}
           styles={{
@@ -309,7 +309,7 @@ export function AdminLayout({
             },
             body: { padding: 0, background: siderBg },
           }}
-          destroyOnClose
+          destroyOnHidden
         >
           <NavMenu
             menuItems={menuItems}

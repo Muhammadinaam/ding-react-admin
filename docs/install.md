@@ -10,8 +10,8 @@ If you already have a React app (`react`, `react-dom`), run:
 
 ```bash
 yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
-  antd@^5.24.0 \
-  @ant-design/icons@^5.6.1 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
   react-hook-form@^7.56.4 \
   react-router-dom@^7.14.2
@@ -23,8 +23,8 @@ New app (includes React):
 yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
   react@^19.2.5 \
   react-dom@^19.2.5 \
-  antd@^5.24.0 \
-  @ant-design/icons@^5.6.1 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
   react-hook-form@^7.56.4 \
   react-router-dom@^7.14.2
@@ -36,8 +36,8 @@ Pin a release tag or commit:
 
 ```bash
 yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v0.1.0 \
-  antd@^5.24.0 \
-  @ant-design/icons@^5.6.1 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
   react-hook-form@^7.56.4 \
   react-router-dom@^7.14.2
@@ -47,8 +47,8 @@ npm equivalent:
 
 ```bash
 npm install https://github.com/Muhammadinaam/ding-react-admin.git \
-  antd@^5.24.0 \
-  @ant-design/icons@^5.6.1 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
   react-hook-form@^7.56.4 \
   react-router-dom@^7.14.2
@@ -63,10 +63,12 @@ npm install https://github.com/Muhammadinaam/ding-react-admin.git \
 | `react-router-dom` | 6+ | `^7.14.2` |
 | `react-hook-form` | 7+ | `^7.56.4` |
 | `dayjs` | 1+ | `^1.11.13` |
-| `antd` | 5+ | `^5.24.0` |
-| `@ant-design/icons` | 5+ | `^5.6.1` |
+| `antd` | 6+ | `^6.0.0` |
+| `@ant-design/icons` | 6+ | `^6.0.0` |
 
 Ant Design is a **peer**, not bundled inside this library — your app installs one copy of `antd` and shares it with `ding-react-admin`. That avoids duplicate React/Ant Design instances and keeps bundle size down.
+
+**Ant Design 6** requires React 18+ and includes native React 19 support (no compatibility patch needed).
 
 ## What you do **not** need
 

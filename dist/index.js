@@ -127,7 +127,7 @@ function De() {
 		placement: D.useBreakpoint().lg ? "bottomRight" : "bottom",
 		trigger: "click",
 		content: /* @__PURE__ */ H(F, {
-			direction: "vertical",
+			orientation: "vertical",
 			size: "middle",
 			style: {
 				minWidth: 240,
@@ -135,7 +135,7 @@ function De() {
 			},
 			children: [/* @__PURE__ */ V(Ee, {}), /* @__PURE__ */ V(we, {})]
 		}),
-		styles: { body: { padding: e.paddingSM } },
+		styles: { content: { padding: e.paddingSM } },
 		children: /* @__PURE__ */ V(y, {
 			type: "default",
 			icon: /* @__PURE__ */ V(q, {}),
@@ -368,7 +368,7 @@ function Ke({ navItems: e, brand: t = "Admin", collapsedBrand: r = "A", mobileDr
 					children: ee
 				}),
 				placement: "left",
-				width: 280,
+				size: 280,
 				onClose: () => k(!1),
 				open: O,
 				styles: {
@@ -381,7 +381,7 @@ function Ke({ navItems: e, brand: t = "Admin", collapsedBrand: r = "A", mobileDr
 						background: W
 					}
 				},
-				destroyOnClose: !0,
+				destroyOnHidden: !0,
 				children: /* @__PURE__ */ V(Ge, {
 					menuItems: L,
 					selectedKeys: K,
@@ -1820,7 +1820,7 @@ function bn() {
 		size: "middle",
 		style: { marginBottom: 16 },
 		children: e.filters.map((t) => /* @__PURE__ */ H(F, {
-			direction: "vertical",
+			orientation: "vertical",
 			size: 2,
 			children: [t.label ? /* @__PURE__ */ V(R.Text, {
 				type: "secondary",
@@ -1874,28 +1874,19 @@ function En(e, t) {
 //#endregion
 //#region src/crud/InlineFormSet.tsx
 function Dn(e) {
-	let t = Tn(), { control: n } = pe(), r = me({
-		control: n,
-		name: e
-	}), { fields: a, append: o, remove: s, replace: c } = de({
+	let t = Tn(), { control: n } = pe(), { fields: r, append: i, remove: a } = de({
 		control: n,
 		name: e
 	});
-	return i(() => {
-		!Array.isArray(r) || r.length === 0 || a.length !== r.length && c(r);
-	}, [
-		r,
-		a.length,
-		c
-	]), {
+	return {
 		ctx: t,
-		fields: a,
-		remove: s,
+		fields: r,
+		remove: a,
 		appendEmpty: () => {
 			if (!t) return;
 			let e = {};
 			for (let n of t.fields) e[n.source] = void 0;
-			o(e);
+			i(e);
 		}
 	};
 }
@@ -1958,7 +1949,7 @@ function kn({ arrayName: e, label: t }) {
 				children: t ?? "Related items"
 			}),
 			/* @__PURE__ */ V(F, {
-				direction: "vertical",
+				orientation: "vertical",
 				size: "middle",
 				style: { width: "100%" },
 				children: r.map((t, r) => /* @__PURE__ */ V(b, {

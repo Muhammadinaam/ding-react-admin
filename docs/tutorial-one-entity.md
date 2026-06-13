@@ -41,8 +41,8 @@ Your app must install Ant Design, React Router, and the other peers itself:
 
 ```bash
 yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
-  antd@^5.24.0 \
-  @ant-design/icons@^5.6.1 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
   react-hook-form@^7.56.4 \
   react-router-dom@^7.14.2

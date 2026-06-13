@@ -18,7 +18,7 @@ export function AppHub({ apps }: { apps: NavItem[] }) {
             onClick={() => navigate(app.path)}
             styles={{ body: { textAlign: "center" } }}
           >
-            <Space direction="vertical" size="small">
+            <Space orientation="vertical" size="small">
               <app.Icon style={{ fontSize: 32 }} />
               <Typography.Text strong>{app.label}</Typography.Text>
             </Space>

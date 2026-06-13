@@ -14,7 +14,7 @@ export function ThemeToolbar() {
       trigger="click"
       content={
         <Space
-          direction="vertical"
+          orientation="vertical"
           size="middle"
           style={{ minWidth: 240, maxWidth: "min(92vw, 320px)" }}
         >
@@ -22,7 +22,7 @@ export function ThemeToolbar() {
           <DensitySwitch />
         </Space>
       }
-      styles={{ body: { padding: token.paddingSM } }}
+      styles={{ content: { padding: token.paddingSM } }}
     >
       <Button
         type="default"
