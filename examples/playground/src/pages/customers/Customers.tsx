@@ -2,6 +2,8 @@ import {
   BooleanColumn,
   BooleanField,
   FilterBar,
+  FormTab,
+  FormTabs,
   NumberField,
   ResourceForm,
   ResourceList,
@@ -10,7 +12,6 @@ import {
   TextField,
   TextFilter,
 } from "ding-react-admin";
-import { Tabs } from "antd";
 import type { Customer } from "../../api/memoryApi";
 import { CUSTOMER_RESOURCE } from "./customerData";
 
@@ -38,77 +39,51 @@ const INDUSTRY_CHOICES = [
 
 function CustomerFormFields() {
   return (
-    <Tabs
-      items={[
-        {
-          key: "company",
-          label: "Company",
-          children: (
-            <>
-              <TextField source="code" label="Code" required />
-              <TextField source="name" label="Name" required />
-              <SelectField
-                source="industry"
-                label="Industry"
-                choices={INDUSTRY_CHOICES}
-                allowClear
-              />
-              <TextField source="website" label="Website" placeholder="https://" />
-              <BooleanField source="active" label="Active" />
-            </>
-          ),
-        },
-        {
-          key: "contact",
-          label: "Contact",
-          children: (
-            <>
-              <TextField source="contactName" label="Contact name" />
-              <TextField source="email" label="Email" />
-              <TextField source="phone" label="Phone" />
-              <TextField source="secondaryPhone" label="Secondary phone" />
-            </>
-          ),
-        },
-        {
-          key: "billing",
-          label: "Billing",
-          children: (
-            <>
-              <TextField source="billingStreet" label="Street" />
-              <TextField source="billingCity" label="City" />
-              <TextField source="billingCountry" label="Country" />
-              <TextField source="taxId" label="Tax ID" />
-              <SelectField
-                source="paymentTerms"
-                label="Payment terms"
-                choices={PAYMENT_TERM_CHOICES}
-              />
-            </>
-          ),
-        },
-        {
-          key: "account",
-          label: "Account",
-          children: (
-            <>
-              <NumberField
-                source="creditLimit"
-                label="Credit limit"
-                min={0}
-                step={100}
-              />
-              <SelectField
-                source="currency"
-                label="Currency"
-                choices={CURRENCY_CHOICES}
-              />
-              <TextField source="notes" label="Notes" />
-            </>
-          ),
-        },
-      ]}
-    />
+    <FormTabs>
+      <FormTab key="company" label="Company">
+        <TextField source="code" label="Code" required />
+        <TextField source="name" label="Name" required />
+        <SelectField
+          source="industry"
+          label="Industry"
+          choices={INDUSTRY_CHOICES}
+          allowClear
+        />
+        <TextField source="website" label="Website" placeholder="https://" />
+        <BooleanField source="active" label="Active" />
+      </FormTab>
+      <FormTab key="contact" label="Contact">
+        <TextField source="contactName" label="Contact name" />
+        <TextField source="email" label="Email" />
+        <TextField source="phone" label="Phone" />
+        <TextField source="secondaryPhone" label="Secondary phone" />
+      </FormTab>
+      <FormTab key="billing" label="Billing">
+        <TextField source="billingStreet" label="Street" />
+        <TextField source="billingCity" label="City" />
+        <TextField source="billingCountry" label="Country" />
+        <TextField source="taxId" label="Tax ID" />
+        <SelectField
+          source="paymentTerms"
+          label="Payment terms"
+          choices={PAYMENT_TERM_CHOICES}
+        />
+      </FormTab>
+      <FormTab key="account" label="Account">
+        <NumberField
+          source="creditLimit"
+          label="Credit limit"
+          min={0}
+          step={100}
+        />
+        <SelectField
+          source="currency"
+          label="Currency"
+          choices={CURRENCY_CHOICES}
+        />
+        <TextField source="notes" label="Notes" />
+      </FormTab>
+    </FormTabs>
   );
 }
 

@@ -1,5 +1,7 @@
 import {
   DateField,
+  FormStep,
+  FormSteps,
   NumberColumn,
   NumberField,
   ResourceForm,
@@ -8,8 +10,6 @@ import {
   TextColumn,
   TextField,
 } from "ding-react-admin";
-import { Button, Space, Steps } from "antd";
-import { useState } from "react";
 import type { PurchaseOrder } from "../../api/memoryApi";
 import { PURCHASE_ORDER_RESOURCE } from "./purchaseOrderData";
 
@@ -48,100 +48,65 @@ const WAREHOUSE_CHOICES = [
 ];
 
 function PurchaseOrderFormFields() {
-  const [step, setStep] = useState(0);
-
-  const stepItems = [
-    { title: "Vendor" },
-    { title: "Delivery" },
-    { title: "Commercial" },
-    { title: "Approval" },
-  ];
-
   return (
-    <>
-      <Steps current={step} items={stepItems} style={{ marginBottom: 24 }} />
-
-      {step === 0 ? (
-        <>
-          <TextField source="number" label="PO number" required />
-          <TextField source="supplierName" label="Supplier" required />
-          <DateField source="orderDate" label="Order date" required />
-          <DateField source="expectedDelivery" label="Expected delivery" />
-        </>
-      ) : null}
-
-      {step === 1 ? (
-        <>
-          <TextField source="shipTo" label="Ship to" />
-          <SelectField
-            source="shippingMethod"
-            label="Shipping method"
-            choices={SHIPPING_METHOD_CHOICES}
-          />
-          <SelectField
-            source="warehouse"
-            label="Warehouse"
-            choices={WAREHOUSE_CHOICES}
-            allowClear
-          />
-          <SelectField
-            source="incoterms"
-            label="Incoterms"
-            choices={INCOTERMS_CHOICES}
-          />
-        </>
-      ) : null}
-
-      {step === 2 ? (
-        <>
-          <SelectField
-            source="currency"
-            label="Currency"
-            choices={CURRENCY_CHOICES}
-          />
-          <NumberField
-            source="subtotal"
-            label="Subtotal"
-            min={0}
-            step={0.01}
-          />
-          <NumberField
-            source="taxRate"
-            label="Tax rate (%)"
-            min={0}
-            max={100}
-            step={0.1}
-          />
-          <TextField source="notes" label="Notes" />
-        </>
-      ) : null}
-
-      {step === 3 ? (
-        <>
-          <SelectField
-            source="status"
-            label="Status"
-            choices={STATUS_CHOICES}
-          />
-          <TextField source="approvedBy" label="Approved by" />
-          <DateField source="approvedAt" label="Approved at" />
-          <TextField source="internalNotes" label="Internal notes" />
-        </>
-      ) : null}
-
-      <Space style={{ marginTop: 16 }}>
-        <Button disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
-          Previous
-        </Button>
-        <Button
-          type="primary"
-          disabled={step === stepItems.length - 1}
-          onClick={() => setStep((s) => s + 1)}
-        >
-          Next
-        </Button>
-      </Space>
-    </>
+    <FormSteps>
+      <FormStep title="Vendor">
+        <TextField source="number" label="PO number" required />
+        <TextField source="supplierName" label="Supplier" required />
+        <DateField source="orderDate" label="Order date" required />
+        <DateField source="expectedDelivery" label="Expected delivery" />
+      </FormStep>
+      <FormStep title="Delivery">
+        <TextField source="shipTo" label="Ship to" />
+        <SelectField
+          source="shippingMethod"
+          label="Shipping method"
+          choices={SHIPPING_METHOD_CHOICES}
+        />
+        <SelectField
+          source="warehouse"
+          label="Warehouse"
+          choices={WAREHOUSE_CHOICES}
+          allowClear
+        />
+        <SelectField
+          source="incoterms"
+          label="Incoterms"
+          choices={INCOTERMS_CHOICES}
+        />
+      </FormStep>
+      <FormStep title="Commercial">
+        <SelectField
+          source="currency"
+          label="Currency"
+          choices={CURRENCY_CHOICES}
+        />
+        <NumberField
+          source="subtotal"
+          label="Subtotal"
+          min={0}
+          step={0.01}
+        />
+        <NumberField
+          source="taxRate"
+          label="Tax rate (%)"
+          min={0}
+          max={100}
+          step={0.1}
+        />
+        <TextField source="notes" label="Notes" />
+      </FormStep>
+      <FormStep title="Approval">
+        <SelectField
+          source="status"
+          label="Status"
+          choices={STATUS_CHOICES}
+        />
+        <TextField source="approvedBy" label="Approved by" />
+        <DateField source="approvedAt" label="Approved at" />
+        <TextField source="internalNotes" label="Internal notes" />
+      </FormStep>
+    </FormSteps>
   );
 }
 

@@ -14,6 +14,10 @@ export {
   loadInlineRows,
 } from "./InlineFormSet";
 export type { InlineFormSetProps, SaveInlineOptions, InlineFormSetLayout } from "./InlineFormSet";
+export { FormTabs, FormTab } from "./FormTabs";
+export type { FormTabsProps, FormTabProps } from "./FormTabs";
+export { FormSteps, FormStep } from "./FormSteps";
+export type { FormStepsProps, FormStepProps } from "./FormSteps";
 
 export { TextField } from "./fields/TextField";
 export { NumberField } from "./fields/NumberField";
