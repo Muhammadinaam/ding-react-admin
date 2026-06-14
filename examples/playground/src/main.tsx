@@ -1,8 +1,9 @@
 import { App as AntdApp } from "antd";
-import { StrictMode } from "react";
+import { StrictMode, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Navigate,
+  Outlet,
   RouterProvider,
   createBrowserRouter,
   type RouteObject,
@@ -53,29 +54,48 @@ const routerBasename =
     ? undefined
     : import.meta.env.BASE_URL.replace(/\/$/, "");
 
+function PlaygroundProviders({ children }: { children: ReactNode }) {
+  return (
+    <AuthProvider adapter={authAdapter}>
+      <DataProvider value={dataProvider}>
+        <PermissionsProvider can={can}>{children}</PermissionsProvider>
+      </DataProvider>
+    </AuthProvider>
+  );
+}
+
 const router = createBrowserRouter(
   [
     {
-      path: LOGIN_PATH,
       element: (
-        <GuestOnly redirectTo={HOME_PATH}>{loginElement}</GuestOnly>
+        <PlaygroundProviders>
+          <Outlet />
+        </PlaygroundProviders>
       ),
+      children: [
+        {
+          path: LOGIN_PATH,
+          element: (
+            <GuestOnly redirectTo={HOME_PATH}>{loginElement}</GuestOnly>
+          ),
+        },
+        {
+          path: "/",
+          element: (
+            <Protected redirectTo={LOGIN_PATH}>
+              <AdminLayout
+                navItems={PLAYGROUND_NAV}
+                loginPath={LOGIN_PATH}
+                brand="Playground"
+                collapsedBrand="P"
+              />
+            </Protected>
+          ),
+          children: playgroundRoutes as RouteObject[],
+        },
+        { path: "*", element: <Navigate to={HOME_PATH} replace /> },
+      ],
     },
-    {
-      path: "/",
-      element: (
-        <Protected redirectTo={LOGIN_PATH}>
-          <AdminLayout
-            navItems={PLAYGROUND_NAV}
-            loginPath={LOGIN_PATH}
-            brand="Playground"
-            collapsedBrand="P"
-          />
-        </Protected>
-      ),
-      children: playgroundRoutes as RouteObject[],
-    },
-    { path: "*", element: <Navigate to={HOME_PATH} replace /> },
   ],
   { basename: routerBasename },
 );
@@ -84,13 +104,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AntdApp>
       <AppThemeProvider>
-        <AuthProvider adapter={authAdapter}>
-          <DataProvider value={dataProvider}>
-            <PermissionsProvider can={can}>
-              <RouterProvider router={router} />
-            </PermissionsProvider>
-          </DataProvider>
-        </AuthProvider>
+        <RouterProvider router={router} />
       </AppThemeProvider>
     </AntdApp>
   </StrictMode>,
