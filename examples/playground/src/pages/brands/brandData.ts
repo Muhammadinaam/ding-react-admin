@@ -22,7 +22,7 @@ export function createBrandHandlers(
     getRows: () => api.brands,
     nextId,
     mapCreate: (data, id) => ({
-      id,
+      id: Number(id),
       name: String(data.name ?? ""),
       productId: null,
     }),

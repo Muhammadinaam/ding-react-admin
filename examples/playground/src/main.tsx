@@ -47,29 +47,38 @@ const loginElement = (
   />
 );
 
-const router = createBrowserRouter([
-  {
-    path: LOGIN_PATH,
-    element: (
-      <GuestOnly redirectTo={HOME_PATH}>{loginElement}</GuestOnly>
-    ),
-  },
-  {
-    path: "/",
-    element: (
-      <Protected redirectTo={LOGIN_PATH}>
-        <AdminLayout
-          navItems={PLAYGROUND_NAV}
-          loginPath={LOGIN_PATH}
-          brand="Playground"
-          collapsedBrand="P"
-        />
-      </Protected>
-    ),
-    children: playgroundRoutes as RouteObject[],
-  },
-  { path: "*", element: <Navigate to={HOME_PATH} replace /> },
-]);
+/** Match Vite `base` (e.g. `/ding-react-admin/` on GitHub Pages). */
+const routerBasename =
+  import.meta.env.BASE_URL === "/"
+    ? undefined
+    : import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const router = createBrowserRouter(
+  [
+    {
+      path: LOGIN_PATH,
+      element: (
+        <GuestOnly redirectTo={HOME_PATH}>{loginElement}</GuestOnly>
+      ),
+    },
+    {
+      path: "/",
+      element: (
+        <Protected redirectTo={LOGIN_PATH}>
+          <AdminLayout
+            navItems={PLAYGROUND_NAV}
+            loginPath={LOGIN_PATH}
+            brand="Playground"
+            collapsedBrand="P"
+          />
+        </Protected>
+      ),
+      children: playgroundRoutes as RouteObject[],
+    },
+    { path: "*", element: <Navigate to={HOME_PATH} replace /> },
+  ],
+  { basename: routerBasename },
+);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

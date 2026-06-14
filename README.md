@@ -1,5 +1,7 @@
 # ding-react-admin
 
+**Live demo:** [playground on GitHub Pages](https://muhammadinaam.github.io/ding-react-admin/) (login: `admin` / `admin` or `user` / `user`)
+
 Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
 ## Providers (manual composition)

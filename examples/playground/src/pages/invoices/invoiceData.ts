@@ -22,7 +22,7 @@ export function createInvoiceHandlers(
     getRows: () => api.invoices,
     nextId,
     mapCreate: (data, id) => ({
-      id,
+      id: Number(id),
       number: String(data.number ?? ""),
       customer: String(data.customer ?? ""),
       issuedAt: String(

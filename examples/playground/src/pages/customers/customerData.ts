@@ -46,7 +46,7 @@ export function createCustomerHandlers(
     getRows: () => api.customers,
     nextId,
     mapCreate: (data, id) => {
-      const row = mapCustomer(data as Record<string, unknown>, id);
+      const row = mapCustomer(data as Record<string, unknown>, Number(id));
       if (api.customers.some((c) => c.code === row.code)) {
         throw validationError({ fields: { code: "Code already exists" } });
       }

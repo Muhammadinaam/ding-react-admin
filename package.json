@@ -1,6 +1,6 @@
 {
   "name": "ding-react-admin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",
@@ -25,6 +25,7 @@
     "build": "vite build && node -e \"require('fs').writeFileSync('dist/index.d.ts','export * from \\\"./src/index\\\";\\n')\"",
     "dev:example": "yarn --cwd examples/playground dev",
     "build:example": "yarn --cwd examples/playground build",
+    "build:example:gh-pages": "yarn --cwd examples/playground build:gh-pages",
     "test": "vitest run",
     "prepublishOnly": "yarn build"
   },

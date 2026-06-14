@@ -50,7 +50,7 @@ export function createPurchaseOrderHandlers(
     getRows: () => api.purchaseOrders,
     nextId,
     mapCreate: (data, id) => {
-      const row = mapPurchaseOrder(data as Record<string, unknown>, id);
+      const row = mapPurchaseOrder(data as Record<string, unknown>, Number(id));
       if (api.purchaseOrders.some((p) => p.number === row.number)) {
         throw validationError({ fields: { number: "PO number already exists" } });
       }

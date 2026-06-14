@@ -324,7 +324,9 @@ export class PlaygroundMemoryApi {
     const u = this.users.find((x) => x.id === userId);
     if (!u) throw new Error("Unauthorized");
     const { password: _p, ...pub } = u;
-    return pub;
+    const permissions =
+      u.role === "admin" ? adminPermissions() : readOnlyPermissions();
+    return { ...pub, permissions };
   }
 
   getPermissions(token: string | null): string[] {

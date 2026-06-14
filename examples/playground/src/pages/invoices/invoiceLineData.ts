@@ -31,7 +31,7 @@ export function createInvoiceLineHandlers(
         });
       }
       return {
-        id,
+        id: Number(id),
         invoiceId: Number(data.invoiceId),
         productId: data.productId == null ? null : Number(data.productId),
         label: String(data.label ?? ""),
