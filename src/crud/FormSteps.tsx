@@ -40,7 +40,7 @@ export type FormStepsProps = {
   allowStepSelect?: boolean;
   stepsStyle?: CSSProperties;
   navigationStyle?: CSSProperties;
-} & Pick<StepsProps, "size" | "direction" | "type" | "status">;
+} & Partial<Pick<StepsProps, "size" | "direction" | "type" | "status">>;
 
 export function FormSteps({
   children,
