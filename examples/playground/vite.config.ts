@@ -10,17 +10,26 @@ const reactRoot = path.resolve(__dirname, "node_modules/react");
 const reactDomRoot = path.resolve(__dirname, "node_modules/react-dom");
 const dayjsRoot = path.resolve(__dirname, "node_modules/dayjs");
 const reactRouterDomRoot = path.resolve(__dirname, "node_modules/react-router-dom");
+const reactHookFormRoot = path.resolve(__dirname, "node_modules/react-hook-form");
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    dedupe: ["react", "react-dom", "dayjs", "react-router", "react-router-dom"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "dayjs",
+      "react-router",
+      "react-router-dom",
+      "react-hook-form",
+    ],
     alias: {
       "ding-react-admin": path.resolve(__dirname, "../../src"),
       react: reactRoot,
       "react-dom": reactDomRoot,
       dayjs: dayjsRoot,
       "react-router-dom": reactRouterDomRoot,
+      "react-hook-form": reactHookFormRoot,
     },
   },
 });
