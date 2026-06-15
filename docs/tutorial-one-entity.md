@@ -40,7 +40,7 @@ We will replace most of `src/` with admin files. You can delete the default `App
 Your app must install Ant Design, React Router, and the other peers itself:
 
 ```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+yarn add ding-react-admin@^1.0.0 \
   antd@^6.0.0 \
   @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
@@ -48,7 +48,7 @@ yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
   react-router-dom@^7.14.2
 ```
 
-See [install.md](install.md) for npm and version details.
+See [install.md](install.md) for npm, GitHub, and version details.
 
 ### Step 3 — Create the app entry file
 

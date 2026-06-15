@@ -39,6 +39,10 @@ Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap field
 
 Use **`FormTabs`** / **`FormTab`** or **`FormSteps`** / **`FormStep`** to split long forms. Fields stay registered across hidden tabs/steps so Save validates the whole form.
 
+| Tabbed form (full page) | Stepped form (modal) |
+| --- | --- |
+| ![Non-modal tabbed form](../assets/non-modal-form-tabbed.png) | ![Modal form with steps](../assets/modal-form-stepped.png) |
+
 ```tsx
 import { FormTab, FormTabs, ResourceForm, TextField } from "ding-react-admin";
 

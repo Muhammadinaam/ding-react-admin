@@ -1,6 +1,6 @@
 # Install
 
-`ding-react-admin` ships as a prebuilt library (`dist/index.js`). **No Vite alias or other bundler config is required** when installing from GitHub or npm — import it like any other package.
+[`ding-react-admin` on npm](https://www.npmjs.com/package/ding-react-admin) ships as a prebuilt library (`dist/index.js`). **No Vite alias or other bundler config is required** — import it like any other package.
 
 ## One-shot install (recommended)
 
@@ -9,7 +9,7 @@ Your app must install **peer dependencies** yourself. Yarn 1 and many setups do 
 If you already have a React app (`react`, `react-dom`), run:
 
 ```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+yarn add ding-react-admin@^1.0.0 \
   antd@^6.0.0 \
   @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
@@ -20,7 +20,7 @@ yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
 New app (includes React):
 
 ```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+yarn add ding-react-admin@^1.0.0 \
   react@^19.2.5 \
   react-dom@^19.2.5 \
   antd@^6.0.0 \
@@ -32,21 +32,10 @@ yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
 
 These versions match the [playground](../examples/playground/package.json) and are the versions this repo is tested against. Newer versions within the ranges below usually work; if something breaks, align with the playground first.
 
-Pin a release tag or commit:
-
-```bash
-yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v0.1.0 \
-  antd@^6.0.0 \
-  @ant-design/icons@^6.0.0 \
-  dayjs@^1.11.13 \
-  react-hook-form@^7.56.4 \
-  react-router-dom@^7.14.2
-```
-
 npm equivalent:
 
 ```bash
-npm install https://github.com/Muhammadinaam/ding-react-admin.git \
+npm install ding-react-admin@^1.0.0 \
   antd@^6.0.0 \
   @ant-design/icons@^6.0.0 \
   dayjs@^1.11.13 \
@@ -80,8 +69,30 @@ Ant Design is a **peer**, not bundled inside this library — your app installs 
 - **Full CRUD walkthrough:** [tutorial-one-entity.md](tutorial-one-entity.md) — create a Vite app, install this package, add a Users page step by step.
 - **Minimal shell only:** [quick-start.md](quick-start.md).
 
-## Installing from a fork
+## Installing from GitHub
 
-Commit `dist/` in your fork, or run `yarn && yarn build` in the repo before installing. Consumers resolve `exports` → `dist/index.js` + types.
+Use this for an unreleased commit, a fork, or when npm is unavailable:
+
+```bash
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
+```
+
+Pin a release tag or commit:
+
+```bash
+yarn add https://github.com/Muhammadinaam/ding-react-admin.git#v1.0.0 \
+  antd@^6.0.0 \
+  @ant-design/icons@^6.0.0 \
+  dayjs@^1.11.13 \
+  react-hook-form@^7.56.4 \
+  react-router-dom@^7.14.2
+```
+
+For a fork, commit `dist/` or run `yarn && yarn build` in the repo before installing. Consumers resolve `exports` → `dist/index.js` + types.
 
 [← Back to README](../README.md)

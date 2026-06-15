@@ -6,6 +6,8 @@ Shared UI for guest/public auth screens:
 - **`AuthAlternateLink`** — “Don’t have an account? **Register**” style row (React Router `Link`).
 - **`LoginPage`** — sign-in card; pass **`brand`** and **`alternateAuth`** for the register link. On submit, the full form values are passed to **`useAuth().login`** as **`LoginCredentials`** (`username`, `password`, plus any fields from **`extraFields`**).
 
+![Login page](../assets/login.png)
+
 ## Custom login fields
 
 Add fields with **`extraFields`** on **`LoginPage`**, or build your own page with **`AuthPageLayout`**. Read extra keys in your **`AuthAdapter.login`** implementation:

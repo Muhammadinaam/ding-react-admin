@@ -1,8 +1,30 @@
 # ding-react-admin
 
+**npm:** [`ding-react-admin`](https://www.npmjs.com/package/ding-react-admin)
+
 **Live demo:** [playground on GitHub Pages](https://muhammadinaam.github.io/ding-react-admin/) (login: `admin` / `admin` or `user` / `user`)
 
+**Tutorial:** [Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
+
+```bash
+yarn add ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
+```
+
+Install details and peer versions: [docs/install.md](docs/install.md).
+
 Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
+
+## Screenshots
+
+From the [playground demo](https://muhammadinaam.github.io/ding-react-admin/):
+
+| List with filters | Tabbed form page |
+| --- | --- |
+| ![List page with filters](docs/assets/list-page-with-filters.png) | ![Non-modal tabbed form](docs/assets/non-modal-form-tabbed.png) |
+
+| Stepped modal form | Login |
+| --- | --- |
+| ![Modal form with steps](docs/assets/modal-form-stepped.png) | ![Login page](docs/assets/login.png) |
 
 ## Providers (manual composition)
 

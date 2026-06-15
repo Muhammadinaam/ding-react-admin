@@ -1,6 +1,6 @@
 {
   "name": "ding-react-admin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",
@@ -19,7 +19,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "docs/assets"
   ],
   "scripts": {
     "build": "vite build && node -e \"require('fs').writeFileSync('dist/index.d.ts','export * from \\\"./src/index\\\";\\n')\"",

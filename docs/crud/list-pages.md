@@ -1,5 +1,7 @@
 # List pages
 
+![List page with filters](../assets/list-page-with-filters.png)
+
 ```tsx
 import {
   FilterBar,
