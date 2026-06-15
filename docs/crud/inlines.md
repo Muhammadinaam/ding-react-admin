@@ -1,5 +1,7 @@
 # Inline nested forms (TabularInline / StackedInline)
 
+![Form with inline rows](../assets/form-with-inline.png)
+
 ```tsx
 import { InlineFormSet, ResourceForm, TextField, NumberField } from "ding-react-admin";
 

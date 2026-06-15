@@ -2,9 +2,11 @@
 
 **npm:** [`ding-react-admin`](https://www.npmjs.com/package/ding-react-admin)
 
-**Live demo:** [playground on GitHub Pages](https://muhammadinaam.github.io/ding-react-admin/) (login: `admin` / `admin` or `user` / `user`)
+## Live demo:
+[playground on GitHub Pages](https://muhammadinaam.github.io/ding-react-admin/) (login: `admin` / `admin` or `user` / `user`)
 
-**Tutorial:** [Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
+## Tutorial:
+[Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
 
 ```bash
 yarn add ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
@@ -25,6 +27,78 @@ From the [playground demo](https://muhammadinaam.github.io/ding-react-admin/):
 | Stepped modal form | Login |
 | --- | --- |
 | ![Modal form with steps](docs/assets/modal-form-stepped.png) | ![Login page](docs/assets/login.png) |
+
+## Declarative CRUD
+
+Wire a [`DataProvider`](docs/data-permissions.md) (see [Providers](#providers-manual-composition) below), then describe list and form pages in JSX — field `source` names map to your API. Filters, modals, permissions, and validation plug in when you need them; start with the basics:
+
+### List page
+
+```tsx
+import { ResourceList, TextColumn, DateColumn } from "ding-react-admin";
+
+export function InvoiceListPage() {
+  return (
+    <ResourceList resource="invoices" title="Invoices" pathPrefix="/invoices">
+      <TextColumn source="number" label="Number" />
+      <TextColumn source="customer" label="Customer" />
+      <DateColumn source="issuedAt" label="Issued" />
+    </ResourceList>
+  );
+}
+```
+
+Add `<TextFilter />`, `<ReferenceFilter />`, bulk actions, and row permissions inside the same component — [list pages guide](docs/crud/list-pages.md).
+
+### Form page
+
+```tsx
+import { ResourceForm, TextField, DateField } from "ding-react-admin";
+
+export function InvoiceFormPage() {
+  return (
+    <ResourceForm resource="invoices" title="Invoice" listPath="/invoices">
+      <TextField source="number" label="Number" required />
+      <TextField source="customer" label="Customer" required />
+      <DateField source="issuedAt" label="Issued" required />
+    </ResourceForm>
+  );
+}
+```
+
+Tabbed forms, stepped modals, and API error mapping — [forms guide](docs/crud/forms.md).
+
+### Inline nested rows
+
+Django-style tabular inlines: related rows edit in a table inside the parent form.
+
+![Form with inline rows](docs/assets/form-with-inline.png)
+
+```tsx
+import {
+  InlineFormSet,
+  NumberField,
+  ResourceForm,
+  TextField,
+} from "ding-react-admin";
+
+<ResourceForm
+  resource="invoices"
+  title="Invoice"
+  listPath="/invoices"
+  inlines={[{ resource: "invoice-lines", foreignKey: "invoiceId" }]}
+>
+  <TextField source="number" label="Number" required />
+  <TextField source="customer" label="Customer" required />
+  <InlineFormSet resource="invoice-lines" foreignKey="invoiceId" label="Lines">
+    <TextField source="label" label="Label" required />
+    <NumberField source="quantity" label="Qty" required min={0} />
+    <NumberField source="unitPrice" label="Unit price" required min={0} step={0.01} />
+  </InlineFormSet>
+</ResourceForm>
+```
+
+Stacked layout, dependent fields, and validation — [inlines guide](docs/crud/inlines.md).
 
 ## Providers (manual composition)
 
