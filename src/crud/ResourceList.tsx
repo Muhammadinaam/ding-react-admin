@@ -9,7 +9,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type Key,
@@ -32,6 +31,8 @@ import type {
   ResourceListRowActionsHelpers,
 } from "./types";
 import { useListQueryState } from "./utils/useListQueryState";
+import { useAbortableEffect } from "./utils/useAbortableEffect";
+import { isAbortError } from "../data/abortError";
 
 type ResourceListContextValue = {
   filterValues: Record<string, unknown>;
@@ -263,32 +264,40 @@ function ResourceListTable<T extends Record<string, unknown>>({
     [queryActions, queryState.sort.length],
   );
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const sort =
-        queryState.sort.length === 0
-          ? undefined
-          : queryState.sort.length === 1
-            ? queryState.sort[0]
-            : queryState.sort;
-      const res = await dp.getList(resource, {
-        pagination: { page: queryState.page, perPage: queryState.perPage },
-        sort,
-        filter: queryState.filter,
-      });
-      setData(res.data as T[]);
-      setTotal(res.total);
-    } catch (e) {
-      message.error(e instanceof Error ? e.message : "Load failed");
-    } finally {
-      setLoading(false);
-    }
-  }, [dp, resource, queryState, message]);
+  const listParams = useMemo(() => {
+    const sort =
+      queryState.sort.length === 0
+        ? undefined
+        : queryState.sort.length === 1
+          ? queryState.sort[0]
+          : queryState.sort;
+    return {
+      pagination: { page: queryState.page, perPage: queryState.perPage },
+      sort,
+      filter: queryState.filter,
+    };
+  }, [queryState]);
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      setLoading(true);
+      try {
+        const res = await dp.getList(resource, { ...listParams, signal });
+        if (signal?.aborted) return;
+        setData(res.data as T[]);
+        setTotal(res.total);
+      } catch (e) {
+        if (!isAbortError(e)) {
+          message.error(e instanceof Error ? e.message : "Load failed");
+        }
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
+    },
+    [dp, resource, listParams, message],
+  );
+
+  useAbortableEffect((signal) => load(signal), [load]);
 
   const bulkActionHelpers = useMemo(
     (): ResourceListBulkActionHelpers => ({

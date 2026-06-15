@@ -22,6 +22,8 @@ import {
 } from "./InlineFormSet";
 import { inlineArrayName } from "./utils/inlineArrayName";
 import { parseAndApplyFormErrors } from "./utils/formErrors";
+import { useAbortableEffect } from "./utils/useAbortableEffect";
+import { isAbortError } from "../data/abortError";
 
 export type ResourceFormInlineConfig = Pick<
   InlineFormSetProps,
@@ -74,72 +76,54 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   });
   const fieldSourcesRef = useRef(new Set<string>());
 
-  const loadInlines = useCallback(
-    async (parentId: string | number) => {
-      if (!inlines?.length) return;
-      const idsMap: Record<string, (string | number)[]> = {};
-      for (const cfg of inlines) {
-        const arrayName = resolveInlineArrayName(cfg);
-        const { rows, ids } = await loadInlineRows(
-          dp,
-          cfg.resource,
-          cfg.foreignKey,
-          parentId,
-        );
-        form.setValue(
-          arrayName as never,
-          rows as never,
-        );
-        idsMap[arrayName] = ids;
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      if (isNew || !id) {
+        if (defaultValues) {
+          form.reset({ ...defaultValues } as DefaultValues<T>);
+        }
+        setLoading(false);
+        return;
       }
-      setExistingInlineIds(idsMap);
+      setLoading(true);
+      try {
+        const res = await dp.getOne(resource, id, { signal });
+        if (signal?.aborted) return;
+        const record = res.data as DefaultValues<T>;
+        if (inlines?.length) {
+          const merged = { ...record } as DefaultValues<T>;
+          const idsMap: Record<string, (string | number)[]> = {};
+          for (const cfg of inlines) {
+            const arrayName = resolveInlineArrayName(cfg);
+            const { rows, ids } = await loadInlineRows(
+              dp,
+              cfg.resource,
+              cfg.foreignKey,
+              id,
+            );
+            (merged as Record<string, unknown>)[arrayName] = rows;
+            idsMap[arrayName] = ids;
+          }
+          if (signal?.aborted) return;
+          form.reset(merged);
+          setExistingInlineIds(idsMap);
+          setFormVersion((v) => v + 1);
+        } else {
+          form.reset(record);
+          setFormVersion((v) => v + 1);
+        }
+      } catch (e) {
+        if (!isAbortError(e)) {
+          message.error(e instanceof Error ? e.message : "Load failed");
+        }
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
     },
-    [dp, inlines, form],
+    [dp, resource, id, isNew, form, message, defaultValues, inlines],
   );
 
-  const load = useCallback(async () => {
-    if (isNew || !id) {
-      if (defaultValues) {
-        form.reset({ ...defaultValues } as DefaultValues<T>);
-      }
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await dp.getOne(resource, id);
-      const record = res.data as DefaultValues<T>;
-      if (inlines?.length) {
-        const merged = { ...record } as DefaultValues<T>;
-        const idsMap: Record<string, (string | number)[]> = {};
-        for (const cfg of inlines) {
-          const arrayName = resolveInlineArrayName(cfg);
-          const { rows, ids } = await loadInlineRows(
-            dp,
-            cfg.resource,
-            cfg.foreignKey,
-            id,
-          );
-          (merged as Record<string, unknown>)[arrayName] = rows;
-          idsMap[arrayName] = ids;
-        }
-        form.reset(merged);
-        setExistingInlineIds(idsMap);
-        setFormVersion((v) => v + 1);
-      } else {
-        form.reset(record);
-        setFormVersion((v) => v + 1);
-      }
-    } catch (e) {
-      message.error(e instanceof Error ? e.message : "Load failed");
-    } finally {
-      setLoading(false);
-    }
-  }, [dp, resource, id, isNew, form, message, defaultValues, loadInlines]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  useAbortableEffect((signal) => load(signal), [load]);
 
   useEffect(() => {
     if (!permissions) return;
@@ -211,13 +195,12 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
       onSaved?.(saved);
       if (!stayOnPage) navigate(listPath);
     } catch (e) {
-      const handled = parseAndApplyFormErrors(dp, form, message, e, {
+      parseAndApplyFormErrors(dp, form, message, e, {
         resource,
         mutation: isNew ? "create" : "update",
       });
-      if (!handled) {
-        message.error(e instanceof Error ? e.message : "Save failed");
-      }
+      message.error(e instanceof Error ? e.message : "Save failed");
+      
     }
   }
 

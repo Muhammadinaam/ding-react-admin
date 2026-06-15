@@ -2,6 +2,8 @@
 
 **Want a full step-by-step guide?** Start with [tutorial-one-entity.md](tutorial-one-entity.md) (create project → install → Users CRUD → `data-provider.ts`).
 
+For async reads and `AbortSignal`, see [request-cancellation.md](request-cancellation.md).
+
 This page is a **minimal** shell without a real data layer.
 
 Providers are composed explicitly — nothing is hidden except theme inside `<AdminApp />` (via its `theme` prop, which wraps `AppThemeProvider`).

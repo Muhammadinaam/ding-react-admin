@@ -48,7 +48,7 @@ export function createMemoryResourceHandlers<
       return applyInMemoryListParams(asRows(base), params) as GetListResult<T>;
     },
 
-    async getOne(id): Promise<GetOneResult<T>> {
+    async getOne(id, _params?): Promise<GetOneResult<T>> {
       return { data: getById(config.getRows(), id) as T };
     },
 

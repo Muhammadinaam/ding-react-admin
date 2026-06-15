@@ -47,6 +47,7 @@ export {
 } from "./filters/ReferenceFilter";
 
 export { useListQueryState } from "./utils/useListQueryState";
+export { useAbortableEffect } from "./utils/useAbortableEffect";
 export type {
   ListQueryState,
   ListQueryActions,

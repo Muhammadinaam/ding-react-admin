@@ -9,6 +9,7 @@ Django-admin-style CRUD built from JSX components. List pages, forms, filters, r
 | Topic | Link |
 |-------|------|
 | List pages & filters | [list-pages.md](list-pages.md) |
+| Request cancellation (`AbortSignal`) | [../request-cancellation.md](../request-cancellation.md) |
 | Bulk actions (checkboxes + action bar) | [bulk-actions.md](bulk-actions.md) |
 | Form pages | [forms.md](forms.md) |
 | Tabbed / stepped forms | [forms.md](forms.md#tabbed-and-stepped-forms) |

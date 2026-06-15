@@ -7,6 +7,7 @@ import type {
   DeleteResult,
   GetListParams,
   GetListResult,
+  GetOneParams,
   GetOneResult,
   Identifier,
   ParseFormError,
@@ -27,7 +28,7 @@ export type ResourceHandlers<
   RecordType extends Record<string, unknown> = Record<string, unknown>,
 > = {
   getList: (params: GetListParams) => Promise<GetListResult<RecordType>>;
-  getOne: (id: Identifier) => Promise<GetOneResult<RecordType>>;
+  getOne: (id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
   create: (data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
   update: (
     params: UpdateParams<RecordType>,
@@ -95,11 +96,11 @@ export function combineResourceHandlers(
       assertPermission(can, permissions, "list");
       return h.getList(params);
     },
-    async getOne(resource, id) {
+    async getOne(resource, id, params) {
       const { handlers: h, permissions } = resolve(resource);
       guard?.(resource, "read");
       assertPermission(can, permissions, "read");
-      return h.getOne(id);
+      return h.getOne(id, params);
     },
     async create(resource, data) {
       const { handlers: h, permissions } = resolve(resource);

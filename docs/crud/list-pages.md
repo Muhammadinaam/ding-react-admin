@@ -65,6 +65,8 @@ export function ProductListPage() {
 
 `editMode`: `"page"` (default), `"modal"`, or `"both"`.
 
+List and form pages pass `AbortSignal` to `getList` / `getOne` and cancel on unmount or filter changes. Forward `params.signal` in your handlers for real HTTP cancellation — see [request-cancellation.md](../request-cancellation.md).
+
 ## List header and row actions
 
 **Card header** — add buttons to the left of **New** / **New page** with `headerExtra`:

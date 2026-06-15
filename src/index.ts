@@ -28,6 +28,7 @@ export type {
   DeleteResult,
   GetListParams,
   GetListResult,
+  GetOneParams,
   GetOneResult,
   Identifier,
   PaginationParams,
@@ -41,6 +42,7 @@ export type {
   ParseFormErrorContext,
 } from "./data/dataProviderTypes";
 export { combineResourceHandlers } from "./data/resourceHandlers";
+export { isAbortError } from "./data/abortError";
 export {
   parseDjangoDRFFormErrors,
   parseDotNetFormErrors,
@@ -148,6 +150,7 @@ export {
   ReferenceManyFilter,
   useListQueryState,
   useChoices,
+  useAbortableEffect,
   getByPath,
   pickBySources,
   inlineArrayName,

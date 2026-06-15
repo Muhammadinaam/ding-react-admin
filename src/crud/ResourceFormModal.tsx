@@ -5,12 +5,14 @@ import {
   type DefaultValues,
   type FieldValues,
 } from "react-hook-form";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
 import { FormFieldsProvider } from "./context/FormFieldsContext";
 import { pickBySources } from "./utils/pickBySources";
 import { parseAndApplyFormErrors } from "./utils/formErrors";
+import { useAbortableEffect } from "./utils/useAbortableEffect";
+import { isAbortError } from "../data/abortError";
 
 export type ResourceFormModalProps = {
   resource: string;
@@ -36,26 +38,36 @@ export function ResourceFormModal({
   const form = useForm<FieldValues>();
   const fieldSourcesRef = useRef(new Set<string>());
 
-  const load = useCallback(async () => {
-    if (isNew || !editId) {
-      form.reset({} as DefaultValues<FieldValues>);
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await dp.getOne(resource, editId);
-      form.reset(res.data as DefaultValues<FieldValues>);
-    } catch (e) {
-      message.error(e instanceof Error ? e.message : "Load failed");
-    } finally {
-      setLoading(false);
-    }
-  }, [dp, resource, editId, isNew, form, message]);
+  const load = useCallback(
+    async (signal?: AbortSignal) => {
+      if (isNew || !editId) {
+        form.reset({} as DefaultValues<FieldValues>);
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      try {
+        const res = await dp.getOne(resource, editId, { signal });
+        if (signal?.aborted) return;
+        form.reset(res.data as DefaultValues<FieldValues>);
+      } catch (e) {
+        if (!isAbortError(e)) {
+          message.error(e instanceof Error ? e.message : "Load failed");
+        }
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
+    },
+    [dp, resource, editId, isNew, form, message],
+  );
 
-  useEffect(() => {
-    if (open) void load();
-  }, [open, load]);
+  useAbortableEffect(
+    (signal) => {
+      if (!open) return;
+      return load(signal);
+    },
+    [open, load],
+  );
 
   async function onSubmit(values: FieldValues) {
     try {

@@ -8,6 +8,8 @@ The [tutorial](tutorial-one-entity.md) covers the **normal** case:
 
 That is enough for most pages. This page explains **when you need more** and **what to do instead** — in plain language.
 
+For async reads and cancellation, see [request-cancellation.md](request-cancellation.md).
+
 ---
 
 ## How do I know I need something advanced?

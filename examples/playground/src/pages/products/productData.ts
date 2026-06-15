@@ -46,7 +46,7 @@ export function createProductHandlers(
       ) as { data: ProductRow[]; total: number };
     },
 
-    async getOne(id) {
+    async getOne(id, _params?) {
       return {
         data: getRowById(api.products, id) as unknown as ProductRow,
       };

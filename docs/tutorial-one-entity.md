@@ -162,6 +162,8 @@ This file connects your backend to `ding-react-admin`. Field names in the form (
 
 Below uses **`fetch`** and string URLs (works with any backend). If you use a generated OpenAPI client, see the variant at the end of Step 7.
 
+> **Focus on the five CRUD functions** (`list`, `retrieve`, `create`, `update`, `destroy`). That is all you need to complete this tutorial. Optional extras (like request cancellation below) can wait until later.
+
 ```ts
 import {
   createRestResourceHandlers,
@@ -287,6 +289,22 @@ export const createUserHandlers = (getApi: () => ApiApi) =>
 ```
 
 Adjust list response shape (`results` / `count`) if your API paginates differently.
+
+#### Optional — request cancellation (`signal`) — **skip for now**
+
+When a list or form loads data, the user might navigate away or change filters before the request finishes. `ding-react-admin` already avoids stale toasts and wrong UI updates for built-in pages — **you do not need to do anything in `userData.ts` to finish this tutorial.**
+
+Later, if you want the browser to **cancel the HTTP request** too (fewer wasted calls on slow networks), forward `params.signal` to `fetch` or axios in `list` and `retrieve` only:
+
+```ts
+// list
+await fetch(`${API_BASE}/?${qs}`, { signal: params.signal });
+
+// retrieve
+await fetch(`${API_BASE}/${id}/`, { signal: params?.signal });
+```
+
+That is a small production polish step, not part of the first walkthrough. See [request-cancellation.md](request-cancellation.md) when you are ready — or ignore it until you need it.
 
 ### Step 8 — Create the Users UI
 

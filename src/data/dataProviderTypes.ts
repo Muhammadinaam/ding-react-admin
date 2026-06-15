@@ -13,12 +13,19 @@ export type PaginationParams = {
   perPage: number;
 };
 
+export type GetOneParams = {
+  /** Forward to fetch/axios to cancel in-flight reads when the UI unmounts or deps change. */
+  signal?: AbortSignal;
+};
+
 export type GetListParams = {
   pagination?: PaginationParams;
   /** Single or multi-column sort. */
   sort?: SortSpec | SortSpec[];
   /** Filter values; arrays mean "match any of" for that field. */
   filter?: Record<string, unknown>;
+  /** Forward to fetch/axios to cancel in-flight reads when the UI unmounts or deps change. */
+  signal?: AbortSignal;
 };
 
 export type GetListResult<RecordType extends Record<string, unknown>> = {
@@ -83,6 +90,7 @@ export type DataProvider<
   getOne: (
     resource: string,
     id: Identifier,
+    params?: GetOneParams,
   ) => Promise<GetOneResult<RecordType>>;
   create: (
     resource: string,
