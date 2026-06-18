@@ -321,7 +321,7 @@ export function AdminLayout({
           />
         </Drawer>
       )}
-      <Layout>
+      <Layout style={{ minWidth: 0 }}>
         <Layout.Header
           style={{
             background: token.colorBgContainer,
@@ -371,6 +371,7 @@ export function AdminLayout({
         <Layout.Content
           style={{
             margin: isMobile ? token.marginSM : token.marginLG,
+            minWidth: 0,
           }}
         >
           <Outlet />

@@ -526,6 +526,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
           loading={loading}
           columns={tableColumns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
           rowSelection={
             showBulkActions
               ? {
