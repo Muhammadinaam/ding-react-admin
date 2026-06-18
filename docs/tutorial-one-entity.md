@@ -708,7 +708,7 @@ On save:
 { "invoiceLine": { "product": "SKU-1", "quantity": 2 } }
 ```
 
-On edit, the form loads the full API record but **only registered field sources** are sent back — read-only nested data (e.g. `tenants`, `permissions`) is not included in the PATCH body.
+On edit, the form loads the full API record but **only top-level field sources** tracked by `useSubmitField` are sent back — read-only nested data (e.g. `tenants`, `permissions`) is not included in the PATCH body. See [crud/internals.md](crud/internals.md).
 
 **What you do not do:** no `toUserRequest` / `toPatch` helpers for the default case; no second field list in `*Data.ts`.
 

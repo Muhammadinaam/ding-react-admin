@@ -1,6 +1,6 @@
 {
   "name": "ding-react-admin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",

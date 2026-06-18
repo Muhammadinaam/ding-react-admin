@@ -1,72 +1,79 @@
 import { Button, Card, Space, Table, Typography } from "antd";
 import { useFieldArray, useFormContext, type FieldValues } from "react-hook-form";
 import { useMemo, type ReactNode } from "react";
-import {
-  InlineFormSetProvider,
-  useInlineFormSetContext,
-  type InlineFormSetLayout,
-} from "./context/InlineFormContext";
 import type { Identifier } from "../data/dataProviderTypes";
 import type { DataProvider } from "../data/dataProviderTypes";
+import type {
+  InlineColumnDef,
+  InlineFormSetBaseProps,
+  InlineRowContext,
+} from "./types";
 import { inlineArrayName as buildInlineArrayName } from "./utils/inlineArrayName";
+import { inlineFieldName } from "./utils/inlineFieldName";
 
-export type { InlineFormSetLayout } from "./context/InlineFormContext";
+export type InlineFormSetLayout = "tabular" | "stacked";
 
-export type InlineFormSetProps = {
-  resource: string;
-  foreignKey: string;
-  label?: string;
-  children: ReactNode;
-  name?: string;
-  /** `tabular` (default) — Django TabularInline; `stacked` — Django StackedInline. */
-  layout?: InlineFormSetLayout;
+export type InlineFormSetProps = InlineFormSetBaseProps & {
+  columns: InlineColumnDef[];
 };
 
-function useInlineRows(arrayName: string) {
-  const ctx = useInlineFormSetContext();
+export type InlineFormSetStackedProps = InlineFormSetBaseProps & {
+  /** Field sources in each row — used when appending an empty row. */
+  sources: string[];
+  renderRow: (ctx: InlineRowContext) => ReactNode;
+};
+
+function emptyRow(sources: string[]) {
+  const row: Record<string, unknown> = {};
+  for (const source of sources) row[source] = undefined;
+  return row;
+}
+
+function useInlineRows(arrayName: string, sources: string[]) {
   const { control } = useFormContext<FieldValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: arrayName,
   });
 
-  const appendEmpty = () => {
-    if (!ctx) return;
-    const empty: Record<string, unknown> = {};
-    for (const f of ctx.fields) empty[f.source] = undefined;
-    append(empty);
-  };
+  const appendEmpty = () => append(emptyRow(sources));
 
-  return { ctx, fields, remove, appendEmpty };
+  return { fields, remove, appendEmpty };
 }
 
-function InlineFormSetTable({
-  arrayName,
+/** Tabular inline (Django TabularInline) — table with column headers. */
+export function InlineFormSet({
+  resource,
   label,
-}: {
-  arrayName: string;
-  label?: string;
-}) {
-  const { ctx, fields, remove, appendEmpty } = useInlineRows(arrayName);
+  name,
+  columns,
+}: InlineFormSetProps) {
+  const arrayName = buildInlineArrayName(resource, name);
+  const sources = useMemo(
+    () => columns.map((col) => col.source),
+    [columns],
+  );
+  const { fields, remove, appendEmpty } = useInlineRows(arrayName, sources);
 
-  const columns = useMemo(() => {
-    if (!ctx) return [];
-    return ctx.fields.map((f) => ({
-      title: f.label ?? f.source,
-      key: f.source,
-      width: f.width,
-      onHeaderCell: () =>
-        f.minWidth != null
-          ? { style: { minWidth: f.minWidth } }
-          : {},
-      onCell: () =>
-        f.minWidth != null ? { style: { minWidth: f.minWidth } } : {},
-      render: (_: unknown, __: unknown, index: number) =>
-        f.render({ name: `${arrayName}.${index}.${f.source}`, index }),
-    }));
-  }, [ctx, arrayName]);
-
-  if (!ctx) return null;
+  const tableColumns = useMemo(
+    () =>
+      columns.map((col) => ({
+        title: col.label ?? col.source,
+        key: col.source,
+        width: col.width,
+        onHeaderCell: () =>
+          col.minWidth != null ? { style: { minWidth: col.minWidth } } : {},
+        onCell: () =>
+          col.minWidth != null ? { style: { minWidth: col.minWidth } } : {},
+        render: (_: unknown, __: unknown, index: number) =>
+          col.cell({
+            name: inlineFieldName(arrayName, index, col.source),
+            index,
+            arrayName,
+          }),
+      })),
+    [columns, arrayName],
+  );
 
   return (
     <div style={{ marginTop: 24 }}>
@@ -77,7 +84,7 @@ function InlineFormSetTable({
         scroll={{ x: "max-content" }}
         dataSource={fields.map((f) => ({ ...f, key: f.id }))}
         columns={[
-          ...columns,
+          ...tableColumns,
           {
             title: "",
             key: "__remove",
@@ -102,16 +109,16 @@ function InlineFormSetTable({
   );
 }
 
-function InlineFormSetStacked({
-  arrayName,
+/** Stacked inline (Django StackedInline) — each row in a card with field labels. */
+export function InlineFormSetStacked({
+  resource,
   label,
-}: {
-  arrayName: string;
-  label?: string;
-}) {
-  const { ctx, fields, remove, appendEmpty } = useInlineRows(arrayName);
-
-  if (!ctx) return null;
+  name,
+  sources,
+  renderRow,
+}: InlineFormSetStackedProps) {
+  const arrayName = buildInlineArrayName(resource, name);
+  const { fields, remove, appendEmpty } = useInlineRows(arrayName, sources);
 
   return (
     <div style={{ marginTop: 24 }}>
@@ -123,19 +130,21 @@ function InlineFormSetStacked({
             size="small"
             title={`Item ${index + 1}`}
             extra={
-              <Button type="link" danger size="small" onClick={() => remove(index)}>
+              <Button
+                type="link"
+                danger
+                size="small"
+                onClick={() => remove(index)}
+              >
                 Remove
               </Button>
             }
           >
-            {ctx.fields.map((f) => (
-              <div key={f.source}>
-                {f.render({
-                  name: `${arrayName}.${index}.${f.source}`,
-                  index,
-                })}
-              </div>
-            ))}
+            {renderRow({
+              arrayName,
+              index,
+              name: (source) => inlineFieldName(arrayName, index, source),
+            })}
           </Card>
         ))}
       </Space>
@@ -143,27 +152,6 @@ function InlineFormSetStacked({
         Add item
       </Button>
     </div>
-  );
-}
-
-export function InlineFormSet({
-  resource,
-  label,
-  children,
-  name,
-  layout = "tabular",
-}: InlineFormSetProps) {
-  const arrayName = buildInlineArrayName(resource, name);
-
-  return (
-    <InlineFormSetProvider arrayName={arrayName} layout={layout}>
-      {children}
-      {layout === "stacked" ? (
-        <InlineFormSetStacked arrayName={arrayName} label={label} />
-      ) : (
-        <InlineFormSetTable arrayName={arrayName} label={label} />
-      )}
-    </InlineFormSetProvider>
   );
 }
 

@@ -46,31 +46,32 @@ export type FilterDefinition = {
         onChange: (value: unknown) => void;
     }) => ReactNode;
 };
-export type InlineFieldDefinition = {
-    key: string;
+export type InlineFormSetBaseProps = {
+    resource: string;
+    foreignKey: string;
+    label?: string;
+    name?: string;
+};
+/** Passed to each tabular inline column's `cell` renderer. */
+export type InlineCellContext = {
+    /** Full RHF path, e.g. `__inline_invoice_lines.0.label`. */
+    name: string;
+    index: number;
+    arrayName: string;
+};
+export type InlineColumnDef = {
     source: string;
     label?: string;
-    /** Column width in tabular inline tables (Ant Design Table `width`). */
-    width?: number | string;
-    /** Minimum column width in tabular inline tables. */
-    minWidth?: number | string;
-    render: (props: {
-        name: string;
-        index: number;
-    }) => ReactNode;
-};
-export type InlineFieldOptions = {
     width?: number | string;
     minWidth?: number | string;
+    cell: (ctx: InlineCellContext) => ReactNode;
 };
-export type FieldRenderProps = {
-    value: unknown;
-    onChange: (value: unknown) => void;
-    onBlur: () => void;
-    disabled?: boolean;
-    /** Set when rendered inside `InlineFormSet`. */
-    name?: string;
-    index?: number;
+/** Passed to `InlineFormSetStacked`'s `renderRow` for one related row. */
+export type InlineRowContext = {
+    arrayName: string;
+    index: number;
+    /** RHF path helper — `name("label")` → `arrayName.index.label`. */
+    name: (source: string) => string;
 };
 export type EditMode = "page" | "modal" | "both";
 /** Toggle built-in row actions. Omitted keys default to `true` (still gated by permissions). */

@@ -1,11 +1,11 @@
-import { GetListParams, Identifier } from './dataProviderTypes';
+import { GetListParams, GetOneParams, Identifier } from './dataProviderTypes';
 import { ResourceHandlers } from './resourceHandlers';
 export type RestResourceHandlersConfig<T extends Record<string, unknown> = Record<string, unknown>> = {
     list: (params: GetListParams) => Promise<{
         data: T[];
         total: number;
     }>;
-    retrieve: (id: Identifier) => Promise<T>;
+    retrieve: (id: Identifier, params?: GetOneParams) => Promise<T>;
     create: (data: Record<string, unknown>) => Promise<T>;
     update: (id: Identifier, data: Record<string, unknown>) => Promise<T>;
     destroy: (id: Identifier) => Promise<void>;

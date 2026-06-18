@@ -39,48 +39,81 @@ function InvoiceLinesInline() {
       resource={INVOICE_LINE_RESOURCE}
       foreignKey="invoiceId"
       label="Invoice lines"
-    >
-      <ReferenceField
-        source="productId"
-        label="Product"
-        reference="products"
-        optionLabel="name"
-        allowClear
-        minWidth={220}
-        inputStyle={{ minWidth: 200 }}
-        onValueChange={(value, option, { name }) => {
-          if (!name) return;
-          const unitPriceName = name.replace(/\.productId$/, ".unitPrice");
-          if (value == null) {
-            setValue(unitPriceName, undefined, { shouldDirty: true });
-            return;
-          }
-          const price = option?.record?.price;
-          if (typeof price === "number") {
-            setValue(unitPriceName, price, { shouldDirty: true });
-          }
-        }}
-      />
-      <TextField source="label" label="Label" required minWidth={180} />
-      <NumberField
-        source="quantity"
-        label="Quantity"
-        required
-        min={0}
-        step={1}
-        minWidth={100}
-        width={120}
-      />
-      <NumberField
-        source="unitPrice"
-        label="Unit price"
-        required
-        min={0}
-        step={0.01}
-        minWidth={120}
-        width={140}
-      />
-    </InlineFormSet>
+      columns={[
+        {
+          source: "productId",
+          label: "Product",
+          minWidth: 220,
+          cell: (cell) => (
+            <ReferenceField
+              source="productId"
+              name={cell.name}
+              hideLabel
+              reference="products"
+              optionLabel="name"
+              allowClear
+              inputStyle={{ minWidth: 200 }}
+              onValueChange={(value, option, { name }) => {
+                const unitPriceName = name.replace(/\.productId$/, ".unitPrice");
+                if (value == null) {
+                  setValue(unitPriceName, undefined, { shouldDirty: true });
+                  return;
+                }
+                const price = option?.record?.price;
+                if (typeof price === "number") {
+                  setValue(unitPriceName, price, { shouldDirty: true });
+                }
+              }}
+            />
+          ),
+        },
+        {
+          source: "label",
+          label: "Label",
+          minWidth: 180,
+          cell: (cell) => (
+            <TextField
+              source="label"
+              name={cell.name}
+              hideLabel
+              required
+            />
+          ),
+        },
+        {
+          source: "quantity",
+          label: "Quantity",
+          width: 120,
+          minWidth: 100,
+          cell: (cell) => (
+            <NumberField
+              source="quantity"
+              name={cell.name}
+              hideLabel
+              required
+              min={0}
+              step={1}
+            />
+          ),
+        },
+        {
+          source: "unitPrice",
+          label: "Unit price",
+          width: 140,
+          minWidth: 120,
+          cell: (cell) => (
+            <NumberField
+              source="unitPrice"
+              name={cell.name}
+              hideLabel
+              required
+              min={0}
+              step={0.01}
+            />
+          ),
+        },
+      ]}
+    />
   );
 }
 

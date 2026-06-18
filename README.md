@@ -90,11 +90,42 @@ import {
 >
   <TextField source="number" label="Number" required />
   <TextField source="customer" label="Customer" required />
-  <InlineFormSet resource="invoice-lines" foreignKey="invoiceId" label="Lines">
-    <TextField source="label" label="Label" required />
-    <NumberField source="quantity" label="Qty" required min={0} />
-    <NumberField source="unitPrice" label="Unit price" required min={0} step={0.01} />
-  </InlineFormSet>
+  <InlineFormSet
+    resource="invoice-lines"
+    foreignKey="invoiceId"
+    label="Lines"
+    columns={[
+      {
+        source: "label",
+        label: "Label",
+        cell: ({ name }) => (
+          <TextField source="label" name={name} hideLabel required />
+        ),
+      },
+      {
+        source: "quantity",
+        label: "Qty",
+        width: 120,
+        cell: ({ name }) => (
+          <NumberField source="quantity" name={name} hideLabel required min={0} />
+        ),
+      },
+      {
+        source: "unitPrice",
+        label: "Unit price",
+        cell: ({ name }) => (
+          <NumberField
+            source="unitPrice"
+            name={name}
+            hideLabel
+            required
+            min={0}
+            step={0.01}
+          />
+        ),
+      },
+    ]}
+  />
 </ResourceForm>
 ```
 

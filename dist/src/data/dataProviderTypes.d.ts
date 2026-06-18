@@ -9,12 +9,18 @@ export type PaginationParams = {
     page: number;
     perPage: number;
 };
+export type GetOneParams = {
+    /** Forward to fetch/axios to cancel in-flight reads when the UI unmounts or deps change. */
+    signal?: AbortSignal;
+};
 export type GetListParams = {
     pagination?: PaginationParams;
     /** Single or multi-column sort. */
     sort?: SortSpec | SortSpec[];
     /** Filter values; arrays mean "match any of" for that field. */
     filter?: Record<string, unknown>;
+    /** Forward to fetch/axios to cancel in-flight reads when the UI unmounts or deps change. */
+    signal?: AbortSignal;
 };
 export type GetListResult<RecordType extends Record<string, unknown>> = {
     data: RecordType[];
@@ -57,7 +63,7 @@ export type ParseFormError = (error: unknown, context: ParseFormErrorContext) =>
  */
 export type DataProvider<RecordType extends Record<string, unknown> = Record<string, unknown>> = {
     getList: (resource: string, params: GetListParams) => Promise<GetListResult<RecordType>>;
-    getOne: (resource: string, id: Identifier) => Promise<GetOneResult<RecordType>>;
+    getOne: (resource: string, id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
     create: (resource: string, data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
     update: (resource: string, params: UpdateParams<RecordType>) => Promise<UpdateResult<RecordType>>;
     delete: (resource: string, id: Identifier) => Promise<DeleteResult<RecordType>>;

@@ -1,50 +1,52 @@
 import { InputNumber } from "antd";
 import type { CSSProperties } from "react";
-import type { BaseSourceProps, FieldRules, InlineFieldOptions } from "../types";
-import { useInlineOrFormField } from "./useInlineOrFormField";
+import type { BaseSourceProps, FieldRules } from "../types";
+import { FieldWrapper } from "./FieldWrapper";
 
-export type NumberFieldProps = BaseSourceProps &
-  InlineFieldOptions & {
-    required?: boolean;
-    rules?: FieldRules;
-    min?: number;
-    max?: number;
-    step?: number;
-    inputStyle?: CSSProperties;
-  };
+export type NumberFieldProps = BaseSourceProps & {
+  name?: string;
+  required?: boolean;
+  rules?: FieldRules;
+  min?: number;
+  max?: number;
+  step?: number;
+  inputStyle?: CSSProperties;
+  hideLabel?: boolean;
+};
 
 export function NumberField({
   source,
+  name,
   label,
   required,
   rules,
   min,
   max,
   step,
-  width: inlineWidth,
-  minWidth: inlineMinWidth,
   inputStyle,
+  hideLabel,
 }: NumberFieldProps) {
-  const field = useInlineOrFormField(
-    source,
-    label,
-    required,
-    rules,
-    ({ value, onChange, onBlur, disabled }) => (
-      <InputNumber
-        value={value as number | undefined}
-        onChange={(v) => onChange(v)}
-        onBlur={onBlur}
-        min={min}
-        max={max}
-        step={step}
-        disabled={disabled}
-        style={{ width: "100%", ...inputStyle }}
-      />
-    ),
-    { width: inlineWidth, minWidth: inlineMinWidth },
+  return (
+    <FieldWrapper
+      source={source}
+      name={name}
+      label={label}
+      required={required}
+      rules={rules}
+      hideLabel={hideLabel}
+    >
+      {({ value, onChange, onBlur, disabled }) => (
+        <InputNumber
+          value={value as number | undefined}
+          onChange={(v) => onChange(v)}
+          onBlur={onBlur}
+          min={min}
+          max={max}
+          step={step}
+          disabled={disabled}
+          style={{ width: "100%", ...inputStyle }}
+        />
+      )}
+    </FieldWrapper>
   );
-
-  if (field.mode === "inline") return null;
-  return field.element;
 }

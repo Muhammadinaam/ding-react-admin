@@ -1,32 +1,38 @@
 import { Switch } from "antd";
 import type { BaseSourceProps, FieldRules } from "../types";
-import { useInlineOrFormField } from "./useInlineOrFormField";
+import { FieldWrapper } from "./FieldWrapper";
 
 export type BooleanFieldProps = BaseSourceProps & {
+  name?: string;
   required?: boolean;
   rules?: FieldRules;
+  hideLabel?: boolean;
 };
 
 export function BooleanField({
   source,
+  name,
   label,
   required,
   rules,
+  hideLabel,
 }: BooleanFieldProps) {
-  const field = useInlineOrFormField(
-    source,
-    label,
-    required,
-    rules,
-    ({ value, onChange, disabled }) => (
-      <Switch
-        checked={Boolean(value)}
-        onChange={onChange}
-        disabled={disabled}
-      />
-    ),
+  return (
+    <FieldWrapper
+      source={source}
+      name={name}
+      label={label}
+      required={required}
+      rules={rules}
+      hideLabel={hideLabel}
+    >
+      {({ value, onChange, disabled }) => (
+        <Switch
+          checked={Boolean(value)}
+          onChange={onChange}
+          disabled={disabled}
+        />
+      )}
+    </FieldWrapper>
   );
-
-  if (field.mode === "inline") return null;
-  return field.element;
 }

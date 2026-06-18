@@ -73,7 +73,7 @@ import { FormStep, FormSteps, ResourceForm, TextField } from "ding-react-admin";
 </ResourceForm>
 ```
 
-On Save (client validation or API errors from `parseFormError`), tabs/steps that contain invalid fields are marked in red, the first such tab/step is opened, and focus moves to the first invalid field in that section. Custom fields built with **`FieldWrapper`** or **`useInlineOrFormField`** participate automatically — see [custom-fields.md](custom-fields.md).
+On Save (client validation or API errors from `parseFormError`), tabs/steps that contain invalid fields are marked in red, the first such tab/step is opened, and focus moves to the first invalid field in that section. Custom fields built with **`FieldWrapper`** participate automatically — see [custom-fields.md](custom-fields.md) and [internals.md](internals.md).
 
 ## Validation errors from the API
 

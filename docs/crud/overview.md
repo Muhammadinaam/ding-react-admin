@@ -15,6 +15,7 @@ Django-admin-style CRUD built from JSX components. List pages, forms, filters, r
 | Tabbed / stepped forms | [forms.md](forms.md#tabbed-and-stepped-forms) |
 | Reference / lookup fields | [references.md](references.md) |
 | Inline nested forms | [inlines.md](inlines.md) |
+| How forms work internally | [internals.md](internals.md) |
 | Custom field types | [custom-fields.md](custom-fields.md) |
 
 ## Built-in field / column / filter components

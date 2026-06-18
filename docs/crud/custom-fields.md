@@ -10,42 +10,71 @@ You only need the pieces you use (e.g. a read-only column might skip the form fi
 
 ## 1. Form field
 
-Use `FieldWrapper` (react-hook-form + Ant Design `Form.Item`) and `useInlineOrFormField` so the same field works in normal forms and inside `InlineFormSet`:
+Use **`FieldWrapper`** — it wires react-hook-form `Controller`, Ant Design `Form.Item`, submit tracking, and tab/step error grouping:
 
 ```tsx
 // src/crud/fields/ColorField.tsx
 import { ColorPicker } from "antd";
 import type { BaseSourceProps, FieldRules } from "../types";
-import { useInlineOrFormField } from "./useInlineOrFormField";
+import { FieldWrapper } from "./FieldWrapper";
 
 export type ColorFieldProps = BaseSourceProps & {
+  name?: string;
   required?: boolean;
   rules?: FieldRules;
+  hideLabel?: boolean;
 };
 
-export function ColorField({ source, label, required, rules }: ColorFieldProps) {
-  const field = useInlineOrFormField(
-    source,
-    label,
-    required,
-    rules,
-    ({ value, onChange, disabled }) => (
-      <ColorPicker
-        value={value as string | undefined}
-        onChange={(_, hex) => onChange(hex)}
-        disabled={disabled}
-      />
-    ),
+export function ColorField({
+  source,
+  name,
+  label,
+  required,
+  rules,
+  hideLabel,
+}: ColorFieldProps) {
+  return (
+    <FieldWrapper
+      source={source}
+      name={name}
+      label={label}
+      required={required}
+      rules={rules}
+      hideLabel={hideLabel}
+    >
+      {({ value, onChange, disabled }) => (
+        <ColorPicker
+          value={value as string | undefined}
+          onChange={(_, hex) => onChange(hex)}
+          disabled={disabled}
+        />
+      )}
+    </FieldWrapper>
   );
-
-  if (field.mode === "inline") return null;
-  return field.element;
 }
 ```
 
 Export it from `src/crud/index.ts` and `src/index.ts`.
 
-Fields registered through **`FieldWrapper`** (or **`useInlineOrFormField`**, which uses it in normal forms) are also tracked inside **`FormTabs`** / **`FormSteps`** for error highlighting and jumping to the first invalid section on Save. If you wire **`Controller`** yourself, call **`useRegisterFormSource(source)`** so submit, tab/step errors, and section grouping all work.
+### Top-level vs inline
+
+| Usage | Props |
+|-------|-------|
+| Normal form | `<ColorField source="color" label="Color" />` |
+| Inline cell | `<ColorField source="color" name={cell.name} hideLabel />` |
+
+See [inlines.md](inlines.md) and [internals.md](internals.md).
+
+### Custom `Controller` without `FieldWrapper`
+
+Call these hooks so submit and tab/step errors still work:
+
+```tsx
+import { useSectionField, useSubmitField } from "ding-react-admin";
+
+useSubmitField(source);
+useSectionField(source);
+```
 
 ## 2. Table column
 
@@ -145,4 +174,4 @@ For one-off renderers, use `CustomColumn`:
 - **Permissions:** `ResourceList` respects `usePermissions()` for New / Edit / Delete / bulk delete. Use `actions={{ delete: false }}` etc. to hide built-in buttons even when permitted; use `headerExtra`, `rowActions`, and `bulkActions` for custom controls.
 - **Playground:** see `examples/playground/src/pages/` for full examples.
 
-[← CRUD overview](overview.md) · [← README](../../README.md)
+[← CRUD overview](overview.md) · [How forms work internally](internals.md) · [← README](../../README.md)

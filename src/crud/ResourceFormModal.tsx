@@ -8,7 +8,7 @@ import {
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
-import { FormFieldsProvider } from "./context/FormFieldsContext";
+import { SubmitFieldsProvider } from "./context/SubmitFieldsContext";
 import { pickBySources } from "./utils/pickBySources";
 import { parseAndApplyFormErrors } from "./utils/formErrors";
 import { useAbortableEffect } from "./utils/useAbortableEffect";
@@ -36,7 +36,7 @@ export function ResourceFormModal({
   const [loading, setLoading] = useState(!isNew);
 
   const form = useForm<FieldValues>();
-  const fieldSourcesRef = useRef(new Set<string>());
+  const submitFieldsRef = useRef(new Set<string>());
 
   const load = useCallback(
     async (signal?: AbortSignal) => {
@@ -73,7 +73,7 @@ export function ResourceFormModal({
     try {
       const payload = pickBySources(
         values as Record<string, unknown>,
-        Array.from(fieldSourcesRef.current),
+        Array.from(submitFieldsRef.current),
       );
       if (isNew) {
         await dp.create(resource, payload);
@@ -110,7 +110,7 @@ export function ResourceFormModal({
         <Spin />
       ) : (
         <FormMetaProvider resource={resource} isNew={isNew}>
-          <FormFieldsProvider sourcesRef={fieldSourcesRef}>
+          <SubmitFieldsProvider fieldsRef={submitFieldsRef}>
           <FormProvider {...form}>
             <Form
               layout="vertical"
@@ -125,7 +125,7 @@ export function ResourceFormModal({
               </Form.Item>
             </Form>
           </FormProvider>
-          </FormFieldsProvider>
+          </SubmitFieldsProvider>
         </FormMetaProvider>
       )}
     </Modal>

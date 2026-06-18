@@ -1,13 +1,13 @@
 import { PermissionsChecker } from '../context/PermissionsProvider';
 import { ResourcePermissions } from '../permissions/resourcePermissions';
-import { CreateResult, DataProvider, DeleteResult, GetListParams, GetListResult, GetOneResult, Identifier, ParseFormError, UpdateParams, UpdateResult } from './dataProviderTypes';
+import { CreateResult, DataProvider, DeleteResult, GetListParams, GetListResult, GetOneParams, GetOneResult, Identifier, ParseFormError, UpdateParams, UpdateResult } from './dataProviderTypes';
 export type ResourceAction = "list" | "read" | "add" | "change" | "delete";
 /** @deprecated Use per-resource `permissions` with `can` in combineResourceHandlers options. */
 export type ResourceGuard = (resource: string, action: ResourceAction) => void;
 /** CRUD handlers for a single resource (no resource name on each method). */
 export type ResourceHandlers<RecordType extends Record<string, unknown> = Record<string, unknown>> = {
     getList: (params: GetListParams) => Promise<GetListResult<RecordType>>;
-    getOne: (id: Identifier) => Promise<GetOneResult<RecordType>>;
+    getOne: (id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
     create: (data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
     update: (params: UpdateParams<RecordType>) => Promise<UpdateResult<RecordType>>;
     delete: (id: Identifier) => Promise<DeleteResult<RecordType>>;

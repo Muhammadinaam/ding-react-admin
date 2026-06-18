@@ -10,10 +10,16 @@ export { ResourceFormModal } from "./ResourceFormModal";
 export type { ResourceFormModalProps } from "./ResourceFormModal";
 export {
   InlineFormSet,
+  InlineFormSetStacked,
   saveInlineRows,
   loadInlineRows,
 } from "./InlineFormSet";
-export type { InlineFormSetProps, SaveInlineOptions, InlineFormSetLayout } from "./InlineFormSet";
+export type {
+  InlineFormSetProps,
+  InlineFormSetStackedProps,
+  SaveInlineOptions,
+  InlineFormSetLayout,
+} from "./InlineFormSet";
 export { FormTabs, FormTab } from "./FormTabs";
 export type { FormTabsProps, FormTabProps } from "./FormTabs";
 export { FormSteps, FormStep } from "./FormSteps";
@@ -27,6 +33,8 @@ export { SelectField } from "./fields/SelectField";
 export { PasswordField } from "./fields/PasswordField";
 export { ReferenceField } from "./fields/ReferenceField";
 export { ReferenceManyField } from "./fields/ReferenceManyField";
+export { FieldWrapper } from "./fields/FieldWrapper";
+export type { FieldWrapperProps } from "./fields/FieldWrapper";
 
 export { TextColumn } from "./columns/TextColumn";
 export { NumberColumn } from "./columns/NumberColumn";
@@ -56,8 +64,12 @@ export { useChoices } from "./utils/useChoices";
 export { getByPath } from "./utils/getByPath";
 export { pickBySources } from "./utils/pickBySources";
 export { inlineArrayName } from "./utils/inlineArrayName";
+export { inlineFieldName } from "./utils/inlineFieldName";
 export { setByPath } from "./utils/setByPath";
-export { useRegisterFormSource } from "./context/FormFieldsContext";
+export {
+  useSubmitField,
+  useSectionField,
+} from "./context/SubmitFieldsContext";
 
 export type {
   BaseSourceProps,
@@ -67,6 +79,10 @@ export type {
   DisplayProps,
   EditMode,
   FieldRules,
+  InlineCellContext,
+  InlineColumnDef,
+  InlineFormSetBaseProps,
+  InlineRowContext,
   ResourceListBuiltInActions,
   ResourceListBulkAction,
   ResourceListBulkActionHelpers,

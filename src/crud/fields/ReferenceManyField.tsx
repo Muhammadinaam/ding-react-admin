@@ -2,18 +2,21 @@ import { Select } from "antd";
 import { useMemo, useState } from "react";
 import type { BaseSourceProps, FieldRules, ReferenceProps } from "../types";
 import { useChoices } from "../utils/useChoices";
-import { useInlineOrFormField } from "./useInlineOrFormField";
+import { FieldWrapper } from "./FieldWrapper";
 
 export type ReferenceManyFieldProps = BaseSourceProps &
   ReferenceProps & {
+    name?: string;
     required?: boolean;
     rules?: FieldRules;
     search?: boolean;
     allowClear?: boolean;
+    hideLabel?: boolean;
   };
 
 export function ReferenceManyField({
   source,
+  name,
   label,
   reference,
   choices,
@@ -23,6 +26,7 @@ export function ReferenceManyField({
   rules,
   search,
   allowClear = true,
+  hideLabel,
 }: ReferenceManyFieldProps) {
   const [searchText, setSearchText] = useState<string | undefined>();
   const { options, loading } = useChoices(
@@ -42,29 +46,31 @@ export function ReferenceManyField({
     [options],
   );
 
-  const field = useInlineOrFormField(
-    source,
-    label,
-    required,
-    rules,
-    ({ value, onChange, disabled }) => (
-      <Select
-        mode="multiple"
-        value={(value as (string | number)[] | undefined) ?? []}
-        onChange={onChange}
-        options={selectOptions}
-        loading={loading}
-        showSearch={search}
-        filterOption={search ? false : undefined}
-        onSearch={search ? setSearchText : undefined}
-        allowClear={allowClear}
-        disabled={disabled}
-        optionFilterProp="label"
-        style={{ width: "100%" }}
-      />
-    ),
+  return (
+    <FieldWrapper
+      source={source}
+      name={name}
+      label={label}
+      required={required}
+      rules={rules}
+      hideLabel={hideLabel}
+    >
+      {({ value, onChange, disabled }) => (
+        <Select
+          mode="multiple"
+          value={(value as (string | number)[] | undefined) ?? []}
+          onChange={onChange}
+          options={selectOptions}
+          loading={loading}
+          showSearch={search}
+          filterOption={search ? false : undefined}
+          onSearch={search ? setSearchText : undefined}
+          allowClear={allowClear}
+          disabled={disabled}
+          optionFilterProp="label"
+          style={{ width: "100%" }}
+        />
+      )}
+    </FieldWrapper>
   );
-
-  if (field.mode === "inline") return null;
-  return field.element;
 }
