@@ -5,6 +5,7 @@
 ```tsx
 import {
   FilterBar,
+  ImageColumn,
   NumberColumn,
   ReferenceColumn,
   ReferenceFilter,
@@ -40,6 +41,7 @@ export function ProductListPage() {
           multiple
         />
       </FilterBar>
+      <ImageColumn source="image" label="Image" />
       <TextColumn source="sku" label="SKU" />
       <TextColumn source="name" label="Name" />
       <ReferenceColumn
@@ -125,6 +127,23 @@ List and form pages pass `AbortSignal` to `getList` / `getOne` and cancel on unm
 Pass `rowActions` alone (without built-in actions) to get an Actions column with only your buttons — set every `actions` key to `false` and ensure permissions would not show defaults, or rely on read-only users plus custom actions.
 
 For a **separate column** (not the Actions column), use `CustomColumn` instead.
+
+### Image thumbnails
+
+Use `ImageColumn` when a list row stores an image URL (same field as `ImageField` on the form). Defaults: 40×40 px thumbnail, `objectFit: "cover"`, `borderRadius: 4`, not sortable.
+
+```tsx
+<ImageColumn source="image" label="Image" />
+<ImageColumn source="photo" label="Photo" width={64} height={64} borderRadius={8} />
+```
+
+| Prop | Default | Purpose |
+|------|---------|---------|
+| `width`, `height` | `40` | Thumbnail size in pixels |
+| `objectFit` | `"cover"` | CSS `object-fit` |
+| `borderRadius` | `4` | Corner radius in pixels |
+| `alt` | `""` | `<img alt>` text |
+| `sortable` | `false` | Enable column sorting |
 
 See also: [Bulk actions](bulk-actions.md)
 

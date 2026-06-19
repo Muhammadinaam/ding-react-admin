@@ -209,7 +209,7 @@ Form `source` fields still define the row shape on create/update.
 
 ## Case 5 — Validation errors on save
 
-Throw errors from `create` / `update` when the API rejects the payload. Wire **`parseFormError`** on `combineResourceHandlers` — use `parseDjangoDRFFormErrors`, `parseDotNetFormErrors`, or `parseNodeFormErrors`. See [tutorial Section D](tutorial-one-entity.md#section-d--form-validation-errors) and [form-validation-errors.md](form-validation-errors.md).
+Wire **`parseFormError`** on `combineResourceHandlers` — use `parseDjangoDRFFormErrors`, `parseDotNetFormErrors`, or `parseNodeFormErrors`. `ResourceForm` resolves the API JSON from fetch, axios, and OpenAPI client errors automatically; you only need to match the **backend body shape**, not the HTTP library. See [tutorial Section D](tutorial-one-entity.md#section-d--form-validation-errors) and [form-validation-errors.md](form-validation-errors.md).
 
 ---
 

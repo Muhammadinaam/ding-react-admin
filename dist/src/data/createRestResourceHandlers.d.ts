@@ -1,4 +1,4 @@
-import { GetListParams, GetOneParams, Identifier } from './dataProviderTypes';
+import { GetListParams, GetOneParams, Identifier, FormMutationBody } from './dataProviderTypes';
 import { ResourceHandlers } from './resourceHandlers';
 export type RestResourceHandlersConfig<T extends Record<string, unknown> = Record<string, unknown>> = {
     list: (params: GetListParams) => Promise<{
@@ -6,12 +6,12 @@ export type RestResourceHandlersConfig<T extends Record<string, unknown> = Recor
         total: number;
     }>;
     retrieve: (id: Identifier, params?: GetOneParams) => Promise<T>;
-    create: (data: Record<string, unknown>) => Promise<T>;
-    update: (id: Identifier, data: Record<string, unknown>) => Promise<T>;
+    create: (data: FormMutationBody) => Promise<T>;
+    update: (id: Identifier, data: FormMutationBody) => Promise<T>;
     destroy: (id: Identifier) => Promise<void>;
-    /** When API create body differs from form `source` paths. */
+    /** When API create body differs from form `source` paths. Not applied when body is already `FormData`. */
     transformCreate?: (data: Record<string, unknown>) => unknown;
-    /** When API update body differs from form `source` paths. */
+    /** When API update body differs from form `source` paths. Not applied when body is already `FormData`. */
     transformUpdate?: (data: Record<string, unknown>) => unknown;
 };
 /**

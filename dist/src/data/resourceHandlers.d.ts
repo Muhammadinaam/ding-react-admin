@@ -8,7 +8,7 @@ export type ResourceGuard = (resource: string, action: ResourceAction) => void;
 export type ResourceHandlers<RecordType extends Record<string, unknown> = Record<string, unknown>> = {
     getList: (params: GetListParams) => Promise<GetListResult<RecordType>>;
     getOne: (id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
-    create: (data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
+    create: (data: Partial<RecordType> | FormData) => Promise<CreateResult<RecordType>>;
     update: (params: UpdateParams<RecordType>) => Promise<UpdateResult<RecordType>>;
     delete: (id: Identifier) => Promise<DeleteResult<RecordType>>;
 };

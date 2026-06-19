@@ -30,6 +30,8 @@ Django-admin-style CRUD built from JSX components. List pages, forms, filters, r
 | Select (static) | `SelectField` | — | `SelectFilter` |
 | Reference (FK) | `ReferenceField` | `ReferenceColumn` | `ReferenceFilter` |
 | Reference many | `ReferenceManyField` | `ReferenceManyColumn` | `ReferenceManyFilter` |
+| Image | `ImageField` | `ImageColumn` | — |
+| File | `FileField` | — | — |
 | Custom | — | `CustomColumn` | — |
 
 `DateField` and `DateFilter` use Ant Design **`DatePicker`** (requires `dayjs` peer). If you alias this library to source in a monorepo (like the playground), **dedupe `dayjs`** in Vite so Ant Design and the library share one copy — otherwise opening the calendar can throw `clone.weekday is not a function`.

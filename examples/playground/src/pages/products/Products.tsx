@@ -1,5 +1,9 @@
 import {
+  FileField,
   FilterBar,
+  ImageColumn,
+  ImageField,
+  InlineFormSet,
   NumberColumn,
   NumberField,
   ReferenceColumn,
@@ -18,7 +22,84 @@ import { Button } from "antd";
 import type { Product } from "../../api/memoryApi";
 import { PRODUCT_RESOURCE, PRODUCT_PERMS } from "./productData";
 
-type ProductRow = Product & Record<string, unknown>;
+type ProductRow = Product & {
+  photos?: Array<{
+    id?: number;
+    caption?: string;
+    image?: string | null;
+  }>;
+  attachments?: Array<{
+    id?: number;
+    label?: string;
+    file?: string | null;
+  }>;
+} & Record<string, unknown>;
+
+function ProductPhotosInline() {
+  return (
+    <InlineFormSet
+      field="photos"
+      label="Gallery photos"
+      columns={[
+        {
+          source: "caption",
+          label: "Caption",
+          minWidth: 140,
+          cell: (cell) => (
+            <TextField source="caption" name={cell.name} hideLabel required />
+          ),
+        },
+        {
+          source: "image",
+          label: "Photo",
+          minWidth: 220,
+          cell: (cell) => (
+            <ImageField
+              source="image"
+              name={cell.name}
+              hideLabel
+              clearable
+              previewWidth={100}
+            />
+          ),
+        },
+      ]}
+    />
+  );
+}
+
+function ProductAttachmentsInline() {
+  return (
+    <InlineFormSet
+      field="attachments"
+      label="Documents"
+      columns={[
+        {
+          source: "label",
+          label: "Label",
+          minWidth: 140,
+          cell: (cell) => (
+            <TextField source="label" name={cell.name} hideLabel required />
+          ),
+        },
+        {
+          source: "file",
+          label: "File",
+          minWidth: 220,
+          cell: (cell) => (
+            <FileField
+              source="file"
+              name={cell.name}
+              hideLabel
+              clearable
+              accept=".pdf,.doc,.docx,application/pdf"
+            />
+          ),
+        },
+      ]}
+    />
+  );
+}
 
 const productFormFields = (
   <>
@@ -38,6 +119,15 @@ const productFormFields = (
       reference="categories"
       optionLabel="name"
     />
+    <ImageField source="image" label="Product image" clearable />
+    <FileField
+      source="specsPdf"
+      label="Specs (PDF)"
+      clearable
+      accept=".pdf,application/pdf"
+    />
+    <ProductPhotosInline />
+    <ProductAttachmentsInline />
   </>
 );
 
@@ -96,6 +186,7 @@ export function ProductListPage() {
           optionLabel="name"
         />
       </FilterBar>
+      <ImageColumn source="image" label="Image" />
       <TextColumn source="sku" label="SKU" />
       <TextColumn source="name" label="Name" />
       <NumberColumn source="price" label="Price" />

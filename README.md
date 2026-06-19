@@ -66,7 +66,7 @@ export function InvoiceFormPage() {
 }
 ```
 
-Tabbed forms, stepped modals, and API error mapping — [forms guide](docs/crud/forms.md).
+Tabbed forms, stepped modals, and API validation errors under fields (fetch, axios, OpenAPI) — [forms guide](docs/crud/forms.md) · [validation errors](docs/form-validation-errors.md).
 
 ### Inline nested rows
 

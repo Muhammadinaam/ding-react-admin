@@ -1,4 +1,4 @@
-import type { GetListParams, GetOneParams, Identifier } from "./dataProviderTypes";
+import type { GetListParams, GetOneParams, Identifier, FormMutationBody } from "./dataProviderTypes";
 import type { ResourceHandlers } from "./resourceHandlers";
 
 export type RestResourceHandlersConfig<
@@ -6,12 +6,12 @@ export type RestResourceHandlersConfig<
 > = {
   list: (params: GetListParams) => Promise<{ data: T[]; total: number }>;
   retrieve: (id: Identifier, params?: GetOneParams) => Promise<T>;
-  create: (data: Record<string, unknown>) => Promise<T>;
-  update: (id: Identifier, data: Record<string, unknown>) => Promise<T>;
+  create: (data: FormMutationBody) => Promise<T>;
+  update: (id: Identifier, data: FormMutationBody) => Promise<T>;
   destroy: (id: Identifier) => Promise<void>;
-  /** When API create body differs from form `source` paths. */
+  /** When API create body differs from form `source` paths. Not applied when body is already `FormData`. */
   transformCreate?: (data: Record<string, unknown>) => unknown;
-  /** When API update body differs from form `source` paths. */
+  /** When API update body differs from form `source` paths. Not applied when body is already `FormData`. */
   transformUpdate?: (data: Record<string, unknown>) => unknown;
 };
 
@@ -32,20 +32,26 @@ export function createRestResourceHandlers<
     },
 
     async create(data) {
-      const body = config.transformCreate
-        ? config.transformCreate(data as Record<string, unknown>)
-        : data;
+      const body =
+        data instanceof FormData
+          ? data
+          : config.transformCreate
+            ? config.transformCreate(data as Record<string, unknown>)
+            : data;
       return {
-        data: await config.create(body as Record<string, unknown>),
+        data: await config.create(body as FormMutationBody),
       };
     },
 
     async update({ id, data }) {
-      const body = config.transformUpdate
-        ? config.transformUpdate(data as Record<string, unknown>)
-        : data;
+      const body =
+        data instanceof FormData
+          ? data
+          : config.transformUpdate
+            ? config.transformUpdate(data as Record<string, unknown>)
+            : data;
       return {
-        data: await config.update(id, body as Record<string, unknown>),
+        data: await config.update(id, body as FormMutationBody),
       };
     },
 

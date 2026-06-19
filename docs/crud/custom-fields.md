@@ -56,6 +56,8 @@ export function ColorField({
 
 Export it from `src/crud/index.ts` and `src/index.ts`.
 
+Built-in upload fields follow the same pattern: **`ImageField`** and **`FileField`** use `FieldWrapper` and store `File | string | null` — see [forms.md](forms.md#image-and-file-uploads).
+
 ### Top-level vs inline
 
 | Usage | Props |

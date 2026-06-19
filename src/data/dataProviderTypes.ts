@@ -43,7 +43,7 @@ export type CreateResult<RecordType extends Record<string, unknown>> = {
 
 export type UpdateParams<RecordType extends Record<string, unknown>> = {
   id: Identifier;
-  data: Partial<RecordType>;
+  data: Partial<RecordType> | FormData;
 };
 
 export type UpdateResult<RecordType extends Record<string, unknown>> = {
@@ -53,6 +53,9 @@ export type UpdateResult<RecordType extends Record<string, unknown>> = {
 export type DeleteResult<RecordType extends Record<string, unknown>> = {
   data: RecordType | null;
 };
+
+/** Save body from forms — plain JSON object or multipart `FormData` when uploads are present. */
+export type FormMutationBody = Record<string, unknown> | FormData;
 
 export type FormMutation = "create" | "update";
 
@@ -93,7 +96,7 @@ export type DataProvider<
   ) => Promise<GetOneResult<RecordType>>;
   create: (
     resource: string,
-    data: Partial<RecordType>,
+    data: Partial<RecordType> | FormData,
   ) => Promise<CreateResult<RecordType>>;
   update: (
     resource: string,

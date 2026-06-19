@@ -9,7 +9,7 @@ import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
 import { PayloadFieldsProvider } from "./context/PayloadFieldsContext";
-import { buildFormPayload } from "./utils/buildFormPayload";
+import { buildResourceFormSubmitBody } from "./utils/buildResourceFormSubmitBody";
 import { applyApiErrorsToForm } from "./utils/formErrors";
 import { useAbortableEffect } from "./utils/useAbortableEffect";
 import { isAbortError } from "../data/abortError";
@@ -71,20 +71,20 @@ export function ResourceFormModal({
 
   async function onSubmit(values: FieldValues) {
     try {
-      const payload = buildFormPayload(
+      const body = buildResourceFormSubmitBody(
         values as Record<string, unknown>,
         Array.from(payloadFieldsRef.current),
       );
       if (isNew) {
-        await dp.create(resource, payload);
+        await dp.create(resource, body);
         message.success("Created");
       } else if (editId) {
-        await dp.update(resource, { id: editId, data: payload });
+        await dp.update(resource, { id: editId, data: body });
         message.success("Updated");
       }
       onClose();
     } catch (e) {
-      const handled = applyApiErrorsToForm(dp, form, message, e, {
+      const handled = await applyApiErrorsToForm(dp, form, message, e, {
         resource,
         mutation: isNew ? "create" : "update",
       });

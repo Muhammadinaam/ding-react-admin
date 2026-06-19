@@ -34,7 +34,7 @@ export type CreateResult<RecordType extends Record<string, unknown>> = {
 };
 export type UpdateParams<RecordType extends Record<string, unknown>> = {
     id: Identifier;
-    data: Partial<RecordType>;
+    data: Partial<RecordType> | FormData;
 };
 export type UpdateResult<RecordType extends Record<string, unknown>> = {
     data: RecordType;
@@ -42,6 +42,8 @@ export type UpdateResult<RecordType extends Record<string, unknown>> = {
 export type DeleteResult<RecordType extends Record<string, unknown>> = {
     data: RecordType | null;
 };
+/** Save body from forms — plain JSON object or multipart `FormData` when uploads are present. */
+export type FormMutationBody = Record<string, unknown> | FormData;
 export type FormMutation = "create" | "update";
 export type ParseFormErrorContext = {
     resource: string;
@@ -63,7 +65,7 @@ export type ParseFormError = (error: unknown, context: ParseFormErrorContext) =>
 export type DataProvider<RecordType extends Record<string, unknown> = Record<string, unknown>> = {
     getList: (resource: string, params: GetListParams) => Promise<GetListResult<RecordType>>;
     getOne: (resource: string, id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
-    create: (resource: string, data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
+    create: (resource: string, data: Partial<RecordType> | FormData) => Promise<CreateResult<RecordType>>;
     update: (resource: string, params: UpdateParams<RecordType>) => Promise<UpdateResult<RecordType>>;
     delete: (resource: string, id: Identifier) => Promise<DeleteResult<RecordType>>;
     /** Map API validation errors to form field paths. Optional. */

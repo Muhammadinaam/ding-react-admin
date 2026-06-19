@@ -1,13 +1,10 @@
-// ADVANCED: manual handlers when create/update/delete have cross-entity side effects.
-// For simple entities use createMemoryResourceHandlers or createRestResourceHandlers instead.
-// SEE: docs/data-layer-advanced.md
-
 import {
   applyInMemoryListParams,
   getRowById,
   type ResourceHandlers,
 } from "ding-react-admin";
-import type { Brand, Product } from "../../api/memoryApi";
+import type { Brand, Product, ProductAttachment, ProductPhoto } from "../../api/memoryApi";
+import { normalizeMutationBody } from "../../api/formDataHelpers";
 import { validationError } from "../../api/formValidation";
 import type { PlaygroundHandlerContext } from "../playgroundHandlerContext";
 
@@ -23,6 +20,112 @@ export const PRODUCT_PERMS = {
 type ProductRow = Product & Record<string, unknown>;
 type Row = Record<string, unknown>;
 
+type PhotoInput = {
+  id?: number;
+  caption?: string;
+  image?: string | null;
+};
+
+type AttachmentInput = {
+  id?: number;
+  label?: string;
+  file?: string | null;
+};
+
+function nullableString(value: unknown): string | null {
+  if (value == null || value === "") return null;
+  return String(value);
+}
+
+function photosForProduct(api: PlaygroundHandlerContext["api"], productId: number) {
+  return api.productPhotos
+    .filter((p) => p.productId === productId)
+    .map(({ id, caption, image }) => ({ id, caption, image }));
+}
+
+function attachmentsForProduct(
+  api: PlaygroundHandlerContext["api"],
+  productId: number,
+) {
+  return api.productAttachments
+    .filter((a) => a.productId === productId)
+    .map(({ id, label, file }) => ({ id, label, file }));
+}
+
+function syncProductPhotos(
+  api: PlaygroundHandlerContext["api"],
+  nextId: PlaygroundHandlerContext["nextId"],
+  productId: number,
+  photos: unknown,
+) {
+  const rows = Array.isArray(photos) ? photos : [];
+  const keptIds = new Set<number>();
+
+  for (const row of rows) {
+    if (!row || typeof row !== "object") continue;
+    const input = row as PhotoInput;
+    const photoData: Omit<ProductPhoto, "id"> = {
+      productId,
+      caption: String(input.caption ?? ""),
+      image: nullableString(input.image),
+    };
+
+    if (input.id != null) {
+      const id = Number(input.id);
+      const idx = api.productPhotos.findIndex((p) => p.id === id);
+      if (idx >= 0) {
+        api.productPhotos[idx] = { id, ...photoData };
+        keptIds.add(id);
+      }
+    } else {
+      const id = Number(nextId());
+      api.productPhotos.push({ id, ...photoData });
+      keptIds.add(id);
+    }
+  }
+
+  api.productPhotos = api.productPhotos.filter(
+    (p) => p.productId !== productId || keptIds.has(p.id),
+  );
+}
+
+function syncProductAttachments(
+  api: PlaygroundHandlerContext["api"],
+  nextId: PlaygroundHandlerContext["nextId"],
+  productId: number,
+  attachments: unknown,
+) {
+  const rows = Array.isArray(attachments) ? attachments : [];
+  const keptIds = new Set<number>();
+
+  for (const row of rows) {
+    if (!row || typeof row !== "object") continue;
+    const input = row as AttachmentInput;
+    const attachmentData: Omit<ProductAttachment, "id"> = {
+      productId,
+      label: String(input.label ?? ""),
+      file: nullableString(input.file),
+    };
+
+    if (input.id != null) {
+      const id = Number(input.id);
+      const idx = api.productAttachments.findIndex((a) => a.id === id);
+      if (idx >= 0) {
+        api.productAttachments[idx] = { id, ...attachmentData };
+        keptIds.add(id);
+      }
+    } else {
+      const id = Number(nextId());
+      api.productAttachments.push({ id, ...attachmentData });
+      keptIds.add(id);
+    }
+  }
+
+  api.productAttachments = api.productAttachments.filter(
+    (a) => a.productId !== productId || keptIds.has(a.id),
+  );
+}
+
 function assertProduct(api: PlaygroundHandlerContext["api"], row: Row, excludeId?: number) {
   const sku = String(row.sku ?? "").trim();
   if (!sku) {
@@ -31,6 +134,71 @@ function assertProduct(api: PlaygroundHandlerContext["api"], row: Row, excludeId
   if (api.products.some((p) => p.sku === sku && p.id !== excludeId)) {
     throw validationError({ fields: { sku: "SKU already exists" } });
   }
+}
+
+/** Django-style nested body — parsed to `image` and `photos.0.image` form paths. */
+function assertProductImages(image: string | null, photos: unknown): void {
+  const body: Record<string, unknown> = {};
+
+  if (!image) {
+    body.image = ["Product image is required"];
+  }
+
+  const photoRows = Array.isArray(photos) ? photos : [];
+  const inlineErrors = photoRows.map((row) => {
+    if (!row || typeof row !== "object") return {};
+    const input = row as PhotoInput;
+    return nullableString(input.image) ? {} : { image: ["Photo is required"] };
+  });
+  const hasInlineErrors = inlineErrors.some(
+    (row) => Object.keys(row).length > 0,
+  );
+
+  if (hasInlineErrors) {
+    body.photos = inlineErrors;
+  }
+
+  if (Object.keys(body).length > 0) {
+    throw { body };
+  }
+}
+
+function mapProductPatch(cur: Product, patch: Row): Product {
+  return {
+    ...cur,
+    ...patch,
+    id: cur.id,
+    brandId: patch.brandId !== undefined ? Number(patch.brandId) : cur.brandId,
+    categoryIds:
+      patch.categoryIds !== undefined
+        ? (patch.categoryIds as number[])
+        : cur.categoryIds,
+    name: patch.name !== undefined ? String(patch.name) : cur.name,
+    sku: patch.sku !== undefined ? String(patch.sku) : cur.sku,
+    price: patch.price !== undefined ? Number(patch.price) : cur.price,
+    image: patch.image !== undefined ? nullableString(patch.image) : cur.image,
+    specsPdf:
+      patch.specsPdf !== undefined ? nullableString(patch.specsPdf) : cur.specsPdf,
+  };
+}
+
+function productWithNested(
+  api: PlaygroundHandlerContext["api"],
+  product: Product,
+): ProductRow {
+  const productId = product.id;
+  return {
+    ...product,
+    photos: photosForProduct(api, productId),
+    attachments: attachmentsForProduct(api, productId),
+  };
+}
+
+function purgeProductNested(api: PlaygroundHandlerContext["api"], productId: number) {
+  api.productPhotos = api.productPhotos.filter((p) => p.productId !== productId);
+  api.productAttachments = api.productAttachments.filter(
+    (a) => a.productId !== productId,
+  );
 }
 
 export function createProductHandlers(
@@ -47,53 +215,53 @@ export function createProductHandlers(
     },
 
     async getOne(id, _params?) {
-      return {
-        data: getRowById(api.products, id) as unknown as ProductRow,
-      };
+      const product = getRowById(api.products, id) as Product;
+      return { data: productWithNested(api, product) };
     },
 
     async create(data) {
-      const row = data as Row;
-      assertProduct(api, row);
-      const brandId = Number(row.brandId);
+      const record = normalizeMutationBody(data);
+      const { photos, attachments, ...parent } = record;
+      assertProduct(api, parent);
+      const image = nullableString(parent.image);
+      assertProductImages(image, photos);
+      const brandId = Number(parent.brandId);
       const p: Product = {
         id: nextId(),
-        name: String(row.name ?? ""),
-        sku: String(row.sku ?? ""),
-        price: Number(row.price ?? 0),
+        name: String(parent.name ?? ""),
+        sku: String(parent.sku ?? ""),
+        price: Number(parent.price ?? 0),
         brandId,
-        categoryIds: Array.isArray(row.categoryIds)
-          ? (row.categoryIds as number[])
+        categoryIds: Array.isArray(parent.categoryIds)
+          ? (parent.categoryIds as number[])
           : [],
+        image: nullableString(parent.image),
+        specsPdf: nullableString(parent.specsPdf),
       };
       api.syncBrandProductLink(p);
       api.products.push(p);
-      return { data: p as ProductRow };
+      syncProductPhotos(api, nextId, p.id, photos);
+      syncProductAttachments(api, nextId, p.id, attachments);
+      return { data: productWithNested(api, p) };
     },
 
     async update({ id, data }) {
-      const patch = data as Row;
+      const record = normalizeMutationBody(data);
+      const { photos, attachments, ...parent } = record;
       const cur = getRowById(api.products, id) as Product;
-      const merged = { ...cur, ...patch };
+      const merged = mapProductPatch(cur, parent);
       assertProduct(api, merged as Row, cur.id);
+      assertProductImages(merged.image, photos);
       const prevBrand = cur.brandId;
-      const next: Product = {
-        ...cur,
-        ...patch,
-        id: cur.id,
-        brandId:
-          patch.brandId !== undefined ? Number(patch.brandId) : cur.brandId,
-        categoryIds:
-          patch.categoryIds !== undefined
-            ? (patch.categoryIds as number[])
-            : cur.categoryIds,
-        name: patch.name !== undefined ? String(patch.name) : cur.name,
-        sku: patch.sku !== undefined ? String(patch.sku) : cur.sku,
-        price: patch.price !== undefined ? Number(patch.price) : cur.price,
-      };
-      api.syncBrandProductLink(next, prevBrand);
-      Object.assign(cur, next);
-      return { data: cur as ProductRow };
+      api.syncBrandProductLink(merged, prevBrand);
+      Object.assign(cur, merged);
+      if (photos !== undefined) {
+        syncProductPhotos(api, nextId, cur.id, photos);
+      }
+      if (attachments !== undefined) {
+        syncProductAttachments(api, nextId, cur.id, attachments);
+      }
+      return { data: productWithNested(api, cur) };
     },
 
     async delete(id) {
@@ -103,6 +271,7 @@ export function createProductHandlers(
       const [removed] = api.products.splice(idx, 1);
       const br = api.brands.find((b: Brand) => b.productId === removed.id);
       if (br) br.productId = null;
+      purgeProductNested(api, removed.id);
       return { data: removed as ProductRow };
     },
   };

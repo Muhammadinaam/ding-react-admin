@@ -13,8 +13,7 @@ import {
   type UseFormReturn,
 } from "react-hook-form";
 import type { InlineFieldRegistration } from "../context/InlineFieldsRegistry";
-import { buildFormPayload } from "./buildFormPayload";
-import { buildInlineRowsPayload } from "./buildInlineRowsPayload";
+import { buildResourceFormSubmitBody } from "./buildResourceFormSubmitBody";
 import { applyApiErrorsToForm } from "./formErrors";
 import { useAbortableEffect } from "./useAbortableEffect";
 
@@ -106,26 +105,19 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
     async (values: T) => {
       try {
         const raw = values as Record<string, unknown>;
-        const payload = buildFormPayload(
+        const body = buildResourceFormSubmitBody(
           raw,
           Array.from(payloadFieldsRef.current),
+          inlineRegistryRef.current.values(),
         );
-
-        for (const inline of inlineRegistryRef.current.values()) {
-          const rows = raw[inline.field];
-          const key = inline.payloadKey ?? inline.field;
-          payload[key] = buildInlineRowsPayload(rows, inline.sources, {
-            transformRows: inline.transformRows,
-          });
-        }
 
         let saved: T;
         if (isNew) {
-          const res = await dp.create(resource, payload);
+          const res = await dp.create(resource, body);
           saved = res.data as T;
           message.success("Created");
         } else if (id) {
-          const res = await dp.update(resource, { id, data: payload });
+          const res = await dp.update(resource, { id, data: body });
           saved = res.data as T;
           message.success("Updated");
         } else {
@@ -136,12 +128,14 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
         if (!stayOnPage) navigate(listPath);
       } catch (e) {
         const inlineFieldPaths = Array.from(inlineRegistryRef.current.keys());
-        applyApiErrorsToForm(dp, form, message, e, {
+        const handled = await applyApiErrorsToForm(dp, form, message, e, {
           resource,
           mutation: isNew ? "create" : "update",
           inlineFieldPaths,
         });
-        message.error(e instanceof Error ? e.message : "Save failed");
+        if (!handled) {
+          message.error(e instanceof Error ? e.message : "Save failed");
+        }
       }
     },
     [

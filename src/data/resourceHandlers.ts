@@ -29,7 +29,7 @@ export type ResourceHandlers<
 > = {
   getList: (params: GetListParams) => Promise<GetListResult<RecordType>>;
   getOne: (id: Identifier, params?: GetOneParams) => Promise<GetOneResult<RecordType>>;
-  create: (data: Partial<RecordType>) => Promise<CreateResult<RecordType>>;
+  create: (data: Partial<RecordType> | FormData) => Promise<CreateResult<RecordType>>;
   update: (
     params: UpdateParams<RecordType>,
   ) => Promise<UpdateResult<RecordType>>;

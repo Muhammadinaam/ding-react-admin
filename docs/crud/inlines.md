@@ -128,6 +128,6 @@ nestedFieldPath("lines", 0, "label"); // → lines.0.label
 
 ## Validation errors
 
-Inline errors use the same RHF paths (`lines.0.quantity`). Built-in `parseDjangoDRFFormErrors` flattens nested array responses automatically. See [form-validation-errors.md](../form-validation-errors.md).
+Inline errors use the same RHF paths (`lines.0.quantity`). Built-in `parseDjangoDRFFormErrors` flattens nested array responses automatically. Save errors work with fetch, axios, and OpenAPI clients — see [form-validation-errors.md](../form-validation-errors.md).
 
 [← CRUD overview](overview.md) · [← README](../../README.md)

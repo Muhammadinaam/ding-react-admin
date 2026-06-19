@@ -31,6 +31,22 @@ export type Product = {
   price: number;
   brandId: number;
   categoryIds: number[];
+  image: string | null;
+  specsPdf: string | null;
+};
+
+export type ProductPhoto = {
+  id: number;
+  productId: number;
+  caption: string;
+  image: string | null;
+};
+
+export type ProductAttachment = {
+  id: number;
+  productId: number;
+  label: string;
+  file: string | null;
 };
 
 export type Invoice = {
@@ -122,6 +138,8 @@ const RESOURCES = [
   "purchase-orders",
   "invoices",
   "invoice-lines",
+  "product-photos",
+  "product-attachments",
 ] as const;
 
 export type ResourceName = (typeof RESOURCES)[number];
@@ -174,6 +192,8 @@ function seedProducts(
     price: 9.5,
     brandId: b[0]!.id,
     categoryIds: [categories[0]!.id],
+    image: "https://picsum.photos/seed/product-usb/400/300",
+    specsPdf: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   };
   const p2: Product = {
     id: nextId(),
@@ -182,6 +202,8 @@ function seedProducts(
     price: 4.2,
     brandId: b[1]!.id,
     categoryIds: [categories[1]!.id, categories[0]!.id],
+    image: "https://picsum.photos/seed/product-notebook/400/300",
+    specsPdf: null,
   };
   b[0] = { ...b[0]!, productId: p1.id };
   b[1] = { ...b[1]!, productId: p2.id };
@@ -277,6 +299,36 @@ function seedInvoices(): { invoices: Invoice[]; lines: InvoiceLine[] } {
   return { invoices: [inv], lines };
 }
 
+function seedProductMedia(products: Product[]): {
+  photos: ProductPhoto[];
+  attachments: ProductAttachment[];
+} {
+  const usb = products[0]!;
+  const photos: ProductPhoto[] = [
+    {
+      id: nextId(),
+      productId: usb.id,
+      caption: "Packaging",
+      image: "https://picsum.photos/seed/product-usb-pack/400/300",
+    },
+    {
+      id: nextId(),
+      productId: usb.id,
+      caption: "Connector close-up",
+      image: "https://picsum.photos/seed/product-usb-port/400/300",
+    },
+  ];
+  const attachments: ProductAttachment[] = [
+    {
+      id: nextId(),
+      productId: usb.id,
+      label: "Safety sheet",
+      file: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    },
+  ];
+  return { photos, attachments };
+}
+
 export class PlaygroundMemoryApi {
   private users: MemoryUser[] = seedUsers();
   brands: Brand[];
@@ -286,6 +338,8 @@ export class PlaygroundMemoryApi {
   purchaseOrders: PurchaseOrder[];
   invoices: Invoice[];
   invoiceLines: InvoiceLine[];
+  productPhotos: ProductPhoto[];
+  productAttachments: ProductAttachment[];
 
   constructor() {
     this.brands = seedBrands();
@@ -298,6 +352,9 @@ export class PlaygroundMemoryApi {
     const { invoices, lines } = seedInvoices();
     this.invoices = invoices;
     this.invoiceLines = lines;
+    const { photos, attachments } = seedProductMedia(this.products);
+    this.productPhotos = photos;
+    this.productAttachments = attachments;
   }
 
   login(username: string, password: string): { token: string; user: PublicUser } {

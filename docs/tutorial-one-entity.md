@@ -832,7 +832,7 @@ if (ordering) qs.set("ordering", ordering);
 
 Skip until basic save works. Use this when save **fails** and you want **red text under fields**, not only a toast.
 
-Pick the helper that matches your API, then pass it to `combineResourceHandlers`:
+Pick the helper that matches your **API JSON shape**, then pass it to `combineResourceHandlers`:
 
 ```ts
 // src/lib/data-provider.ts
@@ -851,21 +851,13 @@ export function createDataProvider() {
 }
 ```
 
-| Helper | When to use |
-|--------|-------------|
+| Helper | When to use (API body shape) |
+|--------|------------------------------|
 | `parseDjangoDRFFormErrors` | `{ "email": ["Invalid"], "non_field_errors": ["…"] }` |
 | `parseDotNetFormErrors` | `{ "errors": { "Email": ["…"] } }` |
 | `parseNodeFormErrors` | `{ errors: { email: ["…"] } }`, express-validator arrays, Joi `details` |
 
-In **`create` / `update`**, attach the API JSON on failure:
-
-```ts
-if (!res.ok) {
-  throw { body: await res.json() };
-}
-```
-
-Built-in parsers also read axios-style `error.response.data`.
+**HTTP client:** the backend JSON is the same for fetch, axios, and OpenAPI clients. `ResourceForm` resolves the error body automatically (including fetch `ResponseError` with a `Response` object). You do **not** need axios-specific middleware or manual `throw { body }` unless your client uses a non-standard error shape — see [form-validation-errors.md](form-validation-errors.md).
 
 **Different API shape?** See [form-validation-errors.md](form-validation-errors.md) — custom `parseFormError`, inline prefixes, nested row errors.
 
