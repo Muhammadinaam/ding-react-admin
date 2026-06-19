@@ -1,5 +1,5 @@
-/** Write a value into a record using dot notation, e.g. `invoiceLine.product`. */
-export function setByPath(
+/** Write a value into an object using dot notation, e.g. `invoiceLine.product`. */
+export function setFormValue(
   record: Record<string, unknown>,
   path: string,
   value: unknown,

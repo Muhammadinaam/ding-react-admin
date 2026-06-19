@@ -12,9 +12,16 @@ import {
 import { useFormContext } from "react-hook-form";
 import type { Invoice } from "../../api/memoryApi";
 import { INVOICE_RESOURCE } from "./invoiceData";
-import { INVOICE_LINE_RESOURCE } from "./invoiceLineData";
 
-type InvoiceRow = Invoice & Record<string, unknown>;
+type InvoiceRow = Invoice & {
+  lines?: Array<{
+    id?: number;
+    productId?: number | null;
+    label?: string;
+    quantity?: number;
+    unitPrice?: number;
+  }>;
+} & Record<string, unknown>;
 
 export function InvoiceListPage() {
   return (
@@ -36,8 +43,7 @@ function InvoiceLinesInline() {
 
   return (
     <InlineFormSet
-      resource={INVOICE_LINE_RESOURCE}
-      foreignKey="invoiceId"
+      field="lines"
       label="Invoice lines"
       columns={[
         {
@@ -123,9 +129,6 @@ export function InvoiceFormPage() {
       resource={INVOICE_RESOURCE}
       title="Invoice"
       listPath="/invoices"
-      inlines={[
-        { resource: INVOICE_LINE_RESOURCE, foreignKey: "invoiceId" },
-      ]}
     >
       <TextField source="number" label="Number" required />
       <TextField source="customer" label="Customer" required />

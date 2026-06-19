@@ -2,22 +2,13 @@ export { ResourceList, useResourceListContext } from "./ResourceList";
 export type { ResourceListProps } from "./ResourceList";
 export { FilterBar } from "./FilterBar";
 export { ResourceForm } from "./ResourceForm";
-export type {
-  ResourceFormProps,
-  ResourceFormInlineConfig,
-} from "./ResourceForm";
+export type { ResourceFormProps } from "./ResourceForm";
 export { ResourceFormModal } from "./ResourceFormModal";
 export type { ResourceFormModalProps } from "./ResourceFormModal";
-export {
-  InlineFormSet,
-  InlineFormSetStacked,
-  saveInlineRows,
-  loadInlineRows,
-} from "./InlineFormSet";
+export { InlineFormSet, InlineFormSetStacked } from "./InlineFormSet";
 export type {
   InlineFormSetProps,
   InlineFormSetStackedProps,
-  SaveInlineOptions,
   InlineFormSetLayout,
 } from "./InlineFormSet";
 export { FormTabs, FormTab } from "./FormTabs";
@@ -61,15 +52,16 @@ export type {
   ListQueryActions,
 } from "./utils/useListQueryState";
 export { useChoices } from "./utils/useChoices";
-export { getByPath } from "./utils/getByPath";
-export { pickBySources } from "./utils/pickBySources";
-export { inlineArrayName } from "./utils/inlineArrayName";
-export { inlineFieldName } from "./utils/inlineFieldName";
-export { setByPath } from "./utils/setByPath";
+export { getFormValue } from "./utils/getFormValue";
+export { setFormValue } from "./utils/setFormValue";
+export { buildFormPayload } from "./utils/buildFormPayload";
+export { buildInlineRowsPayload } from "./utils/buildInlineRowsPayload";
+export { nestedFieldPath } from "./utils/nestedFieldPath";
 export {
-  useSubmitField,
-  useSectionField,
-} from "./context/SubmitFieldsContext";
+  useRegisterPayloadField,
+  useRegisterSectionField,
+} from "./context/PayloadFieldsContext";
+export type { InlineFieldRegistration } from "./context/InlineFieldsRegistry";
 
 export type {
   BaseSourceProps,

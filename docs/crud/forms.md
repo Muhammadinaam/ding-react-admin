@@ -35,6 +35,21 @@ Use **`PasswordField`** for a single write-only password input. Pass **`confirmS
 
 Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap fields in Ant Design `Row` / `Col` as needed.
 
+## If you know react-hook-form
+
+`ResourceForm` is a thin shell around patterns you already use:
+
+| RHF concept | In ding-react-admin |
+|-------------|---------------------|
+| `useForm()` | Inside `ResourceForm` — you get `FormProvider` for children |
+| `Controller` | Built-in fields via `FieldWrapper` |
+| `name` | Top-level: field `source` (e.g. `email`). Inline cells: nested path (e.g. `lines.0.label`) |
+| `useFieldArray` | `InlineFormSet` with `field="lines"` |
+| `form.reset(record)` | Edit load: one `getOne` with nested rows, then reset |
+| Submit body | `buildFormPayload` from registered fields — form values ≈ API JSON |
+
+You can use `useFormContext()` in child components (dependent fields, inline helpers) like any RHF app.
+
 ## Tabbed and stepped forms
 
 Use **`FormTabs`** / **`FormTab`** or **`FormSteps`** / **`FormStep`** to split long forms. Fields stay registered across hidden tabs/steps so Save validates the whole form.

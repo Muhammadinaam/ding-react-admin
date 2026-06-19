@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import type { FieldRules } from "../types";
 import { useFormMetaOptional } from "../context/FormContext";
 import {
-  useSectionField,
-  useSubmitField,
-} from "../context/SubmitFieldsContext";
+  useRegisterPayloadField,
+  useRegisterSectionField,
+} from "../context/PayloadFieldsContext";
 
 export type FieldWrapperProps = {
   /** Logical field name — used for submit payload tracking on top-level fields. */
@@ -49,13 +49,13 @@ export function FieldWrapper({
   const fieldLabel = hideLabel ? undefined : (label ?? source);
   const requiredMessage = label ?? source;
 
-  // ding-react-admin: remember this `source` so Save sends only fields you rendered in JSX
-  // (see pickBySources in ResourceForm). Skipped for inline row cells — nested `name` paths.
-  useSubmitField(source, isTopLevel);
+  // Add this field's `source` to the Save payload (ResourceForm → buildFormPayload).
+  // `isTopLevel` is false when `name` contains "." (e.g. inline cell `__inline_lines.0.label`) —
+  // those values live in the inline array and are saved by saveInlineRows, not the parent PATCH.
+  useRegisterPayloadField(source, isTopLevel);
 
-  // ding-react-admin: group this field with the current FormTab / FormStep for error highlighting
-  // and "jump to first invalid tab" on Save. No-op outside tabs/steps.
-  useSectionField(source, isTopLevel);
+  // Same top-level check: attach this field to the current FormTab / FormStep for error highlighting.
+  useRegisterSectionField(source, isTopLevel);
 
   return (
     <Controller

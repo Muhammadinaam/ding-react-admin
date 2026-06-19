@@ -59,9 +59,8 @@ export type FormMutation = "create" | "update";
 export type ParseFormErrorContext = {
   resource: string;
   mutation: FormMutation;
-  /** Set when saving an inline row — prefix field paths for that row. */
-  inlineArrayName?: string;
-  rowIndex?: number;
+  /** Top-level inline field-array paths on the form, e.g. `["lines"]`. */
+  inlineFieldPaths?: string[];
 };
 
 /** Field paths match react-hook-form `name` (form `source` or inline `arrayName.index.source`). */

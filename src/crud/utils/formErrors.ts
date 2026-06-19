@@ -21,7 +21,7 @@ export function applyFormErrors<T extends FieldValues>(
   }
 }
 
-export function parseAndApplyFormErrors<T extends FieldValues>(
+export function applyApiErrorsToForm<T extends FieldValues>(
   dp: DataProvider,
   form: UseFormReturn<T>,
   message: MessageInstance,

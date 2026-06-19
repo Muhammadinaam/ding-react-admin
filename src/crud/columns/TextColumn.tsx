@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { BaseSourceProps } from "../types";
-import { getByPath } from "../utils/getByPath";
+import { getFormValue } from "../utils/getFormValue";
 import { useRegisterColumn } from "../context/ListContext";
 
 export type TextColumnProps = BaseSourceProps & {
@@ -33,6 +33,6 @@ export function renderDisplayValue(
   display?: string | ((record: Record<string, unknown>) => unknown),
 ): unknown {
   if (typeof display === "function") return display(record);
-  if (display) return getByPath(record, display);
+  if (display) return getFormValue(record, display);
   return record[source];
 }

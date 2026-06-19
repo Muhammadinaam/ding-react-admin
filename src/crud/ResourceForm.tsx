@@ -8,14 +8,12 @@ import { usePermissions } from "../context/PermissionsProvider";
 import type { ResourcePermissions } from "../permissions/resourcePermissions";
 import { checkResourcePermission } from "../permissions/resourcePermissions";
 import { FormMetaProvider } from "./context/FormContext";
-import { SubmitFieldsProvider } from "./context/SubmitFieldsContext";
+import { PayloadFieldsProvider } from "./context/PayloadFieldsContext";
 import {
-  useResourceFormLoad,
-  useResourceFormSubmit,
-  type ResourceFormInlineConfig,
-} from "./utils/useResourceFormData";
-
-export type { ResourceFormInlineConfig };
+  InlineFieldsRegistryProvider,
+  type InlineFieldRegistration,
+} from "./context/InlineFieldsRegistry";
+import { useFormRecordLoad, useFormRecordSave } from "./utils/useFormRecord";
 
 export type ResourceFormProps<T extends FieldValues> = {
   resource: string;
@@ -25,18 +23,15 @@ export type ResourceFormProps<T extends FieldValues> = {
   defaultValues?: Partial<T>;
   onSaved?: (record: T) => void;
   stayOnPage?: boolean;
-  inlines?: ResourceFormInlineConfig[];
   /** Permission strings for create vs edit. Omit to allow all (demos only). */
   permissions?: Pick<ResourcePermissions, "add" | "change">;
 };
 
 /**
- * Create/edit page shell around react-hook-form.
+ * Create/edit page — standard react-hook-form under the hood.
  *
- * Flow:
- * 1. Load — edit: getOne(parent) + loadInlineRows → form.reset (see useResourceFormLoad)
- * 2. Edit — children render fields; useSubmitField tracks sources for the API payload
- * 3. Save — pickBySources → create/update parent → saveInlineRows (see useResourceFormSubmit)
+ * Load: one `getOne` → `form.reset(record)` (nested inline arrays included).
+ * Save: one `create` or `update` with parent fields + nested inline rows.
  */
 export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   resource,
@@ -46,7 +41,6 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   defaultValues,
   onSaved,
   stayOnPage,
-  inlines,
   permissions,
 }: ResourceFormProps<T>) {
   const { id } = useParams();
@@ -56,13 +50,14 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   const navigate = useNavigate();
   const { message } = App.useApp();
   const { token } = theme.useToken();
-  const submitFieldsRef = useRef(new Set<string>());
+  const payloadFieldsRef = useRef(new Set<string>());
+  const inlineRegistryRef = useRef(new Map<string, InlineFieldRegistration>());
 
   const form = useForm<T>({
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
-  const { loading, formVersion, existingInlineIds } = useResourceFormLoad({
+  const { loading, formVersion } = useFormRecordLoad({
     dp,
     resource,
     id,
@@ -70,10 +65,9 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
     form,
     message,
     defaultValues,
-    inlines,
   });
 
-  const onSubmit = useResourceFormSubmit({
+  const onSubmit = useFormRecordSave({
     dp,
     resource,
     id,
@@ -82,9 +76,8 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
     message,
     navigate,
     listPath,
-    submitFieldsRef,
-    inlines,
-    existingInlineIds,
+    payloadFieldsRef,
+    inlineRegistryRef,
     onSaved,
     stayOnPage,
   });
@@ -115,51 +108,52 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
       }
     >
       <FormMetaProvider resource={resource} isNew={isNew}>
-        <SubmitFieldsProvider fieldsRef={submitFieldsRef}>
-          <div style={{ position: "relative" }}>
-            {loading ? (
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 1,
-                }}
-              >
-                <Spin />
-              </div>
-            ) : null}
-            {/* formVersion remounts RHF after load so inline field arrays bind correctly */}
-            <FormProvider {...form} key={formVersion}>
-              <Form
-                layout="vertical"
-                onFinish={() => void form.handleSubmit(onSubmit)()}
-                style={{
-                  opacity: loading ? 0.4 : 1,
-                  pointerEvents: loading ? "none" : undefined,
-                }}
-              >
-                {children}
-                <Form.Item style={{ marginTop: 16 }}>
-                  <Space>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      disabled={loading || !canSave}
-                    >
-                      Save
-                    </Button>
-                    <Link to={listPath}>
-                      <Button disabled={loading}>Cancel</Button>
-                    </Link>
-                  </Space>
-                </Form.Item>
-              </Form>
-            </FormProvider>
-          </div>
-        </SubmitFieldsProvider>
+        <PayloadFieldsProvider fieldsRef={payloadFieldsRef}>
+          <InlineFieldsRegistryProvider registryRef={inlineRegistryRef}>
+            <div style={{ position: "relative" }}>
+              {loading ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 1,
+                  }}
+                >
+                  <Spin />
+                </div>
+              ) : null}
+              <FormProvider {...form} key={formVersion}>
+                <Form
+                  layout="vertical"
+                  onFinish={() => void form.handleSubmit(onSubmit)()}
+                  style={{
+                    opacity: loading ? 0.4 : 1,
+                    pointerEvents: loading ? "none" : undefined,
+                  }}
+                >
+                  {children}
+                  <Form.Item style={{ marginTop: 16 }}>
+                    <Space>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        disabled={loading || !canSave}
+                      >
+                        Save
+                      </Button>
+                      <Link to={listPath}>
+                        <Button disabled={loading}>Cancel</Button>
+                      </Link>
+                    </Space>
+                  </Form.Item>
+                </Form>
+              </FormProvider>
+            </div>
+          </InlineFieldsRegistryProvider>
+        </PayloadFieldsProvider>
       </FormMetaProvider>
     </Card>
   );

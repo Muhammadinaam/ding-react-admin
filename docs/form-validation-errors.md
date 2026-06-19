@@ -2,7 +2,7 @@
 
 Start with [tutorial Section D](tutorial-one-entity.md#section-d--form-validation-errors) — built-in parsers for Django REST, .NET, and Node.
 
-Use this page when your API response is **different**, or you need nested inline errors from a **single** parent save.
+Use this page when your API response is **different**, or you need nested inline errors from a single parent save.
 
 ---
 
@@ -19,7 +19,7 @@ Use this page when your API response is **different**, or you need nested inline
 
 | Part | Meaning |
 |------|---------|
-| **`fields`** | One key per form field. Value is one message or an array. |
+| **`fields`** | One key per form field path. Value is one message or an array. |
 | **`global`** | Not tied to one field — shown as toast. |
 
 **Main form** — keys match field `source`:
@@ -30,42 +30,51 @@ Use this page when your API response is **different**, or you need nested inline
 
 → `fields: { username: "Already taken" }`
 
-**Inline rows** — flat dot paths (not nested objects):
+**Inline rows** — keys match RHF nested paths:
 
 ```ts
 {
   fields: {
-    "__inline_invoice_lines.0.quantity": "Must be greater than zero",
-    "__inline_invoice_lines.1.label": "Label is required",
+    "lines.0.quantity": "Must be greater than zero",
+    "lines.1.label": "Label is required",
   },
 }
 ```
 
 ---
 
-## Inline prefix (`__inline_invoice_lines`)
+## Nested inline errors (one response)
 
-You usually **do not memorize it**.
+Django REST often returns:
 
-When **one inline row** fails, `parseFormError` receives **`context.inlineArrayName`** and **`context.rowIndex`**. Built-in parsers use them automatically.
-
-```ts
-// context when row 2 failed:
-// { inlineArrayName: "__inline_invoice_lines", rowIndex: 2, ... }
+```json
+{
+  "lines": [
+    { "quantity": ["Must be positive"] },
+    {},
+    { "label": ["Required"] }
+  ]
+}
 ```
 
-If your API returns `{ quantity: "Too small" }` for that row, built-in parsers prepend the row path so the form shows the error on the right cell.
+`parseDjangoDRFFormErrors` **auto-flattens** this to `lines.0.quantity`, `lines.2.label`, etc.
 
-When you map a **nested API response yourself** (many rows in one payload), compute the prefix:
+For custom APIs, use `flattenNestedArrayErrors` from the package:
 
 ```ts
-import { inlineArrayName } from "ding-react-admin";
+import { flattenNestedArrayErrors } from "ding-react-admin";
 
-inlineArrayName("invoice-lines"); // → "__inline_invoice_lines"
-inlineArrayName("invoice-lines", "myLines"); // InlineFormSet name="myLines"
+const fields: Record<string, string | string[]> = {};
+flattenNestedArrayErrors("lines", body.lines as unknown[], fields);
 ```
 
-Default: `__inline_` + resource with `-` / `/` → `_`. Custom `name` on `InlineFormSet` overrides that.
+Or build paths with `nestedFieldPath`:
+
+```ts
+import { nestedFieldPath } from "ding-react-admin";
+
+nestedFieldPath("lines", 0, "label"); // → lines.0.label
+```
 
 ---
 
@@ -91,7 +100,6 @@ import type {
   ParseFormErrorContext,
 } from "ding-react-admin";
 import {
-  applyInlineFieldPaths,
   asStringMessages,
   finalizeFormErrors,
   getErrorBody,
@@ -118,7 +126,7 @@ export function parseFormError(
     }
   }
 
-  return finalizeFormErrors(fields, global, ctx);
+  return finalizeFormErrors(fields, global);
 }
 ```
 
@@ -128,59 +136,15 @@ Wire it:
 combineResourceHandlers(handlers, { can, parseFormError });
 ```
 
-### Nested inline errors in one response
-
-If the API returns an array of row errors:
-
-```json
-{
-  "invoice_lines": [
-    { "quantity": ["Must be positive"] },
-    {},
-    { "label": ["Required"] }
-  ]
-}
-```
-
-Flatten in your parser:
-
-```ts
-import { inlineArrayName } from "ding-react-admin";
-
-const prefix = inlineArrayName("invoice-lines");
-const rows = body.invoice_lines as unknown[];
-if (Array.isArray(rows)) {
-  rows.forEach((row, index) => {
-    if (!row || typeof row !== "object") return;
-    for (const [source, value] of Object.entries(row as Record<string, unknown>)) {
-      const msgs = asStringMessages(value);
-      if (msgs.length) {
-        fields[`${prefix}.${index}.${source}`] =
-          msgs.length === 1 ? msgs[0] : msgs;
-      }
-    }
-  });
-}
-```
-
 ---
 
 ## Built-in parsers (reference)
 
 | Function | Typical API body |
 |----------|------------------|
-| `parseDjangoDRFFormErrors` | `{ "email": ["…"], "non_field_errors": ["…"] }` |
+| `parseDjangoDRFFormErrors` | `{ "email": ["…"], "non_field_errors": ["…"] }` — nested inline arrays auto-flattened |
 | `parseDotNetFormErrors` | `{ "errors": { "Email": ["…"] } }` — optional `fieldMap`, `camelCase` |
 | `parseNodeFormErrors` | `{ errors: { email: ["…"] } }` or `[{ path, msg }]` or Joi `details` |
-
-Options example:
-
-```ts
-parseFormError: (error, ctx) =>
-  parseDotNetFormErrors(error, ctx, {
-    fieldMap: { Email: "email" },
-  }),
-```
 
 ---
 

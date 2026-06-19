@@ -18,7 +18,9 @@ Providers are composed explicitly — nothing is hidden except theme inside `<Ad
 | **`AppThemeProvider`** | Optional — `AdminApp` includes it | Theme/density; only wrap yourself if you skip `AdminApp` |
 | **`AntdApp`** (from `antd`) | Optional | Global Ant Design message/modal context |
 
-List/form **internal** contexts (`ListContext`, `FilterContext`, etc.) are created by CRUD components — you do not wrap those.
+List/form **internal** contexts (`ListContext`, `FilterContext`, `FormProvider` from react-hook-form inside `ResourceForm`, etc.) are created by CRUD components — you do not wrap those.
+
+**Forms:** `ResourceForm` uses react-hook-form (`useForm`, `Controller`, `useFieldArray` for inlines). If you know RHF, the mental model is the same — see [crud/forms.md](crud/forms.md).
 
 Recommended order: **`AuthProvider` → `DataProvider` → `PermissionsProvider` → `AdminApp`**.
 

@@ -47,17 +47,19 @@ export type FilterDefinition = {
     }) => ReactNode;
 };
 export type InlineFormSetBaseProps = {
-    resource: string;
-    foreignKey: string;
+    /** RHF `useFieldArray` name and default API nested key, e.g. `"lines"`. */
+    field: string;
     label?: string;
-    name?: string;
+    /** API key when different from `field`. */
+    payloadKey?: string;
+    transformRows?: (rows: Record<string, unknown>[]) => unknown;
 };
 /** Passed to each tabular inline column's `cell` renderer. */
 export type InlineCellContext = {
-    /** Full RHF path, e.g. `__inline_invoice_lines.0.label`. */
+    /** Full RHF path, e.g. `lines.0.label`. */
     name: string;
     index: number;
-    arrayName: string;
+    field: string;
 };
 export type InlineColumnDef = {
     source: string;
@@ -68,9 +70,9 @@ export type InlineColumnDef = {
 };
 /** Passed to `InlineFormSetStacked`'s `renderRow` for one related row. */
 export type InlineRowContext = {
-    arrayName: string;
+    field: string;
     index: number;
-    /** RHF path helper — `name("label")` → `arrayName.index.label`. */
+    /** RHF path helper — `name("label")` → `field.index.label`. */
     name: (source: string) => string;
 };
 export type EditMode = "page" | "modal" | "both";

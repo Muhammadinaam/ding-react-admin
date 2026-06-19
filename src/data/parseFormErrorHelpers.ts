@@ -33,27 +33,44 @@ export function getErrorBody(error: unknown): Record<string, unknown> | null {
   return null;
 }
 
-export function applyInlineFieldPaths(
+function isNestedRowErrorsArray(value: unknown): boolean {
+  if (!Array.isArray(value)) return false;
+  return value.some(
+    (item) =>
+      item &&
+      typeof item === "object" &&
+      !Array.isArray(item) &&
+      Object.values(item as Record<string, unknown>).some(
+        (v) => asStringMessages(v).length > 0,
+      ),
+  );
+}
+
+/** Map `{ lines: [{ label: ["…"] }] }` → `{ "lines.0.label": "…" }`. */
+export function flattenNestedArrayErrors(
+  arrayKey: string,
+  rows: unknown[],
   fields: Record<string, string | string[]>,
-  ctx: ParseFormErrorContext,
-): Record<string, string | string[]> {
-  if (ctx.inlineArrayName == null || ctx.rowIndex == null) return fields;
-  const rowPrefix = `${ctx.inlineArrayName}.${ctx.rowIndex}.`;
-  const out: Record<string, string | string[]> = {};
-  for (const [source, message] of Object.entries(fields)) {
-    out[rowPrefix + source] = message;
-  }
-  return out;
+): void {
+  rows.forEach((row, index) => {
+    if (!row || typeof row !== "object" || Array.isArray(row)) return;
+    for (const [source, value] of Object.entries(
+      row as Record<string, unknown>,
+    )) {
+      const msgs = asStringMessages(value);
+      if (msgs.length) {
+        fields[`${arrayKey}.${index}.${source}`] = toFieldValue(msgs);
+      }
+    }
+  });
 }
 
 export function finalizeFormErrors(
   fields: Record<string, string | string[]>,
   global: string[],
-  ctx: ParseFormErrorContext,
 ): FormValidationErrors {
-  const fieldErrors = applyInlineFieldPaths(fields, ctx);
   return {
-    fields: Object.keys(fieldErrors).length ? fieldErrors : undefined,
+    fields: Object.keys(fields).length ? fields : undefined,
     global: global.length ? global : undefined,
   };
 }
@@ -66,7 +83,7 @@ const DRF_GLOBAL_KEYS = new Set(["non_field_errors", "detail"]);
  */
 export function parseDjangoDRFFormErrors(
   error: unknown,
-  ctx: ParseFormErrorContext,
+  _ctx: ParseFormErrorContext,
 ): FormValidationErrors | null {
   const body = getErrorBody(error);
   if (!body) return null;
@@ -79,12 +96,16 @@ export function parseDjangoDRFFormErrors(
       global.push(...asStringMessages(value));
       continue;
     }
+    if (isNestedRowErrorsArray(value)) {
+      flattenNestedArrayErrors(key, value as unknown[], fields);
+      continue;
+    }
     const msgs = asStringMessages(value);
     if (msgs.length) fields[key] = toFieldValue(msgs);
   }
 
   if (!Object.keys(fields).length && !global.length) return null;
-  return finalizeFormErrors(fields, global, ctx);
+  return finalizeFormErrors(fields, global);
 }
 
 export type DotNetFormErrorOptions = {
@@ -102,7 +123,7 @@ export type DotNetFormErrorOptions = {
  */
 export function parseDotNetFormErrors(
   error: unknown,
-  ctx: ParseFormErrorContext,
+  _ctx: ParseFormErrorContext,
   options?: DotNetFormErrorOptions,
 ): FormValidationErrors | null {
   const body = getErrorBody(error);
@@ -129,7 +150,7 @@ export function parseDotNetFormErrors(
   }
 
   if (!Object.keys(fields).length && !global.length) return null;
-  return finalizeFormErrors(fields, global, ctx);
+  return finalizeFormErrors(fields, global);
 }
 
 export type NodeFormErrorOptions = {
@@ -144,7 +165,7 @@ export type NodeFormErrorOptions = {
  */
 export function parseNodeFormErrors(
   error: unknown,
-  ctx: ParseFormErrorContext,
+  _ctx: ParseFormErrorContext,
   options?: NodeFormErrorOptions,
 ): FormValidationErrors | null {
   const body = getErrorBody(error);
@@ -202,7 +223,7 @@ export function parseNodeFormErrors(
   global.push(...asStringMessages(body.error));
 
   if (!Object.keys(fields).length && !global.length) return null;
-  return finalizeFormErrors(fields, global, ctx);
+  return finalizeFormErrors(fields, global);
 }
 
 function mergeFieldMessage(

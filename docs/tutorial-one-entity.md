@@ -666,7 +666,7 @@ src/
 | You write | Library handles |
 |-----------|-----------------|
 | Folders and files above | `AdminApp`, layout, theme |
-| Field `source` in `Users.tsx` | Submit object from sources (`pickBySources`) |
+| Field `source` in `Users.tsx` | Save body from registered fields (`buildFormPayload`) |
 | Five API functions in `userData.ts` | `createRestResourceHandlers` CRUD glue |
 | Permission strings in `USER_PERMS` | `ResourceList` / nav / routes hide UI |
 | `createDataProvider` + one line per entity | `combineResourceHandlers` |
@@ -708,7 +708,7 @@ On save:
 { "invoiceLine": { "product": "SKU-1", "quantity": 2 } }
 ```
 
-On edit, the form loads the full API record but **only top-level field sources** tracked by `useSubmitField` are sent back — read-only nested data (e.g. `tenants`, `permissions`) is not included in the PATCH body. See [crud/internals.md](crud/internals.md).
+On edit, the form loads the full API record but **only registered field paths** are sent back — read-only nested data is not included unless you render a field for it. See [crud/internals.md](crud/internals.md).
 
 **What you do not do:** no `toUserRequest` / `toPatch` helpers for the default case; no second field list in `*Data.ts`.
 

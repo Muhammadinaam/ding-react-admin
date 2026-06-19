@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { pickBySources } from "../crud/utils/pickBySources";
+import { buildFormPayload } from "../crud/utils/buildFormPayload";
+import { buildInlineRowsPayload } from "../crud/utils/buildInlineRowsPayload";
+import { nestedFieldPath } from "../crud/utils/nestedFieldPath";
 import { createRestResourceHandlers } from "./createRestResourceHandlers";
 import {
   toDjangoRestOrdering,
@@ -7,14 +9,14 @@ import {
   toODataOrderBy,
 } from "./sortHelpers";
 
-describe("pickBySources", () => {
+describe("buildFormPayload", () => {
   it("picks flat fields", () => {
     const values = {
       username: "jane",
       email: "jane@example.com",
       tenants: [{ id: 1 }],
     };
-    expect(pickBySources(values, ["username", "email"])).toEqual({
+    expect(buildFormPayload(values, ["username", "email"])).toEqual({
       username: "jane",
       email: "jane@example.com",
     });
@@ -25,14 +27,43 @@ describe("pickBySources", () => {
       invoiceLine: { product: "SKU-1", quantity: 2 },
       extra: "ignored",
     };
-    expect(pickBySources(values, ["invoiceLine.product", "invoiceLine.quantity"])).toEqual({
+    expect(
+      buildFormPayload(values, ["invoiceLine.product", "invoiceLine.quantity"]),
+    ).toEqual({
       invoiceLine: { product: "SKU-1", quantity: 2 },
     });
   });
 
-  it("returns all values when no sources registered", () => {
+  it("returns all values when no field paths registered", () => {
     const values = { a: 1, b: 2 };
-    expect(pickBySources(values, [])).toEqual(values);
+    expect(buildFormPayload(values, [])).toEqual(values);
+  });
+});
+
+describe("buildInlineRowsPayload", () => {
+  it("picks sources and keeps record id", () => {
+    const rows = [
+      { rowKey: "a", id: 10, label: "A", quantity: 2, extra: "x" },
+      { rowKey: "b", label: "B", quantity: 1 },
+    ];
+    expect(buildInlineRowsPayload(rows, ["label", "quantity"])).toEqual([
+      { label: "A", quantity: 2, id: 10 },
+      { label: "B", quantity: 1 },
+    ]);
+  });
+
+  it("applies transformRows", () => {
+    const rows = [{ rowKey: "a", label: "A" }];
+    const result = buildInlineRowsPayload(rows, ["label"], {
+      transformRows: (cleaned) => cleaned.map((r) => ({ ...r, kind: "line" })),
+    });
+    expect(result).toEqual([{ label: "A", kind: "line" }]);
+  });
+});
+
+describe("nestedFieldPath", () => {
+  it("builds dot paths", () => {
+    expect(nestedFieldPath("lines", 0, "label")).toBe("lines.0.label");
   });
 });
 

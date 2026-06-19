@@ -1,10 +1,19 @@
 # Inline nested forms (TabularInline / StackedInline)
 
-![Form with inline rows](../assets/form-with-inline.png)
+Form with inline rows
 
-Related rows use **react-hook-form `useFieldArray`**. Each cell gets an explicit RHF `name` (via the `cell` or `renderRow` callback) — no hidden registration.
+Related rows are standard **react-hook-form `useFieldArray`** data on the same record — e.g. `lines.0.label`. One `getOne` loads parent + rows; one `create`/`update` saves them together.
 
-Pass matching `inlines={[...]}` on `ResourceForm` so child rows load/save with the parent.
+Your API must return nested rows on `**getOne**` and accept them on `**create`/`update**`:
+
+```json
+{
+  "id": 1,
+  "number": "INV-1001",
+  "customer": "Northwind",
+  "lines": [{ "id": 10, "label": "Service", "quantity": 1, "unitPrice": 120 }]
+}
+```
 
 ## Tabular inline (`InlineFormSet`)
 
@@ -25,8 +34,7 @@ function InvoiceLinesInline() {
 
   return (
     <InlineFormSet
-      resource="invoice-lines"
-      foreignKey="invoiceId"
+      field="lines"
       label="Lines"
       columns={[
         {
@@ -74,92 +82,52 @@ function InvoiceLinesInline() {
   );
 }
 
-<ResourceForm
-  resource="invoices"
-  listPath="/invoices"
-  inlines={[{ resource: "invoice-lines", foreignKey: "invoiceId" }]}
->
+<ResourceForm resource="invoices" listPath="/invoices">
   <TextField source="number" required />
   <InvoiceLinesInline />
 </ResourceForm>
 ```
 
-| Column prop | Purpose |
-|-------------|---------|
-| `source` | Field key in each row object |
-| `label` | Table column header |
-| `width` / `minWidth` | Ant Design Table column sizing |
-| `cell` | Receives `{ name, index, arrayName }` — pass `name` to the field |
 
-Use **`hideLabel`** on fields in tabular cells (the column header is the label).
+| Prop             | Purpose                                                       |
+| ---------------- | ------------------------------------------------------------- |
+| `**field**`      | RHF `useFieldArray` name and default API key (e.g. `"lines"`) |
+| `label`          | Section heading                                               |
+| `payloadKey`     | API key when different from `field` (e.g. `invoice_lines`)    |
+| `transformRows`  | `(rows) => unknown` for custom nested shape                   |
+| `columns[].cell` | Receives `{ name, index, field }` — pass `name` to the field  |
+
+
+Use `**hideLabel**` on fields in tabular cells (the column header is the label).
 
 ## Stacked inline (`InlineFormSetStacked`)
 
 Django StackedInline: each related row in a card with normal field labels.
 
 ```tsx
-import {
-  InlineFormSetStacked,
-  NumberField,
-  ResourceForm,
-  TextField,
-} from "ding-react-admin";
-
-<ResourceForm
-  resource="invoices"
-  listPath="/invoices"
-  inlines={[{ resource: "invoice-lines", foreignKey: "invoiceId" }]}
->
-  <TextField source="number" required />
-
-  <InlineFormSetStacked
-    resource="invoice-lines"
-    foreignKey="invoiceId"
-    label="Lines"
-    sources={["label", "quantity"]}
-    renderRow={(row) => (
-      <>
-        <TextField
-          source="label"
-          name={row.name("label")}
-          label="Label"
-          required
-        />
-        <NumberField
-          source="quantity"
-          name={row.name("quantity")}
-          label="Qty"
-          required
-          min={0}
-        />
-      </>
-    )}
-  />
-</ResourceForm>
+<InlineFormSetStacked
+  field="lines"
+  label="Lines"
+  sources={["label", "quantity"]}
+  renderRow={(row) => (
+    <>
+      <TextField source="label" name={row.name("label")} label="Label" required />
+      <NumberField source="quantity" name={row.name("quantity")} label="Qty" required min={0} />
+    </>
+  )}
+/>
 ```
 
-| Prop | Purpose |
-|------|---------|
-| `sources` | Field keys used when appending an empty row |
-| `renderRow` | Receives `{ arrayName, index, name }` — `row.name("label")` builds the RHF path |
-
-## Helpers
+## Helper
 
 ```ts
-import { inlineArrayName, inlineFieldName } from "ding-react-admin";
+import { nestedFieldPath } from "ding-react-admin";
 
-inlineArrayName("invoice-lines"); // → __inline_invoice_lines
-inlineFieldName("__inline_invoice_lines", 0, "label"); // → __inline_invoice_lines.0.label
+nestedFieldPath("lines", 0, "label"); // → lines.0.label
 ```
-
-Custom `name` on the inline component overrides the default array name (must match `inlines` on `ResourceForm`).
 
 ## Validation errors
 
-Inline row validation uses the same **`parseFormError`** as the parent form (built-in parsers handle inline row context automatically). Custom mapping: [form-validation-errors.md](../form-validation-errors.md).
-
-Reference choices are **cached and deduped** across rows, so multiple inline `ReferenceField`s for the same resource should not each show a loading spinner after the first load.
-
-See [internals.md](internals.md) for how inlines map to react-hook-form.
+Inline errors use the same RHF paths (`lines.0.quantity`). Built-in `parseDjangoDRFFormErrors` flattens nested array responses automatically. See [form-validation-errors.md](../form-validation-errors.md).
 
 [← CRUD overview](overview.md) · [← README](../../README.md)

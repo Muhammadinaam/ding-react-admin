@@ -82,17 +82,11 @@ import {
   TextField,
 } from "ding-react-admin";
 
-<ResourceForm
-  resource="invoices"
-  title="Invoice"
-  listPath="/invoices"
-  inlines={[{ resource: "invoice-lines", foreignKey: "invoiceId" }]}
->
+<ResourceForm resource="invoices" title="Invoice" listPath="/invoices">
   <TextField source="number" label="Number" required />
   <TextField source="customer" label="Customer" required />
   <InlineFormSet
-    resource="invoice-lines"
-    foreignKey="invoiceId"
+    field="lines"
     label="Lines"
     columns={[
       {
@@ -129,7 +123,7 @@ import {
 </ResourceForm>
 ```
 
-Stacked layout, dependent fields, and validation — [inlines guide](docs/crud/inlines.md).
+If you already use react-hook-form, you can pick this up in minutes — nested inlines are just `useFieldArray` on the same record. See [inlines guide](docs/crud/inlines.md).
 
 ## Providers (manual composition)
 

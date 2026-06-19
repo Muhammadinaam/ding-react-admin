@@ -3,15 +3,10 @@ import {
   parseDjangoDRFFormErrors,
   parseDotNetFormErrors,
   parseNodeFormErrors,
+  flattenNestedArrayErrors,
 } from "./parseFormErrorHelpers";
 
 const mainCtx = { resource: "users", mutation: "create" as const };
-const inlineCtx = {
-  resource: "invoice-lines",
-  mutation: "create" as const,
-  inlineArrayName: "__inline_invoice_lines",
-  rowIndex: 1,
-};
 
 describe("parseDjangoDRFFormErrors", () => {
   it("maps field and non_field_errors", () => {
@@ -30,13 +25,36 @@ describe("parseDjangoDRFFormErrors", () => {
     });
   });
 
-  it("prefixes inline row fields", () => {
+  it("flattens nested inline row errors", () => {
     const parsed = parseDjangoDRFFormErrors(
-      { body: { quantity: ["Must be positive"] } },
-      inlineCtx,
+      {
+        body: {
+          lines: [
+            { quantity: ["Must be positive"] },
+            {},
+            { label: ["Required"] },
+          ],
+        },
+      },
+      mainCtx,
     );
     expect(parsed?.fields).toEqual({
-      "__inline_invoice_lines.1.quantity": "Must be positive",
+      "lines.0.quantity": "Must be positive",
+      "lines.2.label": "Required",
+    });
+  });
+});
+
+describe("flattenNestedArrayErrors", () => {
+  it("maps row errors to RHF paths", () => {
+    const fields: Record<string, string | string[]> = {};
+    flattenNestedArrayErrors("lines", [
+      { label: ["Required"] },
+      { quantity: ["Too small", "Invalid"] },
+    ], fields);
+    expect(fields).toEqual({
+      "lines.0.label": "Required",
+      "lines.1.quantity": ["Too small", "Invalid"],
     });
   });
 });

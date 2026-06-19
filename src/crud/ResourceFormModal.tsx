@@ -8,9 +8,9 @@ import {
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
-import { SubmitFieldsProvider } from "./context/SubmitFieldsContext";
-import { pickBySources } from "./utils/pickBySources";
-import { parseAndApplyFormErrors } from "./utils/formErrors";
+import { PayloadFieldsProvider } from "./context/PayloadFieldsContext";
+import { buildFormPayload } from "./utils/buildFormPayload";
+import { applyApiErrorsToForm } from "./utils/formErrors";
 import { useAbortableEffect } from "./utils/useAbortableEffect";
 import { isAbortError } from "../data/abortError";
 
@@ -36,7 +36,7 @@ export function ResourceFormModal({
   const [loading, setLoading] = useState(!isNew);
 
   const form = useForm<FieldValues>();
-  const submitFieldsRef = useRef(new Set<string>());
+  const payloadFieldsRef = useRef(new Set<string>());
 
   const load = useCallback(
     async (signal?: AbortSignal) => {
@@ -71,9 +71,9 @@ export function ResourceFormModal({
 
   async function onSubmit(values: FieldValues) {
     try {
-      const payload = pickBySources(
+      const payload = buildFormPayload(
         values as Record<string, unknown>,
-        Array.from(submitFieldsRef.current),
+        Array.from(payloadFieldsRef.current),
       );
       if (isNew) {
         await dp.create(resource, payload);
@@ -84,7 +84,7 @@ export function ResourceFormModal({
       }
       onClose();
     } catch (e) {
-      const handled = parseAndApplyFormErrors(dp, form, message, e, {
+      const handled = applyApiErrorsToForm(dp, form, message, e, {
         resource,
         mutation: isNew ? "create" : "update",
       });
@@ -110,22 +110,22 @@ export function ResourceFormModal({
         <Spin />
       ) : (
         <FormMetaProvider resource={resource} isNew={isNew}>
-          <SubmitFieldsProvider fieldsRef={submitFieldsRef}>
-          <FormProvider {...form}>
-            <Form
-              layout="vertical"
-              onFinish={() => void form.handleSubmit(onSubmit)()}
-            >
-              {children}
-              <Form.Item style={{ marginTop: 16, marginBottom: 0 }}>
-                <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
-                  Save
-                </Button>
-                <Button onClick={onClose}>Cancel</Button>
-              </Form.Item>
-            </Form>
-          </FormProvider>
-          </SubmitFieldsProvider>
+          <PayloadFieldsProvider fieldsRef={payloadFieldsRef}>
+            <FormProvider {...form}>
+              <Form
+                layout="vertical"
+                onFinish={() => void form.handleSubmit(onSubmit)()}
+              >
+                {children}
+                <Form.Item style={{ marginTop: 16, marginBottom: 0 }}>
+                  <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+                    Save
+                  </Button>
+                  <Button onClick={onClose}>Cancel</Button>
+                </Form.Item>
+              </Form>
+            </FormProvider>
+          </PayloadFieldsProvider>
         </FormMetaProvider>
       )}
     </Modal>

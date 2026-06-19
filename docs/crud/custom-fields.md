@@ -70,10 +70,10 @@ See [inlines.md](inlines.md) and [internals.md](internals.md).
 Call these hooks so submit and tab/step errors still work:
 
 ```tsx
-import { useSectionField, useSubmitField } from "ding-react-admin";
+import { useRegisterPayloadField, useRegisterSectionField } from "ding-react-admin";
 
-useSubmitField(source);
-useSectionField(source);
+useRegisterPayloadField(source);
+useRegisterSectionField(source);
 ```
 
 ## 2. Table column
@@ -170,7 +170,7 @@ For one-off renderers, use `CustomColumn`:
 ## Tips
 
 - **Reference data:** reuse `useChoices(choices, reference, optionLabel)` from `src/crud/utils/useChoices.ts`.
-- **Nested paths:** `display="brand.name"` on columns uses `getByPath`.
+- **Nested paths:** `display="brand.name"` on columns uses `getFormValue`.
 - **Permissions:** `ResourceList` respects `usePermissions()` for New / Edit / Delete / bulk delete. Use `actions={{ delete: false }}` etc. to hide built-in buttons even when permitted; use `headerExtra`, `rowActions`, and `bulkActions` for custom controls.
 - **Playground:** see `examples/playground/src/pages/` for full examples.
 

@@ -1,5 +1,5 @@
-/** Read nested value from a record using dot notation, e.g. `brand.name`. */
-export function getByPath(
+/** Read a nested value from form values or a record, e.g. `lines.0.label`. */
+export function getFormValue(
   record: Record<string, unknown>,
   path: string,
 ): unknown {
