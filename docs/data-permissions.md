@@ -9,6 +9,33 @@
 
 After login, your backend returns `user.permissions: string[]`. The library does **not** parse format — Django (`main.view_user`), .NET (`Users.Read`), Node (`users:read`), all work the same.
 
+### Account menu label
+
+`AdminLayout` shows the logged-in user in the top-right account button. Implement optional **`getUserLabel`** on your **`AuthAdapter`** — return a display string (name, username, email). When omitted or when it returns `null`, the label defaults to `"User"`.
+
+```tsx
+import { createPermissionsChecker, PermissionsProvider } from "ding-react-admin";
+import { getUser } from "./api-client";
+
+const can = createPermissionsChecker(() => getUser()?.permissions);
+
+export function createAuthAdapter(): AuthAdapter {
+  return {
+    // login, logout, getToken …
+    getUserLabel() {
+      const user = getUser();
+      if (!user) return null;
+      const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ");
+      return fullName || user.username || user.email || null;
+    },
+  };
+}
+```
+
+`getUserLabel` is read on mount (page refresh), after login, and after logout — keep it in sync with wherever you store the user (same as permissions).
+
+## Quick setup
+
 ```tsx
 import { createPermissionsChecker, PermissionsProvider } from "ding-react-admin";
 import { getUser } from "./api-client";

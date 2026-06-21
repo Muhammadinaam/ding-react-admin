@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import { AuthAdapter, LoginCredentials } from '../types';
 type AuthContextValue = {
     isAuthenticated: boolean;
+    /** From `AuthAdapter.getUserLabel`; `"User"` when the adapter omits it or returns null. */
+    userLabel: string;
     login: (credentials: LoginCredentials) => Promise<void>;
     logout: () => void;
 };

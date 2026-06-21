@@ -25,6 +25,16 @@ export function createPlaygroundAuthAdapter(
     getToken() {
       return sessionStorage.getItem(storageKey);
     },
+    getUserLabel() {
+      try {
+        const raw = sessionStorage.getItem(PLAYGROUND_USER_KEY);
+        if (!raw) return null;
+        const user = JSON.parse(raw) as PublicUser;
+        return user.username || null;
+      } catch {
+        return null;
+      }
+    },
   };
 }
 

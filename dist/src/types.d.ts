@@ -30,6 +30,11 @@ export type AuthAdapter = {
     logout: () => void;
     /** Synchronous read of session (e.g. token). Used after mount and after login/logout. */
     getToken: () => string | null;
+    /**
+     * Label for the account menu in `AdminLayout` (top-right button).
+     * Return `null` when no user is loaded. Defaults to `"User"` when omitted.
+     */
+    getUserLabel?: () => string | null;
 };
 /** How a route participates in auth when using `AdminApp` / `createAdminRouter`. */
 export type RouteAccess = 

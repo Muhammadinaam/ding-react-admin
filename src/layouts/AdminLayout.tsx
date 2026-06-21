@@ -142,7 +142,7 @@ export function AdminLayout({
   const location = useLocation();
   const { resolved } = useThemeMode();
   const isAppDark = resolved === "dark";
-  const { logout } = useAuth();
+  const { logout, userLabel } = useAuth();
   const can = usePermissions();
   const [collapsed, setCollapsed] = useState(() =>
     readSiderCollapsed(siderCollapsedStorageKey),
@@ -363,7 +363,13 @@ export function AdminLayout({
             >
               <Avatar size="small" icon={<UserOutlined />} />
               {!isMobile && (
-                <Typography.Text type="secondary">User</Typography.Text>
+                <Typography.Text
+                  type="secondary"
+                  ellipsis
+                  style={{ maxWidth: 160 }}
+                >
+                  {userLabel}
+                </Typography.Text>
               )}
             </Button>
           </Dropdown>

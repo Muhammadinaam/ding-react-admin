@@ -13,9 +13,7 @@ export type ResourceFormProps<T extends FieldValues> = {
     permissions?: Pick<ResourcePermissions, "add" | "change">;
 };
 /**
-
  * Create/edit page — Card chrome around {@link ResourceRecordForm}.
-
  */
 export declare function ResourceForm<T extends FieldValues & {
     id?: unknown;
