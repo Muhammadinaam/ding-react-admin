@@ -29,7 +29,7 @@ export function FormMetaProvider({
 export function useFormMeta() {
   const ctx = useContext(FormMetaContext);
   if (!ctx) {
-    throw new Error("Field components must be used within ResourceForm");
+    throw new Error("Field components must be used within a resource form");
   }
   return ctx;
 }

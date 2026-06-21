@@ -4,7 +4,6 @@ import {
   useState,
   type MutableRefObject,
 } from "react";
-import type { NavigateFunction } from "react-router-dom";
 import type { DataProvider } from "../../data/dataProviderTypes";
 import { isAbortError } from "../../data/abortError";
 import {
@@ -25,6 +24,8 @@ type LoadOptions<T extends FieldValues> = {
   form: UseFormReturn<T>;
   message: MessageInstance;
   defaultValues?: Partial<T>;
+  /** When false, skip loading (e.g. modal closed). Defaults to true. */
+  enabled?: boolean;
 };
 
 /** Edit mode: `getOne` → `form.reset` → bump `formVersion` so field arrays remount. */
@@ -36,6 +37,7 @@ export function useFormRecordLoad<T extends FieldValues>({
   form,
   message,
   defaultValues,
+  enabled = true,
 }: LoadOptions<T>) {
   const [loading, setLoading] = useState(!isNew);
   const [formVersion, setFormVersion] = useState(0);
@@ -45,6 +47,8 @@ export function useFormRecordLoad<T extends FieldValues>({
       if (isNew || !id) {
         if (defaultValues) {
           form.reset({ ...defaultValues } as DefaultValues<T>);
+        } else {
+          form.reset({} as DefaultValues<T>);
         }
         setLoading(false);
         return;
@@ -66,7 +70,13 @@ export function useFormRecordLoad<T extends FieldValues>({
     [dp, resource, id, isNew, form, message, defaultValues],
   );
 
-  useAbortableEffect((signal) => load(signal), [load]);
+  useAbortableEffect(
+    (signal) => {
+      if (!enabled) return;
+      return load(signal);
+    },
+    [enabled, load],
+  );
 
   return { loading, formVersion };
 }
@@ -78,13 +88,10 @@ type SubmitOptions<T extends FieldValues & { id?: unknown }> = {
   isNew: boolean;
   form: UseFormReturn<T>;
   message: MessageInstance;
-  navigate: NavigateFunction;
-  listPath: string;
   payloadFieldsRef: MutableRefObject<Set<string>>;
   inlineRegistryRef: MutableRefObject<Map<string, InlineFieldRegistration>>;
   setGlobalErrors: (errors: string[]) => void;
-  onSaved?: (record: T) => void;
-  stayOnPage?: boolean;
+  onSuccess?: (record: T) => void;
 };
 
 /** Save: `buildFormPayload` → clean inline rows → one `create` or `update`. */
@@ -95,13 +102,10 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
   isNew,
   form,
   message,
-  navigate,
-  listPath,
   payloadFieldsRef,
   inlineRegistryRef,
   setGlobalErrors,
-  onSaved,
-  stayOnPage,
+  onSuccess,
 }: SubmitOptions<T>) {
   return useCallback(
     async (values: T) => {
@@ -127,8 +131,7 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
           return;
         }
 
-        onSaved?.(saved);
-        if (!stayOnPage) navigate(listPath);
+        onSuccess?.(saved);
       } catch (e) {
         const { handled, globalErrors } = await applyApiErrorsToForm(
           dp,
@@ -146,7 +149,7 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
         );
         if (handled) {
           setGlobalErrors(globalErrors);
-          message.error("Save failed");
+          message.error("Save failed.");
         } else {
           setGlobalErrors([]);
           message.error(e instanceof Error ? e.message : "Save failed");
@@ -160,13 +163,10 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
       isNew,
       form,
       message,
-      navigate,
-      listPath,
       payloadFieldsRef,
       inlineRegistryRef,
       setGlobalErrors,
-      onSaved,
-      stayOnPage,
+      onSuccess,
     ],
   );
 }
