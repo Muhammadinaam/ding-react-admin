@@ -31,12 +31,13 @@ type SubmitOptions<T extends FieldValues & {
     listPath: string;
     payloadFieldsRef: MutableRefObject<Set<string>>;
     inlineRegistryRef: MutableRefObject<Map<string, InlineFieldRegistration>>;
+    setGlobalErrors: (errors: string[]) => void;
     onSaved?: (record: T) => void;
     stayOnPage?: boolean;
 };
 /** Save: `buildFormPayload` → clean inline rows → one `create` or `update`. */
 export declare function useFormRecordSave<T extends FieldValues & {
     id?: unknown;
-}>({ dp, resource, id, isNew, form, message, navigate, listPath, payloadFieldsRef, inlineRegistryRef, onSaved, stayOnPage, }: SubmitOptions<T>): (values: T) => Promise<void>;
+}>({ dp, resource, id, isNew, form, message, navigate, listPath, payloadFieldsRef, inlineRegistryRef, setGlobalErrors, onSaved, stayOnPage, }: SubmitOptions<T>): (values: T) => Promise<void>;
 export {};
 //# sourceMappingURL=useFormRecord.d.ts.map

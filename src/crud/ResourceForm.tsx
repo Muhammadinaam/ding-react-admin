@@ -1,7 +1,8 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { App, Button, Card, Form, Space, Spin, Typography, theme } from "antd";
 import { FormProvider, useForm, type DefaultValues, type FieldValues } from "react-hook-form";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { FormGlobalErrorsAlert } from "./FormGlobalErrorsAlert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDataProvider } from "../context/DataProvider";
 import { usePermissions } from "../context/PermissionsProvider";
@@ -52,6 +53,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
   const { token } = theme.useToken();
   const payloadFieldsRef = useRef(new Set<string>());
   const inlineRegistryRef = useRef(new Map<string, InlineFieldRegistration>());
+  const [globalErrors, setGlobalErrors] = useState<string[]>([]);
 
   const form = useForm<T>({
     defaultValues: defaultValues as DefaultValues<T>,
@@ -78,6 +80,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
     listPath,
     payloadFieldsRef,
     inlineRegistryRef,
+    setGlobalErrors,
     onSaved,
     stayOnPage,
   });
@@ -134,6 +137,7 @@ export function ResourceForm<T extends FieldValues & { id?: unknown }>({
                     pointerEvents: loading ? "none" : undefined,
                   }}
                 >
+                  <FormGlobalErrorsAlert errors={globalErrors} />
                   {children}
                   <Form.Item style={{ marginTop: 16 }}>
                     <Space>

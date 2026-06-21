@@ -87,7 +87,7 @@ Do **not** add fetch middleware solely to reshape errors for `parseDjangoDRFForm
 | Part | Meaning |
 |------|---------|
 | **`fields`** | One key per form field path. Value is one message or an array. |
-| **`global`** | Not tied to one field — shown as toast. |
+| **`global`** | Not tied to one field — shown in a persistent error alert at the top of the form, plus a `"Save failed"` toast. |
 
 **Main form** — keys match field `source`:
 
@@ -229,7 +229,8 @@ combineResourceHandlers(handlers, { can, parseFormError });
 | Toast only, no field errors | `parseFormError` not passed to `combineResourceHandlers`, or API body keys do not match field `source` |
 | Generic "Save failed" toast | Error body could not be resolved — check client throws one of the supported shapes |
 | Error on wrong field | Backend key differs from form `source`; use a custom `parseFormError` with a field map |
-| Duplicate email shows as toast, not under Email | Django model `ValidationError("…")` without a field → `non_field_errors`; raise `ValidationError({"email": "…"})` on the backend |
+| Duplicate email shows as alert, not under Email | Django model `ValidationError("…")` without a field → `non_field_errors`; raise `ValidationError({"email": "…"})` on the backend |
+| Error for a field not on the form | API key has no matching `<TextField source="…" />` — promoted to the form-top alert automatically |
 
 ---
 

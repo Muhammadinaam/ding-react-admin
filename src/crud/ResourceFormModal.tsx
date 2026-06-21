@@ -9,6 +9,11 @@ import { useCallback, useRef, useState, type ReactNode } from "react";
 import { useDataProvider } from "../context/DataProvider";
 import { FormMetaProvider } from "./context/FormContext";
 import { PayloadFieldsProvider } from "./context/PayloadFieldsContext";
+import {
+  InlineFieldsRegistryProvider,
+  type InlineFieldRegistration,
+} from "./context/InlineFieldsRegistry";
+import { FormGlobalErrorsAlert } from "./FormGlobalErrorsAlert";
 import { buildResourceFormSubmitBody } from "./utils/buildResourceFormSubmitBody";
 import { applyApiErrorsToForm } from "./utils/formErrors";
 import { useAbortableEffect } from "./utils/useAbortableEffect";
@@ -34,9 +39,11 @@ export function ResourceFormModal({
   const dp = useDataProvider();
   const { message } = App.useApp();
   const [loading, setLoading] = useState(!isNew);
+  const [globalErrors, setGlobalErrors] = useState<string[]>([]);
 
   const form = useForm<FieldValues>();
   const payloadFieldsRef = useRef(new Set<string>());
+  const inlineRegistryRef = useRef(new Map<string, InlineFieldRegistration>());
 
   const load = useCallback(
     async (signal?: AbortSignal) => {
@@ -70,10 +77,12 @@ export function ResourceFormModal({
   );
 
   async function onSubmit(values: FieldValues) {
+    setGlobalErrors([]);
     try {
       const body = buildResourceFormSubmitBody(
         values as Record<string, unknown>,
         Array.from(payloadFieldsRef.current),
+        inlineRegistryRef.current.values(),
       );
       if (isNew) {
         await dp.create(resource, body);
@@ -84,11 +93,26 @@ export function ResourceFormModal({
       }
       onClose();
     } catch (e) {
-      const handled = await applyApiErrorsToForm(dp, form, message, e, {
-        resource,
-        mutation: isNew ? "create" : "update",
-      });
-      if (!handled) {
+      const { handled, globalErrors: nextGlobalErrors } =
+        await applyApiErrorsToForm(
+          dp,
+          form,
+          e,
+          {
+            resource,
+            mutation: isNew ? "create" : "update",
+            inlineFieldPaths: Array.from(inlineRegistryRef.current.keys()),
+          },
+          {
+            payloadFields: payloadFieldsRef.current,
+            inlineRegistry: inlineRegistryRef.current.values(),
+          },
+        );
+      if (handled) {
+        setGlobalErrors(nextGlobalErrors);
+        message.error("Save failed");
+      } else {
+        setGlobalErrors([]);
         message.error(e instanceof Error ? e.message : "Save failed");
       }
     }
@@ -111,20 +135,23 @@ export function ResourceFormModal({
       ) : (
         <FormMetaProvider resource={resource} isNew={isNew}>
           <PayloadFieldsProvider fieldsRef={payloadFieldsRef}>
-            <FormProvider {...form}>
-              <Form
-                layout="vertical"
-                onFinish={() => void form.handleSubmit(onSubmit)()}
-              >
-                {children}
-                <Form.Item style={{ marginTop: 16, marginBottom: 0 }}>
-                  <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
-                    Save
-                  </Button>
-                  <Button onClick={onClose}>Cancel</Button>
-                </Form.Item>
-              </Form>
-            </FormProvider>
+            <InlineFieldsRegistryProvider registryRef={inlineRegistryRef}>
+              <FormProvider {...form}>
+                <Form
+                  layout="vertical"
+                  onFinish={() => void form.handleSubmit(onSubmit)()}
+                >
+                  <FormGlobalErrorsAlert errors={globalErrors} />
+                  {children}
+                  <Form.Item style={{ marginTop: 16, marginBottom: 0 }}>
+                    <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+                      Save
+                    </Button>
+                    <Button onClick={onClose}>Cancel</Button>
+                  </Form.Item>
+                </Form>
+              </FormProvider>
+            </InlineFieldsRegistryProvider>
           </PayloadFieldsProvider>
         </FormMetaProvider>
       )}

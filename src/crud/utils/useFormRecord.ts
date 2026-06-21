@@ -82,6 +82,7 @@ type SubmitOptions<T extends FieldValues & { id?: unknown }> = {
   listPath: string;
   payloadFieldsRef: MutableRefObject<Set<string>>;
   inlineRegistryRef: MutableRefObject<Map<string, InlineFieldRegistration>>;
+  setGlobalErrors: (errors: string[]) => void;
   onSaved?: (record: T) => void;
   stayOnPage?: boolean;
 };
@@ -98,11 +99,13 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
   listPath,
   payloadFieldsRef,
   inlineRegistryRef,
+  setGlobalErrors,
   onSaved,
   stayOnPage,
 }: SubmitOptions<T>) {
   return useCallback(
     async (values: T) => {
+      setGlobalErrors([]);
       try {
         const raw = values as Record<string, unknown>;
         const body = buildResourceFormSubmitBody(
@@ -127,13 +130,25 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
         onSaved?.(saved);
         if (!stayOnPage) navigate(listPath);
       } catch (e) {
-        const inlineFieldPaths = Array.from(inlineRegistryRef.current.keys());
-        const handled = await applyApiErrorsToForm(dp, form, message, e, {
-          resource,
-          mutation: isNew ? "create" : "update",
-          inlineFieldPaths,
-        });
-        if (!handled) {
+        const { handled, globalErrors } = await applyApiErrorsToForm(
+          dp,
+          form,
+          e,
+          {
+            resource,
+            mutation: isNew ? "create" : "update",
+            inlineFieldPaths: Array.from(inlineRegistryRef.current.keys()),
+          },
+          {
+            payloadFields: payloadFieldsRef.current,
+            inlineRegistry: inlineRegistryRef.current.values(),
+          },
+        );
+        if (handled) {
+          setGlobalErrors(globalErrors);
+          message.error("Save failed");
+        } else {
+          setGlobalErrors([]);
           message.error(e instanceof Error ? e.message : "Save failed");
         }
       }
@@ -149,6 +164,7 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
       listPath,
       payloadFieldsRef,
       inlineRegistryRef,
+      setGlobalErrors,
       onSaved,
       stayOnPage,
     ],
