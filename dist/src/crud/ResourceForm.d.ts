@@ -13,10 +13,9 @@ export type ResourceFormProps<T extends FieldValues> = {
     permissions?: Pick<ResourcePermissions, "add" | "change">;
 };
 /**
- * Create/edit page — standard react-hook-form under the hood.
- *
- * Load: one `getOne` → `form.reset(record)` (nested inline arrays included).
- * Save: one `create` or `update` with parent fields + nested inline rows.
+
+ * Create/edit page — Card chrome around {@link ResourceRecordForm}.
+
  */
 export declare function ResourceForm<T extends FieldValues & {
     id?: unknown;

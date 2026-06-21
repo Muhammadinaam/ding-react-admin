@@ -1437,102 +1437,182 @@ function Un(e, t) {
 	}, t);
 }
 //#endregion
-//#region src/crud/ResourceFormModal.tsx
-function Wn({ resource: e, editId: t, onClose: n, children: r, title: a }) {
-	let o = t === "new" || t == null, s = t != null, u = vt(), { message: d } = b.useApp(), [f, p] = l(!o), [m, h] = l([]), g = Se(), _ = c(/* @__PURE__ */ new Set()), v = c(/* @__PURE__ */ new Map()), y = i(async (n) => {
-		if (o || !t) {
-			g.reset({}), p(!1);
+//#region src/crud/utils/useFormRecord.ts
+function Wn({ dp: e, resource: t, id: n, isNew: r, form: a, message: o, defaultValues: s, enabled: c = !0 }) {
+	let [u, d] = l(!r), [f, p] = l(0), m = i(async (i) => {
+		if (r || !n) {
+			s ? a.reset({ ...s }) : a.reset({}), d(!1);
 			return;
 		}
-		p(!0);
+		d(!0);
 		try {
-			let r = await u.getOne(e, t, { signal: n });
-			if (n?.aborted) return;
-			g.reset(r.data);
+			let r = await e.getOne(t, n, { signal: i });
+			if (i?.aborted) return;
+			a.reset(r.data), p((e) => e + 1);
 		} catch (e) {
-			St(e) || d.error(e instanceof Error ? e.message : "Load failed");
+			St(e) || o.error(e instanceof Error ? e.message : "Load failed");
 		} finally {
-			n?.aborted || p(!1);
+			i?.aborted || d(!1);
 		}
 	}, [
-		u,
 		e,
 		t,
+		n,
+		r,
+		a,
 		o,
-		g,
-		d
+		s
 	]);
-	Un((e) => {
-		if (s) return y(e);
-	}, [s, y]);
-	async function x(r) {
-		h([]);
+	return Un((e) => {
+		if (c) return m(e);
+	}, [c, m]), {
+		loading: u,
+		formVersion: f
+	};
+}
+function Gn({ dp: e, resource: t, id: n, isNew: r, form: a, message: o, payloadFieldsRef: s, inlineRegistryRef: c, setGlobalErrors: l, onSuccess: u }) {
+	return i(async (i) => {
+		l([]);
 		try {
-			let i = In(r, Array.from(_.current), v.current.values());
-			o ? (await u.create(e, i), d.success("Created")) : t && (await u.update(e, {
-				id: t,
-				data: i
-			}), d.success("Updated")), n();
-		} catch (t) {
-			let { handled: n, globalErrors: r } = await Hn(u, g, t, {
-				resource: e,
-				mutation: o ? "create" : "update",
-				inlineFieldPaths: Array.from(v.current.keys())
+			let a = In(i, Array.from(s.current), c.current.values()), l;
+			if (r) l = (await e.create(t, a)).data, o.success("Created");
+			else if (n) l = (await e.update(t, {
+				id: n,
+				data: a
+			})).data, o.success("Updated");
+			else return;
+			u?.(l);
+		} catch (n) {
+			let { handled: i, globalErrors: u } = await Hn(e, a, n, {
+				resource: t,
+				mutation: r ? "create" : "update",
+				inlineFieldPaths: Array.from(c.current.keys())
 			}, {
-				payloadFields: _.current,
-				inlineRegistry: v.current.values()
+				payloadFields: s.current,
+				inlineRegistry: c.current.values()
 			});
-			n ? (h(r), d.error("Save failed")) : (h([]), d.error(t instanceof Error ? t.message : "Save failed"));
+			i ? (l(u), o.error("Save failed.")) : (l([]), o.error(n instanceof Error ? n.message : "Save failed"));
 		}
-	}
+	}, [
+		e,
+		t,
+		n,
+		r,
+		a,
+		o,
+		s,
+		c,
+		l,
+		u
+	]);
+}
+//#endregion
+//#region src/crud/ResourceRecordForm.tsx
+function Kn({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0, canSave: o = !0, onCancel: s, cancelHref: d, onSuccess: f, loadingMode: p = "overlay" }) {
+	let m = t === "new" || !t, h = m ? void 0 : t, g = vt(), { message: _ } = b.useApp(), v = c(/* @__PURE__ */ new Set()), y = c(/* @__PURE__ */ new Map()), [x, C] = l([]), w = Se({ defaultValues: i }), { loading: T, formVersion: ee } = Wn({
+		dp: g,
+		resource: e,
+		id: h,
+		isNew: m,
+		form: w,
+		message: _,
+		defaultValues: i,
+		enabled: a
+	}), te = Gn({
+		dp: g,
+		resource: e,
+		id: h,
+		isNew: m,
+		form: w,
+		message: _,
+		payloadFieldsRef: v,
+		inlineRegistryRef: y,
+		setGlobalErrors: C,
+		onSuccess: f
+	}), E = /* @__PURE__ */ U(S, {
+		disabled: T,
+		onClick: d ? void 0 : s,
+		children: "Cancel"
+	}), O = /* @__PURE__ */ U(fn, {
+		resource: e,
+		isNew: m,
+		children: /* @__PURE__ */ U(vn, {
+			fieldsRef: v,
+			children: /* @__PURE__ */ U(Cn, {
+				registryRef: y,
+				children: /* @__PURE__ */ W("div", {
+					style: { position: "relative" },
+					children: [T && p === "overlay" ? /* @__PURE__ */ U("div", {
+						style: {
+							position: "absolute",
+							inset: 0,
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							zIndex: 1
+						},
+						children: /* @__PURE__ */ U(R, {})
+					}) : null, /* @__PURE__ */ n(be, {
+						...w,
+						key: ee
+					}, /* @__PURE__ */ W(D, {
+						layout: "vertical",
+						onFinish: () => void w.handleSubmit(te)(),
+						style: p === "overlay" ? {
+							opacity: T ? .4 : 1,
+							pointerEvents: T ? "none" : void 0
+						} : void 0,
+						children: [
+							/* @__PURE__ */ U(En, { errors: x }),
+							r,
+							/* @__PURE__ */ U(D.Item, {
+								style: {
+									marginTop: 16,
+									marginBottom: 0
+								},
+								children: /* @__PURE__ */ W(L, { children: [/* @__PURE__ */ U(S, {
+									type: "primary",
+									htmlType: "submit",
+									disabled: T || !o,
+									children: "Save"
+								}), d ? /* @__PURE__ */ U(u, {
+									to: d,
+									children: E
+								}) : E] })
+							})
+						]
+					}))]
+				})
+			})
+		})
+	});
+	return T && p === "replace" ? /* @__PURE__ */ U(R, {}) : O;
+}
+//#endregion
+//#region src/crud/ResourceFormModal.tsx
+function qn({ resource: e, editId: t, onClose: n, children: r, title: i }) {
+	let a = t === "new", o = t != null;
 	return /* @__PURE__ */ U(P, {
-		open: s,
-		title: a ?? (o ? `New ${e}` : `Edit ${e}`),
+		open: o,
+		title: i ?? (a ? `New ${e}` : `Edit ${e}`),
 		onCancel: n,
 		footer: null,
 		destroyOnHidden: !0,
 		width: 560,
-		children: f ? /* @__PURE__ */ U(R, {}) : /* @__PURE__ */ U(fn, {
+		children: /* @__PURE__ */ U(Kn, {
 			resource: e,
-			isNew: o,
-			children: /* @__PURE__ */ U(vn, {
-				fieldsRef: _,
-				children: /* @__PURE__ */ U(Cn, {
-					registryRef: v,
-					children: /* @__PURE__ */ U(be, {
-						...g,
-						children: /* @__PURE__ */ W(D, {
-							layout: "vertical",
-							onFinish: () => void g.handleSubmit(x)(),
-							children: [
-								/* @__PURE__ */ U(En, { errors: m }),
-								r,
-								/* @__PURE__ */ W(D.Item, {
-									style: {
-										marginTop: 16,
-										marginBottom: 0
-									},
-									children: [/* @__PURE__ */ U(S, {
-										type: "primary",
-										htmlType: "submit",
-										style: { marginRight: 8 },
-										children: "Save"
-									}), /* @__PURE__ */ U(S, {
-										onClick: n,
-										children: "Cancel"
-									})]
-								})
-							]
-						})
-					})
-				})
-			})
+			id: t ?? void 0,
+			enabled: o,
+			loadingMode: "replace",
+			onCancel: n,
+			onSuccess: () => n(),
+			children: r
 		})
 	});
 }
 //#endregion
 //#region src/crud/ListActionsBar.tsx
-function Gn({ selectedCount: e, total: t, allPageSelected: n, allMatchingSelected: r, onSelectAllMatching: a, onClearSelection: o, actions: c, onExecute: u, selectedIds: d, running: f = !1 }) {
+function Jn({ selectedCount: e, total: t, allPageSelected: n, allMatchingSelected: r, onSelectAllMatching: a, onClearSelection: o, actions: c, onExecute: u, selectedIds: d, running: f = !1 }) {
 	let [p, m] = l(), h = s(() => c.map((e) => ({
 		value: e.key,
 		label: e.label
@@ -1616,14 +1696,14 @@ function Gn({ selectedCount: e, total: t, allPageSelected: n, allMatchingSelecte
 }
 //#endregion
 //#region src/crud/types.ts
-var Kn = new Set([
+var Yn = new Set([
 	"page",
 	"perPage",
 	"sort",
 	"create",
 	"edit"
-]), qn = 1, Jn = 10;
-function Yn(e) {
+]), Xn = 1, Zn = 10;
+function Qn(e) {
 	if (e.includes(",")) {
 		let t = e.split(",").map((e) => e.trim()), n = t.map(Number);
 		return n.every((e) => Number.isFinite(e)) ? n : t;
@@ -1631,16 +1711,16 @@ function Yn(e) {
 	let t = Number(e);
 	return e !== "" && Number.isFinite(t) && String(t) === e ? t : e === "true" ? !0 : e === "false" ? !1 : e;
 }
-function Xn(e) {
+function $n(e) {
 	return e == null || e === "" ? null : Array.isArray(e) ? e.length === 0 ? null : e.map(String).join(",") : String(e);
 }
-function Zn(e) {
+function er(e) {
 	let [t, n] = v(), r = s(() => {
-		let n = t.get("page"), r = t.get("perPage"), i = n ? Math.max(1, Number(n) || qn) : qn, a = r ? Math.max(1, Number(r) || Jn) : Jn, o = t.getAll("sort"), s = o.length > 0 ? o.flatMap((e) => tn(e)) : tn(t.get("sort")), c = { ...e };
+		let n = t.get("page"), r = t.get("perPage"), i = n ? Math.max(1, Number(n) || Xn) : Xn, a = r ? Math.max(1, Number(r) || Zn) : Zn, o = t.getAll("sort"), s = o.length > 0 ? o.flatMap((e) => tn(e)) : tn(t.get("sort")), c = { ...e };
 		return t.forEach((e, n) => {
-			if (Kn.has(n)) return;
+			if (Yn.has(n)) return;
 			let r = c[n];
-			r === void 0 ? t.getAll(n).length > 1 ? c[n] = t.getAll(n).map(Yn) : c[n] = Yn(e) : c[n] = [...Array.isArray(r) ? r : [r], Yn(e)];
+			r === void 0 ? t.getAll(n).length > 1 ? c[n] = t.getAll(n).map(Qn) : c[n] = Qn(e) : c[n] = [...Array.isArray(r) ? r : [r], Qn(e)];
 		}), {
 			page: i,
 			perPage: a,
@@ -1663,7 +1743,7 @@ function Zn(e) {
 		},
 		setPerPage: (e) => {
 			a((t) => {
-				e === Jn ? t.delete("perPage") : t.set("perPage", String(e)), t.delete("page");
+				e === Zn ? t.delete("perPage") : t.set("perPage", String(e)), t.delete("page");
 			});
 		},
 		setSort: (e) => {
@@ -1690,15 +1770,15 @@ function Zn(e) {
 		setFilter: (e, t) => {
 			a((n) => {
 				n.delete(e);
-				let r = Xn(t);
+				let r = $n(t);
 				r != null && n.set(e, r), n.delete("page");
 			});
 		},
 		setFilters: (e) => {
 			a((t) => {
-				for (let e of [...t.keys()]) Kn.has(e) || t.delete(e);
+				for (let e of [...t.keys()]) Yn.has(e) || t.delete(e);
 				for (let [n, r] of Object.entries(e)) {
-					let e = Xn(r);
+					let e = $n(r);
 					e != null && t.set(n, e);
 				}
 				t.delete("page");
@@ -1723,11 +1803,11 @@ function Zn(e) {
 }
 //#endregion
 //#region src/crud/ResourceList.tsx
-var Qn = t(null);
-function $n() {
-	return a(Qn);
+var tr = t(null);
+function nr() {
+	return a(tr);
 }
-function er({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: a = "page", formChildren: o, actions: c, rowActions: d, headerExtra: f, bulkActions: p, bulkDelete: m = !0, bulkActionsEnabled: h = !0, permissions: g, queryState: _, queryActions: v }) {
+function rr({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: a = "page", formChildren: o, actions: c, rowActions: d, headerExtra: f, bulkActions: p, bulkDelete: m = !0, bulkActionsEnabled: h = !0, permissions: g, queryState: _, queryActions: v }) {
 	let y = vt(), x = J(), { message: w, modal: T } = b.useApp(), { columns: ee, sortOrders: te, sortPriorities: E } = sn(), [D, O] = l(!1), [k, A] = l([]), [j, M] = l(0), [N, P] = l(() => /* @__PURE__ */ new Set()), [ne, F] = l(!1), I = r ?? `${n}/new`, R = Y(x, g, "add"), re = Y(x, g, "change"), z = Y(x, g, "delete"), ae = re && (a === "page" || a === "both") && c?.edit !== !1, V = re && (a === "modal" || a === "both") && c?.quickEdit !== !1, G = z && c?.delete !== !1, ce = ae || V || G || d, le = i(() => {
 		P(/* @__PURE__ */ new Set());
 	}, []), ue = s(() => {
@@ -1976,7 +2056,7 @@ function er({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: a = "p
 				children: "New"
 			})
 		}) : null] }) : null,
-		children: [de ? /* @__PURE__ */ U(Gn, {
+		children: [de ? /* @__PURE__ */ U(Jn, {
 			selectedCount: fe,
 			total: j,
 			allPageSelected: pe,
@@ -2011,7 +2091,7 @@ function er({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: a = "p
 				ve(n);
 			}
 		})]
-	}), Ce ? /* @__PURE__ */ U(Wn, {
+	}), Ce ? /* @__PURE__ */ U(qn, {
 		resource: e,
 		editId: _.createModal ? "new" : _.editId,
 		onClose: () => {
@@ -2020,8 +2100,8 @@ function er({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: a = "p
 		children: o
 	}) : null] });
 }
-function tr({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: a, editMode: o = "page", syncQueryParams: c = !0, children: l, formChildren: u, actions: d, rowActions: f, headerExtra: p, bulkActions: m, bulkDelete: h, bulkActionsEnabled: g, permissions: _ }) {
-	let [v, y] = Zn(a), b = s(() => {
+function ir({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: a, editMode: o = "page", syncQueryParams: c = !0, children: l, formChildren: u, actions: d, rowActions: f, headerExtra: p, bulkActions: m, bulkDelete: h, bulkActionsEnabled: g, permissions: _ }) {
+	let [v, y] = er(a), b = s(() => {
 		if (!c) return a ?? {};
 		let e = {};
 		for (let [t, n] of Object.entries(v.filter)) a && t in a || (e[t] = n);
@@ -2036,7 +2116,7 @@ function tr({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: a,
 		filterValues: b,
 		setFilterValue: x
 	}), [b, x]);
-	return /* @__PURE__ */ U(Qn.Provider, {
+	return /* @__PURE__ */ U(tr.Provider, {
 		value: S,
 		children: /* @__PURE__ */ U(ln, {
 			values: b,
@@ -2044,7 +2124,7 @@ function tr({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: a,
 			children: /* @__PURE__ */ W(on, {
 				toggleSort: y.toggleSort,
 				sort: v.sort,
-				children: [l, /* @__PURE__ */ U(er, {
+				children: [l, /* @__PURE__ */ U(rr, {
 					resource: e,
 					title: t,
 					pathPrefix: n,
@@ -2067,7 +2147,7 @@ function tr({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: a,
 }
 //#endregion
 //#region src/crud/FilterBar.tsx
-function nr() {
+function ar() {
 	let e = un();
 	return !e || e.filters.length === 0 ? null : /* @__PURE__ */ U(L, {
 		wrap: !0,
@@ -2087,194 +2167,60 @@ function nr() {
 		}, t.key))
 	});
 }
-function rr({ children: e }) {
-	return /* @__PURE__ */ W(H, { children: [e, /* @__PURE__ */ U(nr, {})] });
-}
-//#endregion
-//#region src/crud/utils/useFormRecord.ts
-function ir({ dp: e, resource: t, id: n, isNew: r, form: a, message: o, defaultValues: s }) {
-	let [c, u] = l(!r), [d, f] = l(0), p = i(async (i) => {
-		if (r || !n) {
-			s && a.reset({ ...s }), u(!1);
-			return;
-		}
-		u(!0);
-		try {
-			let r = await e.getOne(t, n, { signal: i });
-			if (i?.aborted) return;
-			a.reset(r.data), f((e) => e + 1);
-		} catch (e) {
-			St(e) || o.error(e instanceof Error ? e.message : "Load failed");
-		} finally {
-			i?.aborted || u(!1);
-		}
-	}, [
-		e,
-		t,
-		n,
-		r,
-		a,
-		o,
-		s
-	]);
-	return Un((e) => p(e), [p]), {
-		loading: c,
-		formVersion: d
-	};
-}
-function ar({ dp: e, resource: t, id: n, isNew: r, form: a, message: o, navigate: s, listPath: c, payloadFieldsRef: l, inlineRegistryRef: u, setGlobalErrors: d, onSaved: f, stayOnPage: p }) {
-	return i(async (i) => {
-		d([]);
-		try {
-			let a = In(i, Array.from(l.current), u.current.values()), d;
-			if (r) d = (await e.create(t, a)).data, o.success("Created");
-			else if (n) d = (await e.update(t, {
-				id: n,
-				data: a
-			})).data, o.success("Updated");
-			else return;
-			f?.(d), p || s(c);
-		} catch (n) {
-			let { handled: i, globalErrors: s } = await Hn(e, a, n, {
-				resource: t,
-				mutation: r ? "create" : "update",
-				inlineFieldPaths: Array.from(u.current.keys())
-			}, {
-				payloadFields: l.current,
-				inlineRegistry: u.current.values()
-			});
-			i ? (d(s), o.error("Save failed")) : (d([]), o.error(n instanceof Error ? n.message : "Save failed"));
-		}
-	}, [
-		e,
-		t,
-		n,
-		r,
-		a,
-		o,
-		s,
-		c,
-		l,
-		u,
-		d,
-		f,
-		p
-	]);
+function or({ children: e }) {
+	return /* @__PURE__ */ W(H, { children: [e, /* @__PURE__ */ U(ar, {})] });
 }
 //#endregion
 //#region src/crud/ResourceForm.tsx
-function or({ resource: e, title: t, listPath: r, children: i, defaultValues: a, onSaved: s, stayOnPage: d, permissions: f }) {
-	let { id: p } = _(), m = p === "new" || !p, h = vt(), v = J(), y = g(), { message: x } = b.useApp(), { token: w } = V.useToken(), T = c(/* @__PURE__ */ new Set()), ee = c(/* @__PURE__ */ new Map()), [te, E] = l([]), O = Se({ defaultValues: a }), { loading: k, formVersion: A } = ir({
-		dp: h,
-		resource: e,
-		id: p,
-		isNew: m,
-		form: O,
-		message: x,
-		defaultValues: a
-	}), j = ar({
-		dp: h,
-		resource: e,
-		id: p,
-		isNew: m,
-		form: O,
-		message: x,
-		navigate: y,
-		listPath: r,
-		payloadFieldsRef: T,
-		inlineRegistryRef: ee,
-		setGlobalErrors: E,
-		onSaved: s,
-		stayOnPage: d
-	});
+function sr({ resource: e, title: t, listPath: n, children: r, defaultValues: i, onSaved: a, stayOnPage: s, permissions: c }) {
+	let { id: l } = _(), d = l === "new" || !l, f = J(), p = g(), { token: m } = V.useToken();
 	o(() => {
-		f && (Y(v, f, m ? "add" : "change") || y(r, { replace: !0 }));
+		c && (Y(f, c, d ? "add" : "change") || p(n, { replace: !0 }));
 	}, [
+		c,
+		d,
 		f,
-		m,
-		v,
-		y,
-		r
+		p,
+		n
 	]);
-	let M = f ? Y(v, f, m ? "add" : "change") : !0;
+	let h = c ? Y(f, c, d ? "add" : "change") : !0;
 	return /* @__PURE__ */ U(C, {
 		title: /* @__PURE__ */ W(L, { children: [/* @__PURE__ */ W(u, {
-			to: r,
-			style: { color: w.colorText },
+			to: n,
+			style: { color: m.colorText },
 			children: [/* @__PURE__ */ U(G, {}), " Back"]
 		}), /* @__PURE__ */ U(B.Title, {
 			level: 5,
 			style: { margin: 0 },
 			children: t
 		})] }),
-		children: /* @__PURE__ */ U(fn, {
+		children: /* @__PURE__ */ U(Kn, {
 			resource: e,
-			isNew: m,
-			children: /* @__PURE__ */ U(vn, {
-				fieldsRef: T,
-				children: /* @__PURE__ */ U(Cn, {
-					registryRef: ee,
-					children: /* @__PURE__ */ W("div", {
-						style: { position: "relative" },
-						children: [k ? /* @__PURE__ */ U("div", {
-							style: {
-								position: "absolute",
-								inset: 0,
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								zIndex: 1
-							},
-							children: /* @__PURE__ */ U(R, {})
-						}) : null, /* @__PURE__ */ n(be, {
-							...O,
-							key: A
-						}, /* @__PURE__ */ W(D, {
-							layout: "vertical",
-							onFinish: () => void O.handleSubmit(j)(),
-							style: {
-								opacity: k ? .4 : 1,
-								pointerEvents: k ? "none" : void 0
-							},
-							children: [
-								/* @__PURE__ */ U(En, { errors: te }),
-								i,
-								/* @__PURE__ */ U(D.Item, {
-									style: { marginTop: 16 },
-									children: /* @__PURE__ */ W(L, { children: [/* @__PURE__ */ U(S, {
-										type: "primary",
-										htmlType: "submit",
-										disabled: k || !M,
-										children: "Save"
-									}), /* @__PURE__ */ U(u, {
-										to: r,
-										children: /* @__PURE__ */ U(S, {
-											disabled: k,
-											children: "Cancel"
-										})
-									})] })
-								})
-							]
-						}))]
-					})
-				})
-			})
+			id: l,
+			defaultValues: i,
+			canSave: h,
+			cancelHref: n,
+			onCancel: () => p(n),
+			onSuccess: (e) => {
+				a?.(e), s || p(n);
+			},
+			children: r
 		})
 	});
 }
 //#endregion
 //#region src/crud/utils/nestedFieldPath.ts
-function sr(e, t, n) {
+function cr(e, t, n) {
 	return `${e}.${t}.${n}`;
 }
 //#endregion
 //#region src/crud/InlineFormSet.tsx
-function cr(e) {
+function lr(e) {
 	let t = {};
 	for (let n of e) t[n] = void 0;
 	return t;
 }
-function lr(e, t) {
+function ur(e, t) {
 	let { control: n } = q(), { fields: r, append: i, remove: a } = xe({
 		control: n,
 		name: e,
@@ -2283,11 +2229,11 @@ function lr(e, t) {
 	return {
 		fields: r,
 		remove: a,
-		appendEmpty: () => i(cr(t))
+		appendEmpty: () => i(lr(t))
 	};
 }
-function ur({ field: e, label: t, payloadKey: n, transformRows: r, columns: i }) {
-	let a = s(() => i.map((e) => e.source), [i]), { fields: o, remove: c, appendEmpty: l } = lr(e, a);
+function dr({ field: e, label: t, payloadKey: n, transformRows: r, columns: i }) {
+	let a = s(() => i.map((e) => e.source), [i]), { fields: o, remove: c, appendEmpty: l } = ur(e, a);
 	bn(e), Tn(e, a, n, r);
 	let u = s(() => i.map((t) => ({
 		title: t.label ?? t.source,
@@ -2296,7 +2242,7 @@ function ur({ field: e, label: t, payloadKey: n, transformRows: r, columns: i })
 		onHeaderCell: () => t.minWidth == null ? {} : { style: { minWidth: t.minWidth } },
 		onCell: () => t.minWidth == null ? {} : { style: { minWidth: t.minWidth } },
 		render: (n, r, i) => t.cell({
-			name: sr(e, i, t.source),
+			name: cr(e, i, t.source),
 			index: i,
 			field: e
 		})
@@ -2338,8 +2284,8 @@ function ur({ field: e, label: t, payloadKey: n, transformRows: r, columns: i })
 		]
 	});
 }
-function dr({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, renderRow: a }) {
-	let { fields: o, remove: s, appendEmpty: c } = lr(e, i);
+function fr({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, renderRow: a }) {
+	let { fields: o, remove: s, appendEmpty: c } = ur(e, i);
 	return bn(e), Tn(e, i, n, r), /* @__PURE__ */ W("div", {
 		style: { marginTop: 24 },
 		children: [
@@ -2364,7 +2310,7 @@ function dr({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, r
 					children: a({
 						field: e,
 						index: n,
-						name: (t) => sr(e, n, t)
+						name: (t) => cr(e, n, t)
 					})
 				}, t.rowKey))
 			}),
@@ -2379,22 +2325,22 @@ function dr({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, r
 }
 //#endregion
 //#region src/crud/utils/formSectionErrors.ts
-function fr(e, t, n) {
+function pr(e, t, n) {
 	for (let r of e) if (t(r, n).invalid) return !0;
 	return !1;
 }
-function pr(e) {
+function mr(e) {
 	let t = c([]);
 	for (; t.current.length < e;) t.current.push({ current: /* @__PURE__ */ new Set() });
 	return t.current.length > e && (t.current.length = e), t.current;
 }
-function mr(e, t) {
+function hr(e, t) {
 	let { control: n, getFieldState: r, setFocus: i } = q(), a = Ce({ control: n }), s = c(0), l = c(0);
 	o(() => {
 		if (a.submitCount === 0) return;
 		let n = Object.keys(a.errors).length, o = a.submitCount !== s.current, c = !o && n > 0 && l.current === 0;
 		if (s.current = a.submitCount, l.current = n, !o && !c || n === 0) return;
-		let u = e.findIndex((e) => fr(e.current, r, a));
+		let u = e.findIndex((e) => pr(e.current, r, a));
 		if (u < 0) return;
 		t(u);
 		let d = [...e[u].current].find((e) => r(e, a).invalid);
@@ -2413,22 +2359,22 @@ function mr(e, t) {
 }
 //#endregion
 //#region src/crud/FormTabs.tsx
-function hr(e) {
+function gr(e) {
 	return null;
 }
-function gr(e) {
-	return r(e) && e.type === hr;
+function _r(e) {
+	return r(e) && e.type === gr;
 }
-function _r({ children: t, defaultActiveKey: n, activeKey: r, onChange: a, ...o }) {
-	let { token: c } = V.useToken(), u = s(() => e.toArray(t).filter(gr).map((e, t) => ({
+function vr({ children: t, defaultActiveKey: n, activeKey: r, onChange: a, ...o }) {
+	let { token: c } = V.useToken(), u = s(() => e.toArray(t).filter(_r).map((e, t) => ({
 		key: e.key ?? String(t),
 		label: e.props.label,
 		disabled: e.props.disabled,
 		children: e.props.children
-	})), [t]), d = pr(u.length), f = r !== void 0, [p, m] = l(() => n ?? u[0]?.key ?? "0"), h = f ? r : p, g = i((e) => {
+	})), [t]), d = mr(u.length), f = r !== void 0, [p, m] = l(() => n ?? u[0]?.key ?? "0"), h = f ? r : p, g = i((e) => {
 		f || m(e), a?.(e);
 	}, [f, a]);
-	mr(d, i((e) => {
+	hr(d, i((e) => {
 		let t = u[e]?.key;
 		t != null && g(t);
 	}, [g, u]));
@@ -2436,7 +2382,7 @@ function _r({ children: t, defaultActiveKey: n, activeKey: r, onChange: a, ...o 
 	return /* @__PURE__ */ U(ae, {
 		destroyOnHidden: !1,
 		items: s(() => u.map((e, t) => {
-			let n = fr(d[t].current, v, y);
+			let n = pr(d[t].current, v, y);
 			return {
 				key: e.key,
 				label: n ? /* @__PURE__ */ U("span", {
@@ -2463,17 +2409,17 @@ function _r({ children: t, defaultActiveKey: n, activeKey: r, onChange: a, ...o 
 }
 //#endregion
 //#region src/crud/FormSteps.tsx
-function vr(e) {
+function yr(e) {
 	return null;
 }
-function yr(e) {
-	return r(e) && e.type === vr;
+function br(e) {
+	return r(e) && e.type === yr;
 }
-function br({ children: t, initialStep: n = 0, showNavigation: r = !0, allowStepSelect: a = !1, stepsStyle: o, navigationStyle: c, size: u, direction: d, type: f, status: p }) {
-	let m = s(() => e.toArray(t).filter(yr), [t]), h = pr(m.length), [g, _] = l(n), v = m.length - 1;
-	mr(h, _);
+function xr({ children: t, initialStep: n = 0, showNavigation: r = !0, allowStepSelect: a = !1, stepsStyle: o, navigationStyle: c, size: u, direction: d, type: f, status: p }) {
+	let m = s(() => e.toArray(t).filter(br), [t]), h = mr(m.length), [g, _] = l(n), v = m.length - 1;
+	hr(h, _);
 	let { control: y, getFieldState: b } = q(), x = Ce({ control: y }), C = s(() => m.map((e, t) => {
-		let n = fr(h[t].current, b, x);
+		let n = pr(h[t].current, b, x);
 		return {
 			title: e.props.title,
 			description: e.props.description,
@@ -2555,7 +2501,7 @@ function $({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, 
 }
 //#endregion
 //#region src/crud/fields/TextField.tsx
-function xr({ source: e, name: t, label: n, required: r, rules: i, placeholder: a, inputStyle: o, hideLabel: s }) {
+function Sr({ source: e, name: t, label: n, required: r, rules: i, placeholder: a, inputStyle: o, hideLabel: s }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2575,7 +2521,7 @@ function xr({ source: e, name: t, label: n, required: r, rules: i, placeholder: 
 }
 //#endregion
 //#region src/crud/fields/NumberField.tsx
-function Sr({ source: e, name: t, label: n, required: r, rules: i, min: a, max: o, step: s, inputStyle: c, hideLabel: l }) {
+function Cr({ source: e, name: t, label: n, required: r, rules: i, min: a, max: o, step: s, inputStyle: c, hideLabel: l }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2600,7 +2546,7 @@ function Sr({ source: e, name: t, label: n, required: r, rules: i, min: a, max: 
 }
 //#endregion
 //#region src/crud/fields/BooleanField.tsx
-function Cr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a }) {
+function wr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2617,8 +2563,8 @@ function Cr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a 
 }
 //#endregion
 //#region src/crud/fields/DateField.tsx
-var wr = "YYYY-MM-DD";
-function Tr({ source: e, name: t, label: n, required: r, rules: i, showTime: a, hideLabel: o }) {
+var Tr = "YYYY-MM-DD";
+function Er({ source: e, name: t, label: n, required: r, rules: i, showTime: a, hideLabel: o }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2628,18 +2574,18 @@ function Tr({ source: e, name: t, label: n, required: r, rules: i, showTime: a, 
 		hideLabel: o,
 		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ U(T, {
 			value: e ? Te(String(e)) : null,
-			onChange: (e) => t(e ? e.format(a ? `${wr} HH:mm:ss` : wr) : null),
+			onChange: (e) => t(e ? e.format(a ? `${Tr} HH:mm:ss` : Tr) : null),
 			onBlur: n,
 			showTime: a,
 			disabled: r,
-			format: a ? `${wr} HH:mm:ss` : wr,
+			format: a ? `${Tr} HH:mm:ss` : Tr,
 			style: { width: "100%" }
 		})
 	});
 }
 //#endregion
 //#region src/crud/fields/SelectField.tsx
-function Er({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, allowClear: s, hideLabel: c }) {
+function Dr({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, allowClear: s, hideLabel: c }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2660,7 +2606,7 @@ function Er({ source: e, name: t, label: n, required: r, rules: i, choices: a, m
 }
 //#endregion
 //#region src/crud/fields/PasswordField.tsx
-function Dr({ source: e, name: t, label: n, required: r, rules: i, autoComplete: a, hideLabel: o }) {
+function Or({ source: e, name: t, label: n, required: r, rules: i, autoComplete: a, hideLabel: o }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2677,12 +2623,12 @@ function Dr({ source: e, name: t, label: n, required: r, rules: i, autoComplete:
 		})
 	});
 }
-function Or({ source: e, name: t, label: n, required: r, rules: i, confirmSource: a, confirmLabel: o = "Confirm password", autoComplete: s = "new-password", hideLabel: c }) {
+function kr({ source: e, name: t, label: n, required: r, rules: i, confirmSource: a, confirmLabel: o = "Confirm password", autoComplete: s = "new-password", hideLabel: c }) {
 	let l = we({
 		name: t ?? e,
 		disabled: !a
 	});
-	return a ? /* @__PURE__ */ W(H, { children: [/* @__PURE__ */ U(Dr, {
+	return a ? /* @__PURE__ */ W(H, { children: [/* @__PURE__ */ U(Or, {
 		source: e,
 		name: t,
 		label: n,
@@ -2690,14 +2636,14 @@ function Or({ source: e, name: t, label: n, required: r, rules: i, confirmSource
 		rules: i,
 		autoComplete: s,
 		hideLabel: c
-	}), /* @__PURE__ */ U(Dr, {
+	}), /* @__PURE__ */ U(Or, {
 		source: a,
 		label: o,
 		required: r,
 		autoComplete: s,
 		hideLabel: c,
 		rules: { validate: (e) => !l || e === l || "Passwords do not match" }
-	})] }) : /* @__PURE__ */ U(Dr, {
+	})] }) : /* @__PURE__ */ U(Or, {
 		source: e,
 		name: t,
 		label: n,
@@ -2709,14 +2655,14 @@ function Or({ source: e, name: t, label: n, required: r, rules: i, confirmSource
 }
 //#endregion
 //#region src/crud/utils/useChoices.ts
-var kr = /* @__PURE__ */ new Map(), Ar = /* @__PURE__ */ new Map();
-function jr(e, t) {
+var Ar = /* @__PURE__ */ new Map(), jr = /* @__PURE__ */ new Map();
+function Mr(e, t) {
 	return typeof e == "function" ? `fn:${t ?? ""}` : Array.isArray(e) ? `static:${e.length}` : `res:${e.resource}:${JSON.stringify(e.filter ?? {})}:${t ?? ""}`;
 }
-function Mr(e, t) {
+function Nr(e, t) {
 	return typeof t == "function" ? t(e) : String(e[t] ?? "");
 }
-async function Nr(e, t, n, r, i) {
+async function Pr(e, t, n, r, i) {
 	return typeof e == "function" ? e({
 		dataProvider: t,
 		search: i
@@ -2730,22 +2676,22 @@ async function Nr(e, t, n, r, i) {
 			perPage: 500
 		}
 	})).data.map((e) => ({
-		label: Mr(e, n),
+		label: Nr(e, n),
 		value: e[r],
 		record: e
 	}));
 }
-function Pr(e, t, n, r, i) {
-	let a = jr(e, i), o = kr.get(a);
+function Fr(e, t, n, r, i) {
+	let a = Mr(e, i), o = Ar.get(a);
 	if (o && !i) return Promise.resolve(o);
-	let s = Ar.get(a);
+	let s = jr.get(a);
 	if (s) return s;
-	let c = Nr(e, t, n, r, i).then((e) => (i || kr.set(a, e), e)).finally(() => {
-		Ar.delete(a);
+	let c = Pr(e, t, n, r, i).then((e) => (i || Ar.set(a, e), e)).finally(() => {
+		jr.delete(a);
 	});
-	return Ar.set(a, c), c;
+	return jr.set(a, c), c;
 }
-function Fr(e, t, n = "name", r = "id", a) {
+function Ir(e, t, n = "name", r = "id", a) {
 	let c = vt(), u = s(() => {
 		if (e) return e;
 		if (t) return {
@@ -2756,19 +2702,19 @@ function Fr(e, t, n = "name", r = "id", a) {
 		e,
 		t,
 		a
-	]), d = u ? jr(u, a) : void 0, [f, p] = l(() => !d || a ? [] : kr.get(d) ?? []), [m, h] = l(() => !d || a ? !!u : !kr.has(d)), g = i(async () => {
+	]), d = u ? Mr(u, a) : void 0, [f, p] = l(() => !d || a ? [] : Ar.get(d) ?? []), [m, h] = l(() => !d || a ? !!u : !Ar.has(d)), g = i(async () => {
 		if (!u) {
 			p([]), h(!1);
 			return;
 		}
-		let e = jr(u, a), t = kr.get(e);
+		let e = Mr(u, a), t = Ar.get(e);
 		if (t && !a) {
 			p(t), h(!1);
 			return;
 		}
 		h(!0);
 		try {
-			p(await Pr(u, c, n, r, a));
+			p(await Fr(u, c, n, r, a));
 		} catch {
 			p([]);
 		} finally {
@@ -2796,8 +2742,8 @@ function Fr(e, t, n = "name", r = "id", a) {
 }
 //#endregion
 //#region src/crud/fields/ReferenceField.tsx
-function Ir({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: c, rules: u, search: d, allowClear: f, disabled: p, hideLabel: m, inputStyle: h, onValueChange: g }) {
-	let [_, v] = l(), { options: y, loading: b, optionForValue: x } = Fr(i, r, a, o, d ? _ : void 0), S = s(() => y.map((e) => ({
+function Lr({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: c, rules: u, search: d, allowClear: f, disabled: p, hideLabel: m, inputStyle: h, onValueChange: g }) {
+	let [_, v] = l(), { options: y, loading: b, optionForValue: x } = Ir(i, r, a, o, d ? _ : void 0), S = s(() => y.map((e) => ({
 		label: e.label,
 		value: e.value
 	})), [y]);
@@ -2831,8 +2777,8 @@ function Ir({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/ReferenceManyField.tsx
-function Lr({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: c, rules: u, search: d, allowClear: f = !0, hideLabel: p }) {
-	let [m, h] = l(), { options: g, loading: _ } = Fr(i, r, a, o, d ? m : void 0), v = s(() => g.map((e) => ({
+function Rr({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: c, rules: u, search: d, allowClear: f = !0, hideLabel: p }) {
+	let [m, h] = l(), { options: g, loading: _ } = Ir(i, r, a, o, d ? m : void 0), v = s(() => g.map((e) => ({
 		label: e.label,
 		value: e.value
 	})), [g]);
@@ -2861,10 +2807,10 @@ function Lr({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/uploadFieldUtils.ts
-function Rr(e) {
+function zr(e) {
 	return e instanceof File ? !0 : typeof e == "string" && e.length > 0;
 }
-function zr(e) {
+function Br(e) {
 	if (e instanceof File) return e.name;
 	if (typeof e == "string" && e.length > 0) try {
 		return new URL(e, "http://local").pathname.split("/").filter(Boolean).pop() || e;
@@ -2874,7 +2820,7 @@ function zr(e) {
 }
 //#endregion
 //#region src/crud/fields/useUploadPreviewUrl.ts
-function Br(e) {
+function Vr(e) {
 	let [t, n] = l();
 	if (o(() => {
 		if (e instanceof File) {
@@ -2887,8 +2833,8 @@ function Br(e) {
 }
 //#endregion
 //#region src/crud/fields/ImageField.tsx
-function Vr({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
-	let o = c(null), s = Br(e), l = r && Rr(e);
+function Hr({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
+	let o = c(null), s = Vr(e), l = r && zr(e);
 	return /* @__PURE__ */ W(L, {
 		direction: "vertical",
 		size: "middle",
@@ -2935,7 +2881,7 @@ function Vr({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "ima
 		]
 	});
 }
-function Hr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s, previewWidth: c }) {
+function Ur({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s, previewWidth: c }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -2943,7 +2889,7 @@ function Hr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		required: r,
 		rules: i,
 		hideLabel: a,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ U(Vr, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ U(Hr, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -2955,8 +2901,8 @@ function Hr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/fields/FileField.tsx
-function Ur({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
-	let a = c(null), o = zr(e), s = typeof e == "string" && e.length > 0 ? e : void 0, l = r && Rr(e);
+function Wr({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
+	let a = c(null), o = Br(e), s = typeof e == "string" && e.length > 0 ? e : void 0, l = r && zr(e);
 	return /* @__PURE__ */ W(L, {
 		direction: "vertical",
 		size: "middle",
@@ -3000,7 +2946,7 @@ function Ur({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
 		]
 	});
 }
-function Wr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s }) {
+function Gr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s }) {
 	return /* @__PURE__ */ U($, {
 		source: e,
 		name: t,
@@ -3008,7 +2954,7 @@ function Wr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		required: r,
 		rules: i,
 		hideLabel: a,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ U(Ur, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ U(Wr, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -3019,7 +2965,7 @@ function Wr({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/columns/TextColumn.tsx
-function Gr({ source: e, label: t, sortable: n = !0 }) {
+function Kr({ source: e, label: t, sortable: n = !0 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3037,12 +2983,12 @@ function Gr({ source: e, label: t, sortable: n = !0 }) {
 		n
 	])), null;
 }
-function Kr(e, t, n) {
+function qr(e, t, n) {
 	return typeof n == "function" ? n(e) : n ? Dn(e, n) : e[t];
 }
 //#endregion
 //#region src/crud/columns/NumberColumn.tsx
-function qr({ source: e, label: t, sortable: n = !0 }) {
+function Jr({ source: e, label: t, sortable: n = !0 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3062,7 +3008,7 @@ function qr({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/BooleanColumn.tsx
-function Jr({ source: e, label: t, sortable: n = !0 }) {
+function Yr({ source: e, label: t, sortable: n = !0 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3083,7 +3029,7 @@ function Jr({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/DateColumn.tsx
-function Yr({ source: e, label: t, sortable: n = !0 }) {
+function Xr({ source: e, label: t, sortable: n = !0 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3104,16 +3050,16 @@ function Yr({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/ReferenceColumn.tsx
-function Xr({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
-	let { labelForValue: s } = Fr(i, r, a, o), c = e[t];
+function Zr({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
+	let { labelForValue: s } = Ir(i, r, a, o), c = e[t];
 	if (typeof n == "function") return /* @__PURE__ */ U(H, { children: n(e) });
 	if (n && n !== t) {
-		let r = Kr(e, t, n);
+		let r = qr(e, t, n);
 		return /* @__PURE__ */ U(H, { children: r == null ? "—" : String(r) });
 	}
 	return /* @__PURE__ */ U(H, { children: s(c) });
 }
-function Zr({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: c = !0 }) {
+function Qr({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: c = !0 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3124,7 +3070,7 @@ function Zr({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: c ? !0 : void 0,
-			render: (s, c) => /* @__PURE__ */ U(Xr, {
+			render: (s, c) => /* @__PURE__ */ U(Zr, {
 				record: c,
 				source: e,
 				label: t,
@@ -3148,11 +3094,11 @@ function Zr({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ReferenceManyColumn.tsx
-function Qr({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
-	let { labelsForValues: o } = Fr(r, n, i, a), s = e[t];
+function $r({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
+	let { labelsForValues: o } = Ir(r, n, i, a), s = e[t];
 	return /* @__PURE__ */ U(H, { children: o(Array.isArray(s) ? s : []) });
 }
-function $r({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
+function ei({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3163,7 +3109,7 @@ function $r({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: o ? !0 : void 0,
-			render: (t, o) => /* @__PURE__ */ U(Qr, {
+			render: (t, o) => /* @__PURE__ */ U($r, {
 				record: o,
 				source: e,
 				reference: n,
@@ -3184,7 +3130,7 @@ function $r({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ImageColumn.tsx
-function ei({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: c = "" }) {
+function ti({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: c = "" }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3219,7 +3165,7 @@ function ei({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 
 }
 //#endregion
 //#region src/crud/columns/CustomColumn.tsx
-function ti({ source: e, label: t, sortable: n = !1, render: r }) {
+function ni({ source: e, label: t, sortable: n = !1, render: r }) {
 	return Z(s(() => ({
 		key: e,
 		source: e,
@@ -3239,7 +3185,7 @@ function ti({ source: e, label: t, sortable: n = !1, render: r }) {
 }
 //#endregion
 //#region src/crud/filters/TextFilter.tsx
-function ni({ source: e, label: t, placeholder: n }) {
+function ri({ source: e, label: t, placeholder: n }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
@@ -3259,7 +3205,7 @@ function ni({ source: e, label: t, placeholder: n }) {
 }
 //#endregion
 //#region src/crud/filters/NumberFilter.tsx
-function ri({ source: e, label: t }) {
+function ii({ source: e, label: t }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
@@ -3274,7 +3220,7 @@ function ri({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/BooleanFilter.tsx
-function ii({ source: e, label: t }) {
+function ai({ source: e, label: t }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
@@ -3297,7 +3243,7 @@ function ii({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/DateFilter.tsx
-function ai({ source: e, label: t }) {
+function oi({ source: e, label: t }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
@@ -3313,7 +3259,7 @@ function ai({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/SelectFilter.tsx
-function oi({ source: e, label: t, choices: n, multiple: r }) {
+function si({ source: e, label: t, choices: n, multiple: r }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
@@ -3336,8 +3282,8 @@ function oi({ source: e, label: t, choices: n, multiple: r }) {
 }
 //#endregion
 //#region src/crud/filters/ReferenceFilter.tsx
-function si({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, value: c, onChange: u }) {
-	let [d, f] = l(), { options: p, loading: m } = Fr(r, n, i, a, s ? d : void 0);
+function ci({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, value: c, onChange: u }) {
+	let [d, f] = l(), { options: p, loading: m } = Ir(r, n, i, a, s ? d : void 0);
 	return /* @__PURE__ */ U(I, {
 		allowClear: !0,
 		mode: o ? "multiple" : void 0,
@@ -3356,12 +3302,12 @@ function si({ source: e, label: t, reference: n, choices: r, optionLabel: i, opt
 		style: { minWidth: 180 }
 	});
 }
-function ci({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: c }) {
+function li({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: c }) {
 	return Q(s(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: s, onChange: l }) => /* @__PURE__ */ U(si, {
+		render: ({ value: s, onChange: l }) => /* @__PURE__ */ U(ci, {
 			source: e,
 			label: t,
 			reference: n,
@@ -3384,11 +3330,11 @@ function ci({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 		c
 	])), null;
 }
-function li(e) {
-	return /* @__PURE__ */ U(ci, {
+function ui(e) {
+	return /* @__PURE__ */ U(li, {
 		...e,
 		multiple: !0
 	});
 }
 //#endregion
-export { ht as AdminApp, rt as AdminLayout, Me as AppThemeProvider, Zt as AuthAlternateLink, Qt as AuthPageLayout, Be as AuthProvider, Jr as BooleanColumn, Cr as BooleanField, ii as BooleanFilter, ti as CustomColumn, _t as DataProvider, Yr as DateColumn, Tr as DateField, ai as DateFilter, Fe as DensitySwitch, $ as FieldWrapper, Wr as FileField, rr as FilterBar, vr as FormStep, br as FormSteps, hr as FormTab, _r as FormTabs, it as Guard, ot as GuestOnly, ei as ImageColumn, Hr as ImageField, ur as InlineFormSet, dr as InlineFormSetStacked, $t as LoginPage, qr as NumberColumn, Sr as NumberField, ri as NumberFilter, Or as PasswordField, Ge as PermissionsProvider, en as PlaceholderPage, at as Protected, Zr as ReferenceColumn, Ir as ReferenceField, ci as ReferenceFilter, $r as ReferenceManyColumn, Lr as ReferenceManyField, li as ReferenceManyFilter, st as RequirePermission, or as ResourceForm, Wn as ResourceFormModal, tr as ResourceList, Er as SelectField, oi as SelectFilter, Gr as TextColumn, xr as TextField, ni as TextFilter, Le as ThemeSwitch, Re as ThemeToolbar, Wt as applyInMemoryListParams, X as asStringMessages, kn as buildFormPayload, An as buildInlineRowsPayload, In as buildResourceFormSubmitBody, xt as combineResourceHandlers, mt as createAdminRouter, Gt as createMemoryResourceHandlers, Ke as createPermissionsChecker, Kt as createRestResourceHandlers, Ue as createSessionStorageAuthAdapter, ft as deriveAuthPaths, Je as filterNavByPermission, Ht as filterRows, At as finalizeFormErrors, kt as flattenNestedArrayErrors, Et as getErrorBody, Dn as getFormValue, ct as getRouteAccess, zt as getRowById, jn as hasUploadValues, St as isAbortError, sr as nestedFieldPath, Nt as parseDjangoDRFFormErrors, Pt as parseDotNetFormErrors, Ft as parseNodeFormErrors, lt as partitionAdminRoutes, Fn as prepareFormSubmitBody, Dt as resolveErrorBody, On as setFormValue, Jt as toDjangoRestOrdering, Pn as toFormData, Xt as toJsonApiSort, Yt as toODataOrderBy, Un as useAbortableEffect, Ve as useAuth, qe as useCan, Fr as useChoices, vt as useDataProvider, Zn as useListQueryState, J as usePermissions, bn as useRegisterPayloadField, xn as useRegisterSectionField, $n as useResourceListContext, Ne as useThemeMode };
+export { ht as AdminApp, rt as AdminLayout, Me as AppThemeProvider, Zt as AuthAlternateLink, Qt as AuthPageLayout, Be as AuthProvider, Yr as BooleanColumn, wr as BooleanField, ai as BooleanFilter, ni as CustomColumn, _t as DataProvider, Xr as DateColumn, Er as DateField, oi as DateFilter, Fe as DensitySwitch, $ as FieldWrapper, Gr as FileField, or as FilterBar, yr as FormStep, xr as FormSteps, gr as FormTab, vr as FormTabs, it as Guard, ot as GuestOnly, ti as ImageColumn, Ur as ImageField, dr as InlineFormSet, fr as InlineFormSetStacked, $t as LoginPage, Jr as NumberColumn, Cr as NumberField, ii as NumberFilter, kr as PasswordField, Ge as PermissionsProvider, en as PlaceholderPage, at as Protected, Qr as ReferenceColumn, Lr as ReferenceField, li as ReferenceFilter, ei as ReferenceManyColumn, Rr as ReferenceManyField, ui as ReferenceManyFilter, st as RequirePermission, sr as ResourceForm, qn as ResourceFormModal, ir as ResourceList, Dr as SelectField, si as SelectFilter, Kr as TextColumn, Sr as TextField, ri as TextFilter, Le as ThemeSwitch, Re as ThemeToolbar, Wt as applyInMemoryListParams, X as asStringMessages, kn as buildFormPayload, An as buildInlineRowsPayload, In as buildResourceFormSubmitBody, xt as combineResourceHandlers, mt as createAdminRouter, Gt as createMemoryResourceHandlers, Ke as createPermissionsChecker, Kt as createRestResourceHandlers, Ue as createSessionStorageAuthAdapter, ft as deriveAuthPaths, Je as filterNavByPermission, Ht as filterRows, At as finalizeFormErrors, kt as flattenNestedArrayErrors, Et as getErrorBody, Dn as getFormValue, ct as getRouteAccess, zt as getRowById, jn as hasUploadValues, St as isAbortError, cr as nestedFieldPath, Nt as parseDjangoDRFFormErrors, Pt as parseDotNetFormErrors, Ft as parseNodeFormErrors, lt as partitionAdminRoutes, Fn as prepareFormSubmitBody, Dt as resolveErrorBody, On as setFormValue, Jt as toDjangoRestOrdering, Pn as toFormData, Xt as toJsonApiSort, Yt as toODataOrderBy, Un as useAbortableEffect, Ve as useAuth, qe as useCan, Ir as useChoices, vt as useDataProvider, er as useListQueryState, J as usePermissions, bn as useRegisterPayloadField, xn as useRegisterSectionField, nr as useResourceListContext, Ne as useThemeMode };
