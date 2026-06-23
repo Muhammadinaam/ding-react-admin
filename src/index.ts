@@ -53,6 +53,8 @@ export {
   flattenNestedArrayErrors,
   asStringMessages,
   finalizeFormErrors,
+  describeNonStandardValidationBody,
+  EXPECTED_VALIDATION_BODY_HINT,
 } from "./data/parseFormErrorHelpers";
 export type {
   DotNetFormErrorOptions,

@@ -832,6 +832,8 @@ if (ordering) qs.set("ordering", ordering);
 
 Skip until basic save works. Use this when save **fails** and you want **red text under fields**, not only a toast.
 
+Your API should respond with **HTTP 400** (or **422**) and a **JSON object** whose keys match form field `source` values — see [form-validation-errors.md](form-validation-errors.md#expected-api-response-http-400).
+
 Pick the helper that matches your **API JSON shape**, then pass it to `combineResourceHandlers`:
 
 ```ts

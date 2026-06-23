@@ -1,6 +1,6 @@
 export type ToFormDataOptions = {
     /**
-     * Omit unchanged upload URL strings (`http://` / `https://`) from the body.
+     * Omit unchanged upload URL strings (`http://` / `https://` / `/media/`) from the body.
      * Default `true` — edit forms keep existing files without re-sending the URL.
      */
     skipExistingUploadUrls?: boolean;

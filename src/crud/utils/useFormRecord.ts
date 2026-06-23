@@ -149,7 +149,7 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
         );
         if (handled) {
           setGlobalErrors(globalErrors);
-          message.error("Save failed.");
+          message.error(globalErrors[0] ?? "Save failed.");
         } else {
           setGlobalErrors([]);
           message.error(e instanceof Error ? e.message : "Save failed");

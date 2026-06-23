@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import type { UseFormReturn } from "react-hook-form";
 
+import type { DataProvider } from "../../data/dataProviderTypes";
 import type { InlineFieldRegistration } from "../context/InlineFieldsRegistry";
 import {
+  applyApiErrorsToForm,
   isKnownFormFieldPath,
   partitionFormErrors,
 } from "./formErrors";
@@ -80,5 +83,86 @@ describe("partitionFormErrors", () => {
       "lines.0.quantity": "Must be positive",
     });
     expect(globalErrors).toEqual(["Bad value"]);
+  });
+});
+
+describe("applyApiErrorsToForm", () => {
+  const context = { resource: "users", mutation: "create" as const };
+  const options = {
+    payloadFields: new Set(["email"]),
+    inlineRegistry: [] as InlineFieldRegistration[],
+  };
+
+  function createForm() {
+    return {
+      setError: vi.fn(),
+    } as unknown as UseFormReturn<{ email: string }>;
+  }
+
+  it("maps standard validation bodies to field errors", async () => {
+    const form = createForm();
+    const dp = {
+      parseFormError: vi.fn().mockReturnValue({
+        fields: { email: "Already taken" },
+      }),
+    } as unknown as DataProvider;
+
+    const result = await applyApiErrorsToForm(
+      dp,
+      form,
+      {
+        body: { email: ["Already taken"] },
+      },
+      context,
+      options,
+    );
+
+    expect(result.handled).toBe(true);
+    expect(result.globalErrors).toEqual([]);
+    expect(form.setError).toHaveBeenCalledWith("email", {
+      type: "server",
+      message: "Already taken",
+    });
+  });
+
+  it("returns a non-standard format warning when the parser cannot map the body", async () => {
+    const form = createForm();
+    const dp = {
+      parseFormError: vi.fn().mockReturnValue(null),
+    } as unknown as DataProvider;
+
+    const result = await applyApiErrorsToForm(
+      dp,
+      form,
+      { body: { message: "Unexpected shape" } },
+      context,
+      options,
+    );
+
+    expect(result.handled).toBe(true);
+    expect(result.globalErrors[0]).toContain("Non-standard validation response.");
+    expect(result.globalErrors[0]).toContain('{"message":"Unexpected shape"}');
+    expect(form.setError).not.toHaveBeenCalled();
+  });
+
+  it("returns a non-standard format warning for HTTP 400 without JSON", async () => {
+    const form = createForm();
+    const dp = {} as DataProvider;
+    const response = new Response("bad request", {
+      status: 400,
+      headers: { "Content-Type": "text/plain" },
+    });
+
+    const result = await applyApiErrorsToForm(
+      dp,
+      form,
+      { response },
+      context,
+      options,
+    );
+
+    expect(result.handled).toBe(true);
+    expect(result.globalErrors[0]).toContain("Non-standard validation response.");
+    expect(result.globalErrors[0]).toContain("text/plain");
   });
 });

@@ -1,14 +1,12 @@
+import { isExistingUploadReference } from "./uploadReferenceUtils";
+
 export type ToFormDataOptions = {
   /**
-   * Omit unchanged upload URL strings (`http://` / `https://`) from the body.
+   * Omit unchanged upload URL strings (`http://` / `https://` / `/media/`) from the body.
    * Default `true` — edit forms keep existing files without re-sending the URL.
    */
   skipExistingUploadUrls?: boolean;
 };
-
-function isExistingUploadUrl(value: string): boolean {
-  return /^https?:\/\//i.test(value);
-}
 
 function appendFormDataValue(
   formData: FormData,
@@ -34,7 +32,7 @@ function appendFormDataValue(
   }
 
   if (typeof value === "string") {
-    if (options.skipExistingUploadUrls && isExistingUploadUrl(value)) {
+    if (options.skipExistingUploadUrls && isExistingUploadReference(value)) {
       return;
     }
     formData.append(key, value);

@@ -6,6 +6,39 @@ Use this page when your API response is **different**, or you need nested inline
 
 ---
 
+## Expected API response (HTTP 400)
+
+For create/update form saves, your backend should return:
+
+| Part | Requirement |
+|------|-------------|
+| **Status code** | `400 Bad Request` (or `422 Unprocessable Entity`) |
+| **Content-Type** | `application/json` |
+| **Body shape** | A **JSON object** whose keys are form field names |
+
+Each field value is a string or an array of strings:
+
+```json
+{
+  "email": ["Enter a valid email address."],
+  "code": ["This code is already in use."]
+}
+```
+
+For errors that are not tied to one field, use a global key such as `non_field_errors` (Django REST) or `detail`:
+
+```json
+{
+  "non_field_errors": ["Cannot save while this record is locked."]
+}
+```
+
+Keys must match your form field `source` values — e.g. `<TextField source="email" />` expects `"email"` in the JSON body.
+
+Top-level JSON **arrays** of strings (common in Django list-style `ValidationError`) are normalized automatically to `{ "non_field_errors": ["…"] }`.
+
+---
+
 ## Two layers: API body vs HTTP client
 
 Your backend returns the **same JSON** whether the frontend uses fetch, axios, or an OpenAPI client. What differs is how each library **wraps** a failed response on the thrown error.
@@ -21,6 +54,8 @@ Your backend returns the **same JSON** whether the frontend uses fetch, axios, o
 2. **`parseDjangoDRFFormErrors` / `parseDotNetFormErrors` / `parseNodeFormErrors`** — map that JSON to form field paths.
 
 On save, **`ResourceForm`** / **`ResourceFormModal`** call `applyApiErrorsToForm`, which runs `resolveErrorBody` first, then your `parseFormError` helper. You usually **do not** need middleware or manual `{ body }` throws when using fetch or OpenAPI-generated clients.
+
+If the response is HTTP 400/422 but the JSON body is **not** in the expected object shape (plain string, unexpected keys, empty object, or non-JSON body), the form shows a **non-standard validation response** message at the top of the form and in the save toast. This helps developers and support see what was received versus the expected `{ "field_name": ["message"] }` format.
 
 ---
 
@@ -87,7 +122,7 @@ Do **not** add fetch middleware solely to reshape errors for `parseDjangoDRFForm
 | Part | Meaning |
 |------|---------|
 | **`fields`** | One key per form field path. Value is one message or an array. |
-| **`global`** | Not tied to one field — shown in a persistent error alert at the top of the form, plus a `"Save failed"` toast. |
+| **`global`** | Not tied to one field — shown in a persistent error alert at the top of the form, plus the same text in the save error toast when present. |
 
 **Main form** — keys match field `source`:
 
@@ -218,6 +253,7 @@ combineResourceHandlers(handlers, { can, parseFormError });
 |----------|----------|
 | `resolveErrorBody(error)` | You need the raw API JSON from any client shape (async) |
 | `getErrorBody(error)` | Body is already parsed on the error (sync) |
+| `describeNonStandardValidationBody(body)` | Build the user-visible hint when the API body is not in the expected shape |
 | `asStringMessages`, `finalizeFormErrors`, `flattenNestedArrayErrors` | Building custom parsers |
 
 ---
@@ -227,7 +263,8 @@ combineResourceHandlers(handlers, { can, parseFormError });
 | Symptom | Likely cause |
 |---------|----------------|
 | Toast only, no field errors | `parseFormError` not passed to `combineResourceHandlers`, or API body keys do not match field `source` |
-| Generic "Save failed" toast | Error body could not be resolved — check client throws one of the supported shapes |
+| "Non-standard validation response…" alert | HTTP 400/422 body is not a JSON object with field keys and string messages — fix the backend response shape |
+| Generic client error toast (not handled as validation) | Error is not HTTP 400/422, or the client does not expose one of the supported error shapes |
 | Error on wrong field | Backend key differs from form `source`; use a custom `parseFormError` with a field map |
 | Duplicate email shows as alert, not under Email | Django model `ValidationError("…")` without a field → `non_field_errors`; raise `ValidationError({"email": "…"})` on the backend |
 | Error for a field not on the form | API key has no matching `<TextField source="…" />` — promoted to the form-top alert automatically |

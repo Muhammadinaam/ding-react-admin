@@ -117,7 +117,15 @@ describe("toFormData", () => {
 describe("prepareFormSubmitBody", () => {
   it("returns plain object when no uploads", () => {
     const payload = { name: "Widget" };
-    expect(prepareFormSubmitBody(payload)).toBe(payload);
+    expect(prepareFormSubmitBody(payload)).toEqual(payload);
+  });
+
+  it("omits unchanged upload references from JSON payloads", () => {
+    const body = prepareFormSubmitBody({
+      name: "Widget",
+      photo: "/media/employee_pictures/default.png",
+    });
+    expect(body).toEqual({ name: "Widget" });
   });
 
   it("returns FormData when uploads are present", () => {

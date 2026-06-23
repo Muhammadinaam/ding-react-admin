@@ -6,7 +6,12 @@ import type {
   ParseFormErrorContext,
 } from "../../data/dataProviderTypes";
 import type { InlineFieldRegistration } from "../context/InlineFieldsRegistry";
-import { resolveErrorBody } from "../../data/parseFormErrorHelpers";
+import {
+  describeNonStandardValidationBody,
+  getErrorResponseContentType,
+  getValidationErrorStatus,
+  resolveErrorBody,
+} from "../../data/parseFormErrorHelpers";
 
 export type ApplyApiErrorsResult = {
   handled: boolean;
@@ -73,6 +78,14 @@ export function applyFormErrors<T extends FieldValues>(
   }
 }
 
+function nonStandardValidationHint(error: unknown): string | undefined {
+  const contentType = getErrorResponseContentType(error);
+  if (contentType && !/application\/json/i.test(contentType)) {
+    return `non-JSON response (Content-Type: ${contentType})`;
+  }
+  return undefined;
+}
+
 export async function applyApiErrorsToForm<T extends FieldValues>(
   dp: DataProvider,
   form: UseFormReturn<T>,
@@ -81,29 +94,45 @@ export async function applyApiErrorsToForm<T extends FieldValues>(
   options: ApplyApiErrorsOptions,
 ): Promise<ApplyApiErrorsResult> {
   const body = await resolveErrorBody(error);
-  const normalizedError = body != null ? { body } : error;
-  const parsed = dp.parseFormError?.(normalizedError, context);
 
-  if (!parsed) {
-    return { handled: false, globalErrors: [] };
+  if (body != null) {
+    const parsed = dp.parseFormError?.({ body }, context);
+
+    if (parsed) {
+      const payloadFields = new Set(options.payloadFields);
+      const inlineRegistry = new Map<string, InlineFieldRegistration>();
+      for (const inline of options.inlineRegistry) {
+        inlineRegistry.set(inline.field, inline);
+      }
+
+      const { fieldErrors, globalErrors } = partitionFormErrors(
+        parsed,
+        payloadFields,
+        inlineRegistry,
+      );
+
+      if (Object.keys(fieldErrors).length || globalErrors.length) {
+        applyFormErrors(form, fieldErrors);
+        return { handled: true, globalErrors };
+      }
+    }
+
+    return {
+      handled: true,
+      globalErrors: [describeNonStandardValidationBody(body)],
+    };
   }
 
-  const payloadFields = new Set(options.payloadFields);
-  const inlineRegistry = new Map<string, InlineFieldRegistration>();
-  for (const inline of options.inlineRegistry) {
-    inlineRegistry.set(inline.field, inline);
+  if (getValidationErrorStatus(error) != null) {
+    return {
+      handled: true,
+      globalErrors: [
+        describeNonStandardValidationBody(null, {
+          hint: nonStandardValidationHint(error),
+        }),
+      ],
+    };
   }
 
-  const { fieldErrors, globalErrors } = partitionFormErrors(
-    parsed,
-    payloadFields,
-    inlineRegistry,
-  );
-
-  if (!Object.keys(fieldErrors).length && !globalErrors.length) {
-    return { handled: false, globalErrors: [] };
-  }
-
-  applyFormErrors(form, fieldErrors);
-  return { handled: true, globalErrors };
+  return { handled: false, globalErrors: [] };
 }
