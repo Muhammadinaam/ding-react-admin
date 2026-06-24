@@ -82,6 +82,8 @@ function ReferenceFilterInput({
   optionValue,
   multiple,
   search,
+  lazy = true,
+  fetchSelected = true,
   value,
   onChange,
 }: ReferenceFilterProps & {
@@ -89,13 +91,18 @@ function ReferenceFilterInput({
   onChange: (value: unknown) => void;
 }) {
   const [searchText, setSearchText] = useState<string | undefined>();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const active = dropdownOpen || Boolean(searchText);
+
   const { options, loading } = useChoices(
     choices,
     reference,
     optionLabel,
     optionValue,
     search ? searchText : undefined,
+    { lazy, active, selectedValues: value, fetchSelected },
   );
+
   return (
     <Select
       allowClear
@@ -111,6 +118,10 @@ function ReferenceFilterInput({
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
+      onDropdownVisibleChange={(open) => {
+        setDropdownOpen(open);
+        if (!open) setSearchText(undefined);
+      }}
       optionFilterProp="label"
       style={{ minWidth: 180 }}
     />
@@ -126,6 +137,8 @@ export function ReferenceFilter({
   optionValue = "id",
   multiple,
   search,
+  lazy = true,
+  fetchSelected = true,
 }: ReferenceFilterProps) {
   const def = useMemo(
     () => ({
@@ -148,6 +161,8 @@ export function ReferenceFilter({
           optionValue={optionValue}
           multiple={multiple}
           search={search}
+          lazy={lazy}
+          fetchSelected={fetchSelected}
           value={value}
           onChange={onChange}
         />
@@ -162,6 +177,8 @@ export function ReferenceFilter({
       optionValue,
       multiple,
       search,
+      lazy,
+      fetchSelected,
     ],
   );
   useRegisterFilter(def);

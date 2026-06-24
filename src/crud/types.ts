@@ -30,6 +30,18 @@ export type ReferenceProps = {
   choices?: ChoicesLoader;
   optionLabel?: string | ((record: Record<string, unknown>) => string);
   optionValue?: string;
+  /** When true (default), options load on dropdown open / search instead of on mount. */
+  lazy?: boolean;
+  /**
+   * Key on the loaded form record with the related object or array of objects.
+   * Use when retrieve embeds relations, e.g. `source="branch_id"` + `recordSource="branch"`.
+   */
+  recordSource?: string;
+  /**
+   * When true (default), fetch labels for primitive ids via `getOne` if they are not
+   * already embedded in the form record. Set `false` to never call `getOne`.
+   */
+  fetchSelected?: boolean;
 };
 
 export type DisplayProps = {

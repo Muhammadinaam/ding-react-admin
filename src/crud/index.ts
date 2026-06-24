@@ -58,6 +58,7 @@ export type {
   ListQueryActions,
 } from "./utils/useListQueryState";
 export { useChoices } from "./utils/useChoices";
+export type { UseChoicesOptions } from "./utils/useChoices";
 export { getFormValue } from "./utils/getFormValue";
 export { setFormValue } from "./utils/setFormValue";
 export { buildFormPayload } from "./utils/buildFormPayload";

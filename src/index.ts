@@ -185,6 +185,7 @@ export type {
   BaseSourceProps,
   ChoiceOption,
   ChoicesLoader,
+  UseChoicesOptions,
   ReferenceProps,
   DisplayProps,
   EditMode,

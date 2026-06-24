@@ -13,6 +13,7 @@ export function ProductFormPage() {
         label="Brand"
         reference="brands"
         optionLabel="name"
+        search
         required
       />
     </ResourceForm>
@@ -34,6 +35,8 @@ Use **`PasswordField`** for a single write-only password input. Pass **`confirmS
 ```
 
 Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap fields in Ant Design `Row` / `Col` as needed.
+
+`ReferenceField` / `ReferenceManyField` load their option list **lazily** (on dropdown open / search). See [references.md](references.md) for embedded relations (`recordSource`), `fetchSelected`, and custom loaders.
 
 ## Image and file uploads
 
