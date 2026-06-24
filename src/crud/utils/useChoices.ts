@@ -33,6 +33,11 @@ export type UseChoicesOptions = {
    * not already known from `selectedValues` / `selectedRecords`.
    */
   fetchSelected?: boolean;
+  /**
+   * Cache list results in memory. Defaults to `false` when `lazy` is true so each
+   * dropdown open refetches; eager loads (e.g. table columns) default to `true`.
+   */
+  cache?: boolean;
 };
 
 function loaderKey(loader: ChoicesLoader, search?: string): string {
@@ -73,12 +78,15 @@ function loadChoicesShared(
   dp: ReturnType<typeof useDataProvider>,
   optionLabel: string | ((record: Record<string, unknown>) => string),
   optionValue: string,
-  search?: string,
+  search: string | undefined,
+  useCache: boolean,
 ): Promise<ChoiceOption[]> {
   const key = loaderKey(effectiveLoader, search);
-  const cached = choicesCache.get(key);
-  if (cached && !search) {
-    return Promise.resolve(cached);
+  if (useCache) {
+    const cached = choicesCache.get(key);
+    if (cached && !search) {
+      return Promise.resolve(cached);
+    }
   }
 
   const inflight = choicesInflight.get(key);
@@ -92,7 +100,7 @@ function loadChoicesShared(
     search,
   )
     .then((result) => {
-      if (!search) choicesCache.set(key, result);
+      if (useCache && !search) choicesCache.set(key, result);
       return result;
     })
     .finally(() => {
@@ -117,7 +125,9 @@ export function useChoices(
     selectedValues,
     selectedRecords,
     fetchSelected = true,
+    cache: cacheOption,
   } = hookOptions;
+  const useCache = cacheOption ?? !lazy;
   const dp = useDataProvider();
 
   const effectiveLoader = useMemo((): ChoicesLoader | undefined => {
@@ -153,14 +163,14 @@ export function useChoices(
   );
 
   const [options, setOptions] = useState<ChoiceOption[]>(() => {
-    const initial = embeddedOptions.length ? embeddedOptions : [];
-    if (!cacheKey || search || lazy) return initial;
-    return mergeOptions(initial, choicesCache.get(cacheKey) ?? []);
+    if (embeddedOptions.length) return embeddedOptions;
+    if (!cacheKey || search || lazy || !useCache) return [];
+    return choicesCache.get(cacheKey) ?? [];
   });
 
   const [loading, setLoading] = useState(() => {
     if (!shouldLoadList) return false;
-    if (!cacheKey || search) return Boolean(effectiveLoader);
+    if (!useCache || !cacheKey || search) return Boolean(effectiveLoader);
     return !choicesCache.has(cacheKey);
   });
 
@@ -178,15 +188,21 @@ export function useChoices(
       return;
     }
 
-    const key = loaderKey(effectiveLoader, search);
-    const cached = choicesCache.get(key);
-    if (cached && !search) {
-      setOptions((prev) => mergeOptions(prev, mergeOptions(embeddedOptions, cached)));
-      setLoading(false);
-      return;
+    if (useCache) {
+      const key = loaderKey(effectiveLoader, search);
+      const cached = choicesCache.get(key);
+      if (cached && !search) {
+        setOptions(mergeOptions(embeddedOptions, cached));
+        setLoading(false);
+        return;
+      }
     }
 
     setLoading(true);
+    if (lazy) {
+      setOptions(embeddedOptions);
+    }
+
     try {
       const result = await loadChoicesShared(
         effectiveLoader,
@@ -194,11 +210,14 @@ export function useChoices(
         optionLabel,
         optionValue,
         search,
+        useCache,
       );
-      setOptions((prev) => mergeOptions(prev, mergeOptions(embeddedOptions, result)));
+      setOptions(mergeOptions(embeddedOptions, result));
     } catch {
       if (!normalizedSelected.length && !embeddedOptions.length) {
         setOptions([]);
+      } else if (lazy) {
+        setOptions(embeddedOptions);
       }
     } finally {
       setLoading(false);
@@ -206,10 +225,12 @@ export function useChoices(
   }, [
     effectiveLoader,
     shouldLoadList,
+    useCache,
     dp,
     optionLabel,
     optionValue,
     search,
+    lazy,
     normalizedSelected.length,
     embeddedOptions,
   ]);
@@ -217,6 +238,13 @@ export function useChoices(
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    if (lazy && !active && !search) {
+      setOptions(embeddedOptions);
+      setLoading(false);
+    }
+  }, [lazy, active, search, embeddedOptions]);
 
   useEffect(() => {
     if (!fetchSelected || !reference || !normalizedSelected.length) return;

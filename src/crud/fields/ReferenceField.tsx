@@ -96,7 +96,7 @@ function ReferenceFieldSelect({
         onValueChange?.(next, optionForValue(next), { name: fieldName });
       }}
       options={selectOptions}
-      loading={loading && selectOptions.length === 0}
+      loading={loading}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}

@@ -29,9 +29,11 @@ combineResourceHandlers({
 | When | API call |
 |------|----------|
 | Form mounts | No list fetch |
-| User opens dropdown | `getList(reference, …)` |
+| User opens dropdown | `getList(reference, …)` — always refetched (no cache) |
 | User types (`search`) | `getList` with `filter.q` |
 | Edit form with selected id(s) | See [Showing selected labels](#showing-selected-labels) |
+
+While the list loads, the Select shows a spinner. Only the selected label(s) appear in the dropdown until the fetch completes.
 
 Opt back into eager loading (e.g. small static lists):
 
@@ -128,6 +130,7 @@ With `fetchSelected={false}` and no embedded data, the raw id is shown until the
 | `optionValue` | `"id"` | Field used as Select value |
 | `search` | `false` | Enable server-side search (`filter.q`) |
 | `lazy` | `true` | Load list only on open / search |
+| `cache` | `!lazy` | When `false`, refetch on every dropdown open |
 | `recordSource` | — | Form key with embedded related object(s) |
 | `fetchSelected` | `true` | Call `getOne` for unresolved primitive ids |
 
