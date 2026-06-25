@@ -15,14 +15,22 @@ import {
   Typography,
 } from "antd";
 import type { MenuProps } from "antd";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ThemeToolbar } from "../components/ThemeToolbar";
+import { NavMenuSearch } from "../components/NavMenuSearch";
+import { ScrollableArea } from "../components/ScrollableArea";
 import { useAuth } from "../context/AuthProvider";
 import { usePermissions } from "../context/PermissionsProvider";
 import { useThemeMode } from "../context/AppThemeProvider";
+import {
+  collectSubmenuKeys,
+  filterNavItems,
+} from "./navFilter";
+import { navItemsToAntdItems } from "./navMenuItems";
 import { filterNavByPermission } from "../permissions/resourcePermissions";
 import type { AdminLayoutProps, NavItem } from "../types";
+import "../components/navMenu.css";
 
 const LIGHT_SIDEBAR_BG = "#001529";
 const DEFAULT_SIDER_KEY = "ding-react-admin-sider-collapsed";
@@ -72,28 +80,6 @@ function ancestorKeysForActivePath(
   return dfs(items) ?? [];
 }
 
-function navItemsToAntdItems(
-  items: NavItem[],
-): NonNullable<MenuProps["items"]> {
-  return items.map((item) => {
-    const IconComp = item.Icon;
-    const icon = IconComp ? <IconComp /> : undefined;
-    if (item.children?.length) {
-      return {
-        key: item.path,
-        icon,
-        label: item.label,
-        children: navItemsToAntdItems(item.children),
-      };
-    }
-    return {
-      key: item.path,
-      icon,
-      label: item.label,
-    };
-  });
-}
-
 type NavMenuProps = {
   menuItems: MenuProps["items"];
   selectedKeys: string[];
@@ -102,6 +88,61 @@ type NavMenuProps = {
   onOpenChange?: (keys: string[]) => void;
   onNavigate: (key: string) => void;
 };
+
+type SiderNavPanelProps = NavMenuProps & {
+  navQuery: string;
+  onNavQueryChange: (value: string) => void;
+  showNavSearch: boolean;
+  navSearchPlaceholder?: string;
+  scrollVariant: "default" | "on-dark";
+  searchVariant: "on-dark" | "app";
+};
+
+function SiderNavPanel({
+  menuItems,
+  selectedKeys,
+  inlineCollapsed,
+  openKeys,
+  onOpenChange,
+  onNavigate,
+  navQuery,
+  onNavQueryChange,
+  showNavSearch,
+  navSearchPlaceholder,
+  scrollVariant,
+  searchVariant,
+}: SiderNavPanelProps) {
+  return (
+    <>
+      {showNavSearch && !inlineCollapsed ? (
+        <NavMenuSearch
+          value={navQuery}
+          onChange={onNavQueryChange}
+          placeholder={navSearchPlaceholder}
+          variant={searchVariant}
+        />
+      ) : null}
+      <ScrollableArea
+        variant={scrollVariant}
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        <NavMenu
+          menuItems={menuItems}
+          selectedKeys={selectedKeys}
+          inlineCollapsed={inlineCollapsed}
+          openKeys={openKeys}
+          onOpenChange={onOpenChange}
+          onNavigate={onNavigate}
+        />
+      </ScrollableArea>
+    </>
+  );
+}
 
 function NavMenu({
   menuItems,
@@ -113,10 +154,12 @@ function NavMenu({
 }: NavMenuProps) {
   return (
     <Menu
+      className="ding-admin-nav-menu"
       mode="inline"
       theme="dark"
       inlineCollapsed={inlineCollapsed}
       selectedKeys={selectedKeys}
+      tooltip={{ placement: "right", mouseEnterDelay: 1 }}
       {...(!inlineCollapsed && openKeys !== undefined && onOpenChange
         ? { openKeys, onOpenChange }
         : {})}
@@ -137,6 +180,7 @@ export function AdminLayout({
   onUserMenuClick,
   loginPath = "/login",
   siderCollapsedStorageKey = DEFAULT_SIDER_KEY,
+  navSearch = true,
 }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -150,6 +194,12 @@ export function AdminLayout({
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isMobile = useIsMobileNav();
   const { token } = theme.useToken();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [navQuery, setNavQuery] = useState("");
+
+  const navSearchEnabled = navSearch !== false;
+  const navSearchPlaceholder =
+    typeof navSearch === "object" ? navSearch.placeholder : undefined;
 
   const drawerTitle = mobileDrawerTitle ?? brand;
 
@@ -178,19 +228,46 @@ export function AdminLayout({
     setMobileNavOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0, left: 0 });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (collapsed) setNavQuery("");
+  }, [collapsed]);
+
   const visibleNavItems = useMemo(
     () => filterNavByPermission(navItems, can),
     [navItems, can],
   );
 
+  const trimmedNavQuery = navQuery.trim();
+  const isNavFiltering = trimmedNavQuery.length > 0;
+
+  const displayNavItems = useMemo(
+    () =>
+      isNavFiltering
+        ? filterNavItems(visibleNavItems, trimmedNavQuery)
+        : visibleNavItems,
+    [visibleNavItems, trimmedNavQuery, isNavFiltering],
+  );
+
   const leafPaths = useMemo(
-    () => collectLeafPaths(visibleNavItems),
-    [visibleNavItems],
+    () => collectLeafPaths(displayNavItems),
+    [displayNavItems],
   );
 
   const menuItems: MenuProps["items"] = useMemo(
-    () => navItemsToAntdItems(visibleNavItems),
-    [visibleNavItems],
+    () =>
+      navItemsToAntdItems(displayNavItems, {
+        showLabelTooltip: !collapsed,
+      }),
+    [displayNavItems, collapsed],
+  );
+
+  const filteredOpenKeys = useMemo(
+    () => collectSubmenuKeys(displayNavItems),
+    [displayNavItems],
   );
 
   const requiredOpenKeys = useMemo(
@@ -208,6 +285,12 @@ export function AdminLayout({
 
   const handleOpenChange = useCallback((keys: string[]) => {
     setOpenKeys(keys);
+  }, []);
+
+  const effectiveOpenKeys = isNavFiltering ? filteredOpenKeys : openKeys;
+
+  const handleNavQueryChange = useCallback((value: string) => {
+    setNavQuery(value);
   }, []);
 
   const defaultUserMenuItems: MenuProps["items"] = useMemo(
@@ -233,6 +316,8 @@ export function AdminLayout({
   };
 
   const siderBg = isAppDark ? token.colorBgContainer : LIGHT_SIDEBAR_BG;
+  const siderScrollVariant = isAppDark ? "default" : "on-dark";
+  const siderSearchVariant = isAppDark ? "app" : "on-dark";
   const selectedKeys = [location.pathname];
 
   const goNav = (key: string) => {
@@ -244,8 +329,9 @@ export function AdminLayout({
   return (
     <Layout
       style={{
-        minHeight: "100vh",
+        height: "100vh",
         width: "100%",
+        overflow: "hidden",
         background: token.colorBgLayout,
       }}
     >
@@ -257,6 +343,8 @@ export function AdminLayout({
           collapsedWidth={64}
           style={{
             background: siderBg,
+            height: "100vh",
+            overflow: "hidden",
             borderInlineEnd: isAppDark
               ? `1px solid ${token.colorSplit}`
               : undefined,
@@ -264,28 +352,44 @@ export function AdminLayout({
         >
           <div
             style={{
-              height: 64,
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 600,
+              flexDirection: "column",
+              height: "100%",
+              overflow: "hidden",
             }}
           >
-            <Typography.Text
-              strong
-              style={{ color: token.colorTextLightSolid }}
+            <div
+              style={{
+                height: 64,
+                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600,
+              }}
             >
-              {collapsed ? collapsedBrand : brand}
-            </Typography.Text>
+              <Typography.Text
+                strong
+                style={{ color: token.colorTextLightSolid }}
+              >
+                {collapsed ? collapsedBrand : brand}
+              </Typography.Text>
+            </div>
+            <SiderNavPanel
+              menuItems={menuItems}
+              selectedKeys={selectedKeys}
+              inlineCollapsed={collapsed}
+              openKeys={effectiveOpenKeys}
+              onOpenChange={handleOpenChange}
+              onNavigate={goNav}
+              navQuery={navQuery}
+              onNavQueryChange={handleNavQueryChange}
+              showNavSearch={navSearchEnabled}
+              navSearchPlaceholder={navSearchPlaceholder}
+              scrollVariant={siderScrollVariant}
+              searchVariant={siderSearchVariant}
+            />
           </div>
-          <NavMenu
-            menuItems={menuItems}
-            selectedKeys={selectedKeys}
-            inlineCollapsed={collapsed}
-            openKeys={openKeys}
-            onOpenChange={handleOpenChange}
-            onNavigate={goNav}
-          />
         </Layout.Sider>
       )}
       {isMobile && (
@@ -311,17 +415,41 @@ export function AdminLayout({
           }}
           destroyOnHidden
         >
-          <NavMenu
-            menuItems={menuItems}
-            selectedKeys={selectedKeys}
-            inlineCollapsed={false}
-            openKeys={openKeys}
-            onOpenChange={handleOpenChange}
-            onNavigate={goNav}
-          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              overflow: "hidden",
+            }}
+          >
+            <SiderNavPanel
+              menuItems={menuItems}
+              selectedKeys={selectedKeys}
+              inlineCollapsed={false}
+              openKeys={effectiveOpenKeys}
+              onOpenChange={handleOpenChange}
+              onNavigate={goNav}
+              navQuery={navQuery}
+              onNavQueryChange={handleNavQueryChange}
+              showNavSearch={navSearchEnabled}
+              navSearchPlaceholder={navSearchPlaceholder}
+              scrollVariant={siderScrollVariant}
+              searchVariant={siderSearchVariant}
+            />
+          </div>
         </Drawer>
       )}
-      <Layout style={{ minWidth: 0 }}>
+      <Layout
+        style={{
+          minWidth: 0,
+          flex: 1,
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Layout.Header
           style={{
             background: token.colorBgContainer,
@@ -330,6 +458,7 @@ export function AdminLayout({
             alignItems: "center",
             gap: token.marginSM,
             lineHeight: "normal",
+            flexShrink: 0,
           }}
         >
           {isMobile && (
@@ -376,11 +505,24 @@ export function AdminLayout({
         </Layout.Header>
         <Layout.Content
           style={{
-            margin: isMobile ? token.marginSM : token.marginLG,
             minWidth: 0,
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <Outlet />
+          <ScrollableArea
+            ref={contentRef}
+            style={{
+              margin: isMobile ? token.marginSM : token.marginLG,
+              flex: 1,
+              minHeight: 0,
+              overflow: "auto",
+            }}
+          >
+            <Outlet />
+          </ScrollableArea>
         </Layout.Content>
       </Layout>
     </Layout>

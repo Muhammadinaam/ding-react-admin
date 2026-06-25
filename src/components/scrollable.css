@@ -1,0 +1,28 @@
+.ding-admin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ding-scroll-thumb) transparent;
+}
+
+.ding-admin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ding-admin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ding-admin-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--ding-scroll-thumb);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.ding-admin-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ding-scroll-thumb-hover);
+}
+
+.ding-admin-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}

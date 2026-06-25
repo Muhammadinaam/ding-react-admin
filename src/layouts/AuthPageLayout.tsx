@@ -1,5 +1,6 @@
 import { Flex, theme } from "antd";
 import type { ReactNode } from "react";
+import { ScrollableArea } from "../components/ScrollableArea";
 import { ThemeToolbar } from "../components/ThemeToolbar";
 
 export type AuthPageLayoutProps = {
@@ -55,27 +56,32 @@ export function AuthPageLayout({
           {brand}
         </div>
       ) : null}
-      <Flex
-        flex={1}
-        vertical
-        align="center"
-        justify="flex-start"
+      <ScrollableArea
         style={{
-          width: "100%",
+          flex: 1,
           minHeight: 0,
-          padding: "0 24px 24px",
-          overflow: "auto",
-          overflowX: "hidden",
+          width: "100%",
           background: token.colorBgLayout,
         }}
       >
-        {children}
-        {footer ? (
-          <div style={{ marginTop: 16, width: "100%", maxWidth: 520 }}>
-            {footer}
-          </div>
-        ) : null}
-      </Flex>
+        <Flex
+          vertical
+          align="center"
+          justify="flex-start"
+          style={{
+            width: "100%",
+            minHeight: "100%",
+            padding: "0 24px 24px",
+          }}
+        >
+          {children}
+          {footer ? (
+            <div style={{ marginTop: 16, width: "100%", maxWidth: 520 }}>
+              {footer}
+            </div>
+          ) : null}
+        </Flex>
+      </ScrollableArea>
     </Flex>
   );
 }

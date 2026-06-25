@@ -1,0 +1,21 @@
+.ding-admin-nav-menu .ant-menu-title-content {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ding-admin-menu-label {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mobile drawer: wrap long labels instead of truncating */
+.ant-drawer .ding-admin-menu-label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
