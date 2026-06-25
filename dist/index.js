@@ -310,7 +310,7 @@ function ot(e, t) {
 		let r = e.Icon, i = r ? /* @__PURE__ */ K(r, {}) : void 0, a = nt(e), o = a && n ? /* @__PURE__ */ K(at, {
 			label: e.label,
 			title: a
-		}) : e.label, s = n ? { title: !1 } : a ? { title: a } : {};
+		}) : e.label, s = !n && a ? { title: a } : {};
 		return e.children?.length ? {
 			key: e.path,
 			icon: i,

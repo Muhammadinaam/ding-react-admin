@@ -20,13 +20,10 @@ export function navItemsToAntdItems(
         item.label
       );
 
-    // Expanded: NavMenuLabel tooltip only (`title: false` avoids native `title`
-    // on the DOM node). Collapsed: string title for the sider icon tooltip.
-    const itemTitle = showLabelTooltip
-      ? ({ title: false } as const)
-      : title
-        ? { title }
-        : {};
+    // Expanded: NavMenuLabel tooltip only (omit `title` to avoid native DOM tooltip).
+    // Collapsed: string title for the sider icon tooltip.
+    const itemTitle: { title?: string } =
+      !showLabelTooltip && title ? { title } : {};
 
     if (item.children?.length) {
       return {
