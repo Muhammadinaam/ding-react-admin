@@ -1,28 +1,53 @@
 # ding-react-admin
 
-**npm:** [`ding-react-admin`](https://www.npmjs.com/package/ding-react-admin)
+[![npm version](https://img.shields.io/npm/v/ding-react-admin.svg)](https://www.npmjs.com/package/ding-react-admin)
+[![license](https://img.shields.io/npm/l/ding-react-admin.svg)](https://github.com/Muhammadinaam/ding-react-admin/blob/main/LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/Muhammadinaam/ding-react-admin/ci.yml?branch=main)](https://github.com/Muhammadinaam/ding-react-admin/actions/workflows/ci.yml)
 
----
+Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
-## [Live demo →](https://muhammadinaam.github.io/ding-react-admin/)
+## Live demo
 
 [![Open playground](https://img.shields.io/badge/Try%20it-playground-1677ff?style=for-the-badge)](https://muhammadinaam.github.io/ding-react-admin/)
 
 Interactive demo on GitHub Pages — sign in with **`admin` / `admin`** or **`user` / `user`**.
 
----
+## Installation
 
-## Tutorial:
-[Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
+```bash
+npm install ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
+```
 
 ```bash
 yarn add ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
 ```
 
-## Installation
-Install details and peer versions: [docs/install.md](docs/install.md).
+Peer dependency versions and setup notes: [docs/install.md](docs/install.md).
 
-Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
+## Quick start
+
+Wrap your app with `AuthProvider`, then render `AdminApp` with navigation and routes:
+
+```tsx
+import { AdminApp, AuthProvider, createSessionStorageAuthAdapter } from "ding-react-admin";
+
+const navItems = [{ key: "home", label: "Home", path: "/" }];
+const routes = [{ path: "/", element: <div>Welcome</div> }];
+
+export function App() {
+  return (
+    <AuthProvider adapter={createSessionStorageAuthAdapter()}>
+      <AdminApp navItems={navItems} routes={routes} />
+    </AuthProvider>
+  );
+}
+```
+
+For CRUD pages, add `DataProvider` and `PermissionsProvider` — see [Getting started](#getting-started) and [docs/quick-start.md](docs/quick-start.md).
+
+## Tutorial
+
+[Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
 
 ## Features
 

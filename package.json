@@ -1,12 +1,32 @@
 {
   "name": "ding-react-admin",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",
+  "keywords": [
+    "react",
+    "admin",
+    "dashboard",
+    "antd",
+    "ant-design",
+    "crud",
+    "react-router",
+    "react-hook-form",
+    "data-grid",
+    "forms",
+    "typescript"
+  ],
+  "homepage": "https://muhammadinaam.github.io/ding-react-admin/",
+  "bugs": {
+    "url": "https://github.com/Muhammadinaam/ding-react-admin/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Muhammadinaam/ding-react-admin.git"
+  },
+  "publishConfig": {
+    "provenance": true
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
