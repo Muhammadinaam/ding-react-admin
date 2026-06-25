@@ -153,22 +153,28 @@ function Ue({ value: e, onChange: t, placeholder: n = "Search menu…", variant:
 			paddingInline: i.paddingSM,
 			paddingBlock: i.paddingXS
 		},
-		children: /* @__PURE__ */ K(N, {
-			allowClear: !0,
-			size: "small",
-			value: e,
-			onChange: (e) => {
-				t(e.target.value);
-			},
-			placeholder: n,
-			prefix: /* @__PURE__ */ K(J, { style: { color: a ? "rgba(255, 255, 255, 0.45)" : i.colorTextDescription } }),
-			"aria-label": n,
-			styles: { input: a ? { color: "rgba(255, 255, 255, 0.88)" } : void 0 },
-			style: {
-				background: a ? "rgba(255, 255, 255, 0.08)" : i.colorFillTertiary,
-				borderColor: "transparent",
-				boxShadow: "none"
-			}
+		children: /* @__PURE__ */ K(T, {
+			theme: a ? { token: { colorTextPlaceholder: "rgba(255, 255, 255, 0.45)" } } : void 0,
+			children: /* @__PURE__ */ K(N, {
+				allowClear: !0,
+				size: "small",
+				value: e,
+				onChange: (e) => {
+					t(e.target.value);
+				},
+				placeholder: n,
+				prefix: /* @__PURE__ */ K(J, { style: { color: a ? "rgba(255, 255, 255, 0.45)" : i.colorTextDescription } }),
+				"aria-label": n,
+				styles: {
+					input: a ? { color: "rgba(255, 255, 255, 0.88)" } : void 0,
+					clear: a ? { color: "rgba(255, 255, 255, 0.45)" } : void 0
+				},
+				style: {
+					background: a ? "rgba(255, 255, 255, 0.08)" : i.colorFillTertiary,
+					borderColor: "transparent",
+					boxShadow: "none"
+				}
+			})
 		})
 	});
 }
@@ -3135,9 +3141,7 @@ function mi(e, t, n = "name", r = "id", i, o = {}) {
 //#region src/crud/fields/ReferenceInputActions.tsx
 function hi({ reference: e, referenceForm: t, referencePermissions: n, referenceTitle: r, referenceDefaultValues: i, referenceModalWidth: a, selectedId: o, disabled: s, onCreated: c, onUpdated: l }) {
 	let d = Y(), f = r ?? e, p = !!(e && t) && X(d, n, "add"), m = !!(e && t && o != null && o !== "") && X(d, n, "change"), [h, g] = u(null);
-	if (!p && !m) return null;
-	let _ = () => g(null);
-	return /* @__PURE__ */ q(G, { children: [/* @__PURE__ */ q(R, {
+	return !p && !m ? null : /* @__PURE__ */ q(G, { children: [/* @__PURE__ */ q(R, {
 		size: 4,
 		children: [p ? /* @__PURE__ */ K(H, {
 			title: `Add ${f ?? "record"}`,
@@ -3161,14 +3165,14 @@ function hi({ reference: e, referenceForm: t, referencePermissions: n, reference
 	}), e && t && h != null ? /* @__PURE__ */ K(_r, {
 		resource: e,
 		editId: h,
-		onClose: _,
+		onClose: () => g(null),
 		title: h === "new" ? `New ${f ?? e}` : `Edit ${f ?? e}`,
 		permissions: n,
 		defaultValues: h === "new" ? i : void 0,
 		width: a,
 		onSuccess: (e) => {
 			let t = e;
-			h === "new" ? c?.(t) : l?.(t), _();
+			h === "new" ? c?.(t) : l?.(t);
 		},
 		children: t
 	}) : null] });

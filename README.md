@@ -2,8 +2,15 @@
 
 **npm:** [`ding-react-admin`](https://www.npmjs.com/package/ding-react-admin)
 
-## Live demo:
-[playground on GitHub Pages](https://muhammadinaam.github.io/ding-react-admin/) (login: `admin` / `admin` or `user` / `user`)
+---
+
+## [Live demo →](https://muhammadinaam.github.io/ding-react-admin/)
+
+[![Open playground](https://img.shields.io/badge/Try%20it-playground-1677ff?style=for-the-badge)](https://muhammadinaam.github.io/ding-react-admin/)
+
+Interactive demo on GitHub Pages — sign in with **`admin` / `admin`** or **`user` / `user`**.
+
+---
 
 ## Tutorial:
 [Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
@@ -12,21 +19,48 @@
 yarn add ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
 ```
 
+## Installation
 Install details and peer versions: [docs/install.md](docs/install.md).
 
 Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
+
+## Features
+
+- **Declarative CRUD** — describe list and form pages in JSX; field `source` names map to your API
+- **List tables** with column sorting, pagination, and URL-synced query state
+- **Filters** — text, number, boolean, date, select, and reference lookups on list pages
+- **Page forms** and **modal forms** (`ResourceForm`, `ResourceFormModal`) with shared create/edit logic
+- **Tabbed forms** (`FormTabs`) and **stepped forms** (`FormSteps`) for long or wizard-style records
+- **Reference / lookup fields** with inline **create** and **edit** actions in a modal
+- **Inline nested rows** — tabular (`InlineFormSet`) and stacked layouts for related records
+- **Bulk actions** — Django-style row selection and batch operations
+- **Built-in fields** — text, number, boolean, date, select, password, image, file, reference, reference-many
+- **Permissions** — gate list/form actions and nav items per resource (`useCan`, `usePermissions`)
+- **Auth & routing** — `AuthProvider`, login page, `Protected` / `GuestOnly` route guards
+- **Theme & density** — light/dark mode and compact/comfortable layout switches
+- **Validation errors** — map API responses to field errors (Django REST, .NET, Node helpers included)
+- **Data layer** — `DataProvider` contract plus REST and in-memory handler factories
+- **Uploads** — image/file fields with `FormData` submit support
 
 ## Screenshots
 
 From the [playground demo](https://muhammadinaam.github.io/ding-react-admin/):
 
-| List with filters | Tabbed form page |
-| --- | --- |
-| ![List page with filters](docs/assets/list-page-with-filters.png) | ![Non-modal tabbed form](docs/assets/non-modal-form-tabbed.png) |
+**List with filters**
 
-| Stepped modal form | Login |
-| --- | --- |
-| ![Modal form with steps](docs/assets/modal-form-stepped.png) | ![Login page](docs/assets/login.png) |
+![List page with filters](docs/assets/list-page-with-filters.png)
+
+**Tabbed form page**
+
+![Non-modal tabbed form](docs/assets/non-modal-form-tabbed.png)
+
+**Stepped modal form**
+
+![Modal form with steps](docs/assets/modal-form-stepped.png)
+
+**Login**
+
+![Login page](docs/assets/login.png)
 
 ## Declarative CRUD
 

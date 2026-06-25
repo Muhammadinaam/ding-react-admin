@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, theme } from "antd";
+import { ConfigProvider, Input, theme } from "antd";
 import type { ChangeEvent } from "react";
 
 export type NavMenuSearchProps = {
@@ -31,35 +31,46 @@ export function NavMenuSearch({
         paddingBlock: token.paddingXS,
       }}
     >
-      <Input
-        allowClear
-        size="small"
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        prefix={
-          <SearchOutlined
-            style={{
-              color: onDark
-                ? "rgba(255, 255, 255, 0.45)"
-                : token.colorTextDescription,
-            }}
-          />
+      <ConfigProvider
+        theme={
+          onDark
+            ? { token: { colorTextPlaceholder: "rgba(255, 255, 255, 0.45)" } }
+            : undefined
         }
-        aria-label={placeholder}
-        styles={{
-          input: onDark
-            ? { color: "rgba(255, 255, 255, 0.88)" }
-            : undefined,
-        }}
-        style={{
-          background: onDark
-            ? "rgba(255, 255, 255, 0.08)"
-            : token.colorFillTertiary,
-          borderColor: "transparent",
-          boxShadow: "none",
-        }}
-      />
+      >
+        <Input
+          allowClear
+          size="small"
+          value={value}
+          onChange={handleChange}
+          placeholder={placeholder}
+          prefix={
+            <SearchOutlined
+              style={{
+                color: onDark
+                  ? "rgba(255, 255, 255, 0.45)"
+                  : token.colorTextDescription,
+              }}
+            />
+          }
+          aria-label={placeholder}
+          styles={{
+            input: onDark
+              ? { color: "rgba(255, 255, 255, 0.88)" }
+              : undefined,
+            clear: onDark
+              ? { color: "rgba(255, 255, 255, 0.45)" }
+              : undefined,
+          }}
+          style={{
+            background: onDark
+              ? "rgba(255, 255, 255, 0.08)"
+              : token.colorFillTertiary,
+            borderColor: "transparent",
+            boxShadow: "none",
+          }}
+        />
+      </ConfigProvider>
     </div>
   );
 }
