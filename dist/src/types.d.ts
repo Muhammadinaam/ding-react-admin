@@ -73,6 +73,13 @@ export type AdminLayoutProps = {
     loginPath?: string;
     /** localStorage key for sider collapsed state. Default `ding-react-admin-sider-collapsed`. */
     siderCollapsedStorageKey?: string;
+    /**
+     * Sidebar menu search. Enabled by default; pass `false` to hide.
+     * Use an object to customize the placeholder.
+     */
+    navSearch?: boolean | {
+        placeholder?: string;
+    };
 };
 export type { AuthPageLayoutProps } from './layouts/AuthPageLayout';
 export type { AuthAlternateLinkProps } from './components/AuthAlternateLink';

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import type { BaseSourceProps, ChoiceOption, ReferenceProps } from "../types";
 import { useRegisterFilter } from "../context/FilterContext";
 import { useChoices } from "../utils/useChoices";
+import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 
 export type SelectFilterProps = BaseSourceProps & {
   choices: ChoiceOption[];
@@ -115,6 +116,7 @@ function ReferenceFilterInput({
         value: o.value as string | number,
       }))}
       loading={loading}
+      notFoundContent={referenceSelectNotFoundContent(loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}

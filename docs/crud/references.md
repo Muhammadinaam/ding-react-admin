@@ -33,7 +33,7 @@ combineResourceHandlers({
 | User types (`search`) | `getList` with `filter.q` |
 | Edit form with selected id(s) | See [Showing selected labels](#showing-selected-labels) |
 
-While the list loads, the Select shows a spinner. Only the selected label(s) appear in the dropdown until the fetch completes.
+While the list loads, the Select shows a spinner and **does not** flash "No data" in the dropdown (`notFoundContent` is suppressed until loading finishes).
 
 Opt back into eager loading (e.g. small static lists):
 
@@ -133,6 +133,44 @@ With `fetchSelected={false}` and no embedded data, the raw id is shown until the
 | `cache` | `!lazy` | When `false`, refetch on every dropdown open |
 | `recordSource` | — | Form key with embedded related object(s) |
 | `fetchSelected` | `true` | Call `getOne` for unresolved primitive ids |
+| `referenceForm` | — | Form fields for add/edit modal; omit to hide buttons |
+| `referencePermissions` | — | `add` / `change` permission strings for the buttons |
+| `referenceTitle` | — | Modal title segment |
+| `referenceActions` | `true` | Set `false` to hide add/edit buttons |
+
+## Add / edit in modal (Django admin–style)
+
+Pass `referenceForm` and `referencePermissions` on the field. When the user has `add` / `change` permission, `ReferenceField` shows **+** (create) and **edit** (update selected) beside the Select. `ReferenceManyField` shows **+** only.
+
+```tsx
+<ReferenceField
+  source="brandId"
+  reference="brands"
+  optionLabel="name"
+  search
+  referenceForm={<TextField source="name" label="Name" required />}
+  referencePermissions={BRAND_PERMS}
+  referenceTitle="Brand"
+/>
+```
+
+After create, the new record is selected automatically and the option list reloads. After edit, labels refresh. Set `referenceActions={false}` to hide the buttons.
+
+If the same reference appears on many forms, wrap it once in your app (no library provider needed):
+
+```tsx
+function BrandReferenceField(props: Omit<ReferenceFieldProps, "reference" | "referenceForm" | "referencePermissions">) {
+  return (
+    <ReferenceField
+      reference="brands"
+      referenceForm={<TextField source="name" label="Name" required />}
+      referencePermissions={BRAND_PERMS}
+      referenceTitle="Brand"
+      {...props}
+    />
+  );
+}
+```
 
 ## Columns and filters
 

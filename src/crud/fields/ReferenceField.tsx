@@ -8,9 +8,13 @@ import type {
   FieldRules,
   ReferenceProps,
 } from "../types";
-import { valueAsId } from "../utils/choiceSelectionUtils";
+import { valueAsId, resolveOptionLabel } from "../utils/choiceSelectionUtils";
+import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
+import { ReferenceInputActions } from "./ReferenceInputActions";
+import type { ResourcePermissions } from "../../permissions/resourcePermissions";
+import type { ReactNode } from "react";
 
 export type ReferenceFieldProps = BaseSourceProps &
   ReferenceProps & {
@@ -29,6 +33,15 @@ export type ReferenceFieldProps = BaseSourceProps &
       option: ChoiceOption | undefined,
       meta: { name: string },
     ) => void;
+    /** Form fields shown in the add/edit modal. Omit to hide action buttons. */
+    referenceForm?: ReactNode;
+    /** Permissions for add/edit buttons (`add` and `change` slots). */
+    referencePermissions?: ResourcePermissions;
+    referenceTitle?: string;
+    referenceDefaultValues?: Record<string, unknown>;
+    referenceModalWidth?: number;
+    /** When false, hide add/edit buttons. Default true when `referenceForm` is set. */
+    referenceActions?: boolean;
   };
 
 type ReferenceFieldSelectProps = Omit<
@@ -58,13 +71,19 @@ function ReferenceFieldSelect({
   onChange,
   fieldName,
   selectedRecords,
+  referenceForm,
+  referencePermissions,
+  referenceTitle,
+  referenceDefaultValues,
+  referenceModalWidth,
+  referenceActions = true,
 }: ReferenceFieldSelectProps) {
   const [searchText, setSearchText] = useState<string | undefined>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const active = dropdownOpen || Boolean(searchText);
   const selectValue = valueAsId(value, optionValue);
 
-  const { options, loading, optionForValue } = useChoices(
+  const { options, loading, optionForValue, reload } = useChoices(
     choices,
     reference,
     optionLabel,
@@ -88,7 +107,22 @@ function ReferenceFieldSelect({
     [options],
   );
 
-  return (
+  const applyRecord = (record: Record<string, unknown>) => {
+    const id = record[optionValue];
+    onChange(id);
+    onValueChange?.(
+      id,
+      {
+        label: resolveOptionLabel(record, optionLabel),
+        value: id,
+        record,
+      },
+      { name: fieldName },
+    );
+    void reload();
+  };
+
+  const select = (
     <Select
       value={selectValue}
       onChange={(next) => {
@@ -97,6 +131,7 @@ function ReferenceFieldSelect({
       }}
       options={selectOptions}
       loading={loading}
+      notFoundContent={referenceSelectNotFoundContent(loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
@@ -109,6 +144,26 @@ function ReferenceFieldSelect({
       optionFilterProp="label"
       style={{ width: "100%", minWidth: 160, ...inputStyle }}
     />
+  );
+
+  if (!referenceActions) return select;
+
+  return (
+    <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "flex-start" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>{select}</div>
+      <ReferenceInputActions
+        reference={reference}
+        referenceForm={referenceForm}
+        referencePermissions={referencePermissions}
+        referenceTitle={referenceTitle}
+        referenceDefaultValues={referenceDefaultValues}
+        referenceModalWidth={referenceModalWidth}
+        selectedId={selectValue}
+        disabled={disabled}
+        onCreated={applyRecord}
+        onUpdated={() => void reload()}
+      />
+    </div>
   );
 }
 
@@ -131,6 +186,12 @@ export function ReferenceField({
   lazy = true,
   recordSource,
   fetchSelected = true,
+  referenceForm,
+  referencePermissions,
+  referenceTitle,
+  referenceDefaultValues,
+  referenceModalWidth,
+  referenceActions = true,
 }: ReferenceFieldProps) {
   const embeddedRecord = useWatch({
     name: recordSource ?? "",
@@ -163,6 +224,12 @@ export function ReferenceField({
           onChange={onChange}
           fieldName={fieldName}
           selectedRecords={recordSource ? embeddedRecord : undefined}
+          referenceForm={referenceForm}
+          referencePermissions={referencePermissions}
+          referenceTitle={referenceTitle}
+          referenceDefaultValues={referenceDefaultValues}
+          referenceModalWidth={referenceModalWidth}
+          referenceActions={referenceActions}
         />
       )}
     </FieldWrapper>

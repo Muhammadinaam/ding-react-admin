@@ -20,6 +20,7 @@ import {
 } from "ding-react-admin";
 import { Button } from "antd";
 import type { Product } from "../../api/memoryApi";
+import { BRAND_PERMS, CATEGORY_PERMS } from "../../api/playgroundPermissions";
 import { PRODUCT_RESOURCE, PRODUCT_PERMS } from "./productData";
 
 type ProductRow = Product & {
@@ -112,12 +113,18 @@ const productFormFields = (
       reference="brands"
       optionLabel="name"
       required
+      referenceForm={<TextField source="name" label="Name" required />}
+      referencePermissions={BRAND_PERMS}
+      referenceTitle="Brand"
     />
     <ReferenceManyField
       source="categoryIds"
       label="Categories"
       reference="categories"
       optionLabel="name"
+      referenceForm={<TextField source="name" label="Name" required />}
+      referencePermissions={CATEGORY_PERMS}
+      referenceTitle="Category"
     />
     <ImageField source="image" label="Product image" clearable />
     <FileField

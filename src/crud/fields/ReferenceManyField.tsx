@@ -3,8 +3,12 @@ import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { BaseSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
+import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
+import { ReferenceInputActions } from "./ReferenceInputActions";
+import type { ResourcePermissions } from "../../permissions/resourcePermissions";
+import type { ReactNode } from "react";
 
 export type ReferenceManyFieldProps = BaseSourceProps &
   ReferenceProps & {
@@ -14,6 +18,13 @@ export type ReferenceManyFieldProps = BaseSourceProps &
     search?: boolean;
     allowClear?: boolean;
     hideLabel?: boolean;
+    referenceForm?: ReactNode;
+    referencePermissions?: ResourcePermissions;
+    referenceTitle?: string;
+    referenceDefaultValues?: Record<string, unknown>;
+    referenceModalWidth?: number;
+    /** When false, hide add button even if catalog defines a form. Default true. */
+    referenceActions?: boolean;
   };
 
 type ReferenceManyFieldSelectProps = Omit<
@@ -39,13 +50,19 @@ function ReferenceManyFieldSelect({
   onChange,
   disabled,
   selectedRecords,
+  referenceForm,
+  referencePermissions,
+  referenceTitle,
+  referenceDefaultValues,
+  referenceModalWidth,
+  referenceActions = true,
 }: ReferenceManyFieldSelectProps) {
   const [searchText, setSearchText] = useState<string | undefined>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const active = dropdownOpen || Boolean(searchText);
   const selectValue = valuesAsIds(value, optionValue);
 
-  const { options, loading } = useChoices(
+  const { options, loading, reload } = useChoices(
     choices,
     reference,
     optionLabel,
@@ -69,13 +86,14 @@ function ReferenceManyFieldSelect({
     [options],
   );
 
-  return (
+  const select = (
     <Select
       mode="multiple"
       value={selectValue}
       onChange={onChange}
       options={selectOptions}
       loading={loading}
+      notFoundContent={referenceSelectNotFoundContent(loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
@@ -88,6 +106,33 @@ function ReferenceManyFieldSelect({
       optionFilterProp="label"
       style={{ width: "100%" }}
     />
+  );
+
+  if (!referenceActions) return select;
+
+  return (
+    <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "flex-start" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>{select}</div>
+      <ReferenceInputActions
+        reference={reference}
+        referenceForm={referenceForm}
+        referencePermissions={referencePermissions}
+        referenceTitle={referenceTitle}
+        referenceDefaultValues={referenceDefaultValues}
+        referenceModalWidth={referenceModalWidth}
+        disabled={disabled}
+        onCreated={(record) => {
+          const id = record[optionValue];
+          const current = Array.isArray(selectValue) ? selectValue : [];
+          if (current.some((v) => v === id)) {
+            void reload();
+            return;
+          }
+          onChange([...current, id]);
+          void reload();
+        }}
+      />
+    </div>
   );
 }
 
@@ -107,6 +152,12 @@ export function ReferenceManyField({
   lazy = true,
   recordSource,
   fetchSelected = true,
+  referenceForm,
+  referencePermissions,
+  referenceTitle,
+  referenceDefaultValues,
+  referenceModalWidth,
+  referenceActions = true,
 }: ReferenceManyFieldProps) {
   const embeddedRecords = useWatch({
     name: recordSource ?? "",
@@ -136,6 +187,12 @@ export function ReferenceManyField({
           onChange={onChange}
           disabled={disabled}
           selectedRecords={recordSource ? embeddedRecords : undefined}
+          referenceForm={referenceForm}
+          referencePermissions={referencePermissions}
+          referenceTitle={referenceTitle}
+          referenceDefaultValues={referenceDefaultValues}
+          referenceModalWidth={referenceModalWidth}
+          referenceActions={referenceActions}
         />
       )}
     </FieldWrapper>

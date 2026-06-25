@@ -38,6 +38,8 @@ return combineResourceHandlers(
 
 Form validation demo: duplicate product SKU or invoice line quantity `0` (`parseDjangoDRFFormErrors` in `playgroundDataProvider.ts`).
 
+The product form passes `referenceForm` + `referencePermissions` on brand/category fields for Django admin–style add modals.
+
 **Removing a resource:** delete its folder, remove one line from the composer, and drop routes + nav entries.
 
 For a **REST API**, use the same folder layout with `createRestResourceHandlers` — see [tutorial-one-entity.md](tutorial-one-entity.md). Pages keep `resource={PRODUCT_RESOURCE}` and `pathPrefix="/products"` unchanged.

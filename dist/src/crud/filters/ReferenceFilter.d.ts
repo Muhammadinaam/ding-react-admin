@@ -8,6 +8,6 @@ export type ReferenceFilterProps = BaseSourceProps & ReferenceProps & {
     multiple?: boolean;
     search?: boolean;
 };
-export declare function ReferenceFilter({ source, label, reference, choices, optionLabel, optionValue, multiple, search, }: ReferenceFilterProps): null;
+export declare function ReferenceFilter({ source, label, reference, choices, optionLabel, optionValue, multiple, search, lazy, fetchSelected, }: ReferenceFilterProps): null;
 export declare function ReferenceManyFilter(props: ReferenceFilterProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceFilter.d.ts.map

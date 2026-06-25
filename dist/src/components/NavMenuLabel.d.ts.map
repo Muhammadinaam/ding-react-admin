@@ -1,0 +1,1 @@
+{"version":3,"file":"NavMenuLabel.d.ts","sourceRoot":"","sources":["../../../src/components/NavMenuLabel.tsx"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AACvC,OAAO,eAAe,CAAC;AAEvB,MAAM,MAAM,iBAAiB,GAAG;IAC9B,KAAK,EAAE,SAAS,CAAC;IACjB,yCAAyC;IACzC,KAAK,EAAE,MAAM,CAAC;CACf,CAAC;AAEF,wBAAgB,YAAY,CAAC,EAAE,KAAK,EAAE,KAAK,EAAE,EAAE,iBAAiB,2CAe/D"}
