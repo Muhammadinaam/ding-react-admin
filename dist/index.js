@@ -1739,41 +1739,47 @@ function mr({ dp: e, resource: t, id: n, isNew: r, form: i, message: o, defaultV
 		formVersion: f
 	};
 }
-function hr({ dp: e, resource: t, id: n, isNew: r, form: i, message: o, payloadFieldsRef: s, inlineRegistryRef: c, setGlobalErrors: l, onSuccess: u }) {
-	return a(async (a) => {
-		l([]);
-		try {
-			let i = ar(a, Array.from(s.current), c.current.values()), l;
-			if (r) l = (await e.create(t, i)).data, o.success("Created");
-			else if (n) l = (await e.update(t, {
-				id: n,
-				data: i
-			})).data, o.success("Updated");
-			else return;
-			u?.(l);
-		} catch (n) {
-			let { handled: a, globalErrors: u } = await fr(e, i, n, {
-				resource: t,
-				mutation: r ? "create" : "update",
-				inlineFieldPaths: Array.from(c.current.keys())
-			}, {
-				payloadFields: s.current,
-				inlineRegistry: c.current.values()
-			});
-			a ? (l(u), o.error(u[0] ?? "Save failed.")) : (l([]), o.error(n instanceof Error ? n.message : "Save failed"));
-		}
-	}, [
-		e,
-		t,
-		n,
-		r,
-		i,
-		o,
-		s,
-		c,
-		l,
-		u
-	]);
+function hr({ dp: e, resource: t, id: n, isNew: r, form: i, message: o, payloadFieldsRef: s, inlineRegistryRef: c, setGlobalErrors: l, onSuccess: d }) {
+	let [f, p] = u(!1);
+	return {
+		onSubmit: a(async (a) => {
+			l([]), p(!0);
+			try {
+				let i = ar(a, Array.from(s.current), c.current.values()), l;
+				if (r) l = (await e.create(t, i)).data, o.success("Created");
+				else if (n) l = (await e.update(t, {
+					id: n,
+					data: i
+				})).data, o.success("Updated");
+				else return;
+				d?.(l);
+			} catch (n) {
+				let { handled: a, globalErrors: u } = await fr(e, i, n, {
+					resource: t,
+					mutation: r ? "create" : "update",
+					inlineFieldPaths: Array.from(c.current.keys())
+				}, {
+					payloadFields: s.current,
+					inlineRegistry: c.current.values()
+				});
+				a ? (l(u), o.error(u[0] ?? "Save failed.")) : (l([]), o.error(n instanceof Error ? n.message : "Save failed"));
+			} finally {
+				p(!1);
+			}
+		}, [
+			e,
+			t,
+			n,
+			r,
+			i,
+			o,
+			s,
+			c,
+			l,
+			d
+		]),
+		saving: f
+	};
 }
 //#endregion
 //#region src/crud/ResourceRecordForm.tsx
@@ -1787,7 +1793,7 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 		message: _,
 		defaultValues: i,
 		enabled: a
-	}), D = hr({
+	}), { onSubmit: D, saving: O } = hr({
 		dp: g,
 		resource: e,
 		id: h,
@@ -1798,11 +1804,15 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 		inlineRegistryRef: y,
 		setGlobalErrors: S,
 		onSuccess: f
-	}), O = /* @__PURE__ */ K(C, {
-		disabled: T,
+	}), k = T || O, j = () => {
+		w.handleSubmit(D, () => {
+			_.warning("Please fix the errors below.");
+		})();
+	}, M = /* @__PURE__ */ K(C, {
+		disabled: k,
 		onClick: c ? void 0 : s,
 		children: "Cancel"
-	}), k = /* @__PURE__ */ K(Nn, {
+	}), N = /* @__PURE__ */ K(Nn, {
 		resource: e,
 		isNew: m,
 		children: /* @__PURE__ */ K(zn, {
@@ -1811,7 +1821,7 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 				registryRef: y,
 				children: /* @__PURE__ */ q("div", {
 					style: { position: "relative" },
-					children: [T && p === "overlay" ? /* @__PURE__ */ K("div", {
+					children: [k && p === "overlay" ? /* @__PURE__ */ K("div", {
 						style: {
 							position: "absolute",
 							inset: 0,
@@ -1826,10 +1836,10 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 						key: E
 					}, /* @__PURE__ */ q(A, {
 						layout: "vertical",
-						onFinish: () => void w.handleSubmit(D)(),
+						onFinish: j,
 						style: p === "overlay" ? {
-							opacity: T ? .4 : 1,
-							pointerEvents: T ? "none" : void 0
+							opacity: k ? .4 : 1,
+							pointerEvents: k ? "none" : void 0
 						} : void 0,
 						children: [
 							/* @__PURE__ */ K(qn, { errors: b }),
@@ -1842,12 +1852,13 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 								children: /* @__PURE__ */ q(R, { children: [/* @__PURE__ */ K(C, {
 									type: "primary",
 									htmlType: "submit",
-									disabled: T || !o,
+									loading: O,
+									disabled: k || !o,
 									children: "Save"
 								}), c ? /* @__PURE__ */ K(d, {
 									to: c,
-									children: O
-								}) : O] })
+									children: M
+								}) : M] })
 							})
 						]
 					}))]
@@ -1855,7 +1866,7 @@ function gr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 			})
 		})
 	});
-	return T && p === "replace" ? /* @__PURE__ */ K(re, {}) : k;
+	return T && !O && p === "replace" ? /* @__PURE__ */ K(re, {}) : N;
 }
 //#endregion
 //#region src/crud/ResourceFormModal.tsx
@@ -1868,19 +1879,20 @@ function _r({ resource: e, editId: t, onClose: n, children: r, title: i, permiss
 		footer: null,
 		destroyOnHidden: !0,
 		width: s,
-		children: /* @__PURE__ */ K(gr, {
+		maskClosable: !1,
+		children: /* @__PURE__ */ K(x, { children: /* @__PURE__ */ K(gr, {
 			resource: e,
 			id: t ?? void 0,
 			enabled: u,
-			loadingMode: "replace",
+			loadingMode: "overlay",
 			defaultValues: o,
 			canSave: p,
 			onCancel: n,
 			onSuccess: (e) => {
-				c?.(e), c || n();
+				c?.(e), n();
 			},
 			children: r
-		})
+		}) })
 	});
 }
 //#endregion

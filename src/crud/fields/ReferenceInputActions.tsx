@@ -96,7 +96,6 @@ export function ReferenceInputActions({
             } else {
               onUpdated?.(row);
             }
-            closeModal();
           }}
         >
           {referenceForm}

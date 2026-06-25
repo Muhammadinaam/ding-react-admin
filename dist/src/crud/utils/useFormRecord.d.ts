@@ -36,6 +36,9 @@ type SubmitOptions<T extends FieldValues & {
 /** Save: `buildFormPayload` → clean inline rows → one `create` or `update`. */
 export declare function useFormRecordSave<T extends FieldValues & {
     id?: unknown;
-}>({ dp, resource, id, isNew, form, message, payloadFieldsRef, inlineRegistryRef, setGlobalErrors, onSuccess, }: SubmitOptions<T>): (values: T) => Promise<void>;
+}>({ dp, resource, id, isNew, form, message, payloadFieldsRef, inlineRegistryRef, setGlobalErrors, onSuccess, }: SubmitOptions<T>): {
+    onSubmit: (values: T) => Promise<void>;
+    saving: boolean;
+};
 export {};
 //# sourceMappingURL=useFormRecord.d.ts.map

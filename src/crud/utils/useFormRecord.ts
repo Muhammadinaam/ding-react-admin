@@ -107,9 +107,12 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
   setGlobalErrors,
   onSuccess,
 }: SubmitOptions<T>) {
-  return useCallback(
+  const [saving, setSaving] = useState(false);
+
+  const onSubmit = useCallback(
     async (values: T) => {
       setGlobalErrors([]);
+      setSaving(true);
       try {
         const raw = values as Record<string, unknown>;
         const body = buildResourceFormSubmitBody(
@@ -154,6 +157,8 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
           setGlobalErrors([]);
           message.error(e instanceof Error ? e.message : "Save failed");
         }
+      } finally {
+        setSaving(false);
       }
     },
     [
@@ -169,4 +174,6 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
       onSuccess,
     ],
   );
+
+  return { onSubmit, saving };
 }

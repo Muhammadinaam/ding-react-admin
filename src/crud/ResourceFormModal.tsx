@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { App, Modal } from "antd";
 import { type FieldValues } from "react-hook-form";
 import { type ReactNode } from "react";
 import { usePermissions } from "../context/PermissionsProvider";
@@ -50,22 +50,26 @@ export function ResourceFormModal({
       footer={null}
       destroyOnHidden
       width={width}
+      maskClosable={false}
     >
-      <ResourceRecordForm<FieldValues>
-        resource={resource}
-        id={editId ?? undefined}
-        enabled={open}
-        loadingMode="replace"
-        defaultValues={defaultValues}
-        canSave={canSave}
-        onCancel={onClose}
-        onSuccess={(record) => {
-          onSuccess?.(record);
-          if (!onSuccess) onClose();
-        }}
-      >
-        {children}
-      </ResourceRecordForm>
+      {/* Nested App so message/toast works when Modal is portaled to document.body. */}
+      <App>
+        <ResourceRecordForm<FieldValues>
+          resource={resource}
+          id={editId ?? undefined}
+          enabled={open}
+          loadingMode="overlay"
+          defaultValues={defaultValues}
+          canSave={canSave}
+          onCancel={onClose}
+          onSuccess={(record) => {
+            onSuccess?.(record);
+            onClose();
+          }}
+        >
+          {children}
+        </ResourceRecordForm>
+      </App>
     </Modal>
   );
 }

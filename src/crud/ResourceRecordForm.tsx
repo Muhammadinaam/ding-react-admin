@@ -72,7 +72,7 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
     enabled,
   });
 
-  const onSubmit = useFormRecordSave({
+  const { onSubmit, saving } = useFormRecordSave({
     dp,
     resource,
     id: recordId,
@@ -85,8 +85,16 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
     onSuccess,
   });
 
+  const busy = loading || saving;
+
+  const handleFinish = () => {
+    void form.handleSubmit(onSubmit, () => {
+      message.warning("Please fix the errors below.");
+    })();
+  };
+
   const cancelButton = (
-    <Button disabled={loading} onClick={cancelHref ? undefined : onCancel}>
+    <Button disabled={busy} onClick={cancelHref ? undefined : onCancel}>
       Cancel
     </Button>
   );
@@ -96,7 +104,7 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
       <PayloadFieldsProvider fieldsRef={payloadFieldsRef}>
         <InlineFieldsRegistryProvider registryRef={inlineRegistryRef}>
           <div style={{ position: "relative" }}>
-            {loading && loadingMode === "overlay" ? (
+            {busy && loadingMode === "overlay" ? (
               <div
                 style={{
                   position: "absolute",
@@ -113,12 +121,12 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
             <FormProvider {...form} key={formVersion}>
               <Form
                 layout="vertical"
-                onFinish={() => void form.handleSubmit(onSubmit)()}
+                onFinish={handleFinish}
                 style={
                   loadingMode === "overlay"
                     ? {
-                        opacity: loading ? 0.4 : 1,
-                        pointerEvents: loading ? "none" : undefined,
+                        opacity: busy ? 0.4 : 1,
+                        pointerEvents: busy ? "none" : undefined,
                       }
                     : undefined
                 }
@@ -130,7 +138,8 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
                     <Button
                       type="primary"
                       htmlType="submit"
-                      disabled={loading || !canSave}
+                      loading={saving}
+                      disabled={busy || !canSave}
                     >
                       Save
                     </Button>
@@ -149,7 +158,7 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
     </FormMetaProvider>
   );
 
-  if (loading && loadingMode === "replace") {
+  if (loading && !saving && loadingMode === "replace") {
     return <Spin />;
   }
 
