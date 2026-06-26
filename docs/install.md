@@ -1,6 +1,6 @@
 # Install
 
-[`ding-react-admin` on npm](https://www.npmjs.com/package/ding-react-admin) ships as a prebuilt library (`dist/index.js`). **No Vite alias or other bundler config is required** — import it like any other package.
+[`ding-react-admin` on npm](https://www.npmjs.com/package/ding-react-admin) ships as a prebuilt library (`dist/index.js`). **No Vite alias or other bundler config is required** — import it like any other package. Component styles (scrollbars, nav menu labels) are bundled automatically when you import from `ding-react-admin`; your bundler must process CSS imports from `node_modules` (Vite and webpack do this by default). If styles are missing, add `import "ding-react-admin/style.css"` once in your app entry.
 
 ## One-shot install (recommended)
 

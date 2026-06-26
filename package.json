@@ -1,6 +1,6 @@
 {
   "name": "ding-react-admin",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "type": "module",
   "license": "MIT",
   "description": "Composable admin shell (Ant Design + React Router): quick-start AdminApp or build your own layout.",
@@ -31,11 +31,16 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css",
+    "dist/index.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./style.css": "./dist/index.css"
   },
   "files": [
     "dist",
@@ -73,6 +78,7 @@
     "typescript": "~6.0.2",
     "vite": "^8.0.9",
     "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-lib-inject-css": "^2.2.2",
     "vitest": "^3.2.4"
   },
   "dependencies": {}
