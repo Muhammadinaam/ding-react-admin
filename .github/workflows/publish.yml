@@ -12,10 +12,11 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      # checkout >= 6.0.2 fixes detached-HEAD on release events (actions/checkout#2280)
+      - name: Checkout release tag
+        uses: actions/checkout@v6.0.2
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: refs/tags/${{ github.event.release.tag_name }}
 
       - name: Setup Node
         uses: actions/setup-node@v5

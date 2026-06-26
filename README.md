@@ -1,8 +1,8 @@
 # ding-react-admin
 
 [![npm version](https://img.shields.io/npm/v/ding-react-admin.svg)](https://www.npmjs.com/package/ding-react-admin)
-[![license](https://img.shields.io/npm/l/ding-react-admin.svg)](https://github.com/Muhammadinaam/ding-react-admin/blob/main/LICENSE)
-[![build](https://img.shields.io/github/actions/workflow/status/Muhammadinaam/ding-react-admin/ci.yml?branch=main)](https://github.com/Muhammadinaam/ding-react-admin/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/ding-react-admin.svg)](https://github.com/Muhammadinaam/ding-react-admin/blob/master/LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/Muhammadinaam/ding-react-admin/ci.yml?branch=master)](https://github.com/Muhammadinaam/ding-react-admin/actions/workflows/ci.yml)
 
 Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
