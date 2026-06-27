@@ -6,9 +6,13 @@
 
 Composable admin shell for React apps: **Ant Design 6** layout, **CRUD field system** (lists, forms, filters, inlines, bulk actions), **theme/density** controls, **`AuthProvider`** + **`useAuth`**, **data / permissions providers** (react-admin–style naming, intentionally small), and **React Router** helpers.
 
-## Live demo
+# -> Live demo
 
 [![Open playground](https://img.shields.io/badge/Try%20it-playground-1677ff?style=for-the-badge)](https://muhammadinaam.github.io/ding-react-admin/)
+
+# -> Tutorial
+
+[Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
 
 Interactive demo on GitHub Pages — sign in with **`admin` / `admin`** or **`user` / `user`**.
 
@@ -44,10 +48,6 @@ export function App() {
 ```
 
 For CRUD pages, add `DataProvider` and `PermissionsProvider` — see [Getting started](#getting-started) and [docs/quick-start.md](docs/quick-start.md).
-
-## Tutorial
-
-[Build an admin app and add a Users page](docs/tutorial-one-entity.md) — step-by-step from `yarn create vite` through CRUD and routes.
 
 ## Features
 
