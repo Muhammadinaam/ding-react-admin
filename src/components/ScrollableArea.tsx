@@ -33,6 +33,7 @@ export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
         className={["ding-admin-scroll", className].filter(Boolean).join(" ")}
         style={
           {
+            overflow: "auto",
             ...style,
             "--ding-scroll-thumb": thumb,
             "--ding-scroll-thumb-hover": thumbHover,
