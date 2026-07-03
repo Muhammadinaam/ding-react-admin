@@ -35,8 +35,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build playground for GitHub Pages
-        working-directory: examples/playground
-        run: yarn build:gh-pages
+        run: yarn build:example:gh-pages
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

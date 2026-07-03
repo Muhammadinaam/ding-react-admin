@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "build:gh-pages": "tsc -b && vite build --base=/ding-react-admin/ && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+    "dev": "yarn --cwd ../.. dev:example",
+    "build": "yarn --cwd ../.. build:example",
+    "build:gh-pages": "yarn --cwd ../.. build:example:gh-pages",
     "preview": "vite preview",
     "preview:gh-pages": "vite preview --base=/ding-react-admin/"
   },

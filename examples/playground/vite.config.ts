@@ -13,6 +13,7 @@ function pkgDir(name: string) {
 }
 
 export default defineConfig({
+  root: __dirname,
   plugins: [react()],
   resolve: {
     dedupe: [
