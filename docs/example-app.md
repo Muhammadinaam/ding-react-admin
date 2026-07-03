@@ -4,10 +4,10 @@
 
 There is a Vite app under [`examples/playground`](../examples/playground): **in-memory demo API** (auth + products, brands, categories, invoices, lines), **CRUD screens**, wired **`DataProvider` / `PermissionsProvider`**, and **demo users** (`admin`/`admin` vs `user`/`user`).
 
-From the **repository root**:
+From the **repository root** (one `yarn install` at the root is enough — playground deps are shared with the library’s devDependencies):
 
 ```bash
-yarn --cwd examples/playground install
+yarn install
 yarn dev:example
 ```
 

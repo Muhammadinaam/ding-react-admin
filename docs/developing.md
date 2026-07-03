@@ -7,7 +7,14 @@ When you alias `ding-react-admin` to `src`, Vite may resolve peers (`react`, `re
 In your app’s `vite.config.ts`:
 
 ```ts
+import { createRequire } from "node:module";
 import path from "node:path";
+
+const require = createRequire(import.meta.url);
+
+function pkgDir(name: string) {
+  return path.dirname(require.resolve(`${name}/package.json`));
+}
 
 export default defineConfig({
   resolve: {
@@ -21,15 +28,17 @@ export default defineConfig({
     ],
     alias: {
       "ding-react-admin": path.resolve(__dirname, "../../ding-react-admin/src"),
-      react: path.resolve(__dirname, "node_modules/react"),
-      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
-      dayjs: path.resolve(__dirname, "node_modules/dayjs"),
-      "react-router-dom": path.resolve(__dirname, "node_modules/react-router-dom"),
-      "react-hook-form": path.resolve(__dirname, "node_modules/react-hook-form"),
+      react: pkgDir("react"),
+      "react-dom": pkgDir("react-dom"),
+      dayjs: pkgDir("dayjs"),
+      "react-router-dom": pkgDir("react-router-dom"),
+      "react-hook-form": pkgDir("react-hook-form"),
     },
   },
 });
 ```
+
+`pkgDir` finds each peer wherever your package manager installed it (app `node_modules` or a hoisted monorepo root), so you do not hard-code `node_modules` paths.
 
 And in `tsconfig.json` / `tsconfig.app.json`:
 

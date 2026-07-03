@@ -18,15 +18,7 @@ Interactive demo on GitHub Pages — sign in with **`admin` / `admin`** or **`us
 
 ## Installation
 
-```bash
-npm install ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
-```
-
-```bash
-yarn add ding-react-admin antd @ant-design/icons dayjs react-hook-form react-router-dom
-```
-
-Peer dependency versions and setup notes: [docs/install.md](docs/install.md).
+Install **`ding-react-admin`** plus its peer dependencies in one command — versions depend on whether you already have React. See **[docs/install.md](docs/install.md)** (yarn and npm, new vs existing app).
 
 ## Quick start
 
