@@ -27,6 +27,8 @@ Django-admin-style CRUD built from JSX components. List pages, forms, filters, r
 | Number | `NumberField` | `NumberColumn` | `NumberFilter` |
 | Boolean | `BooleanField` | `BooleanColumn` | `BooleanFilter` |
 | Date | `DateField` | `DateColumn` | `DateFilter` |
+| Date + time | `DateTimeField` or `DateField showTime` | `DateColumn` | — |
+| Time | `TimeField` | `TextColumn` | — |
 | Select (static) | `SelectField` | — | `SelectFilter` |
 | Reference (FK) | `ReferenceField` | `ReferenceColumn` | `ReferenceFilter` |
 | Reference many | `ReferenceManyField` | `ReferenceManyColumn` | `ReferenceManyFilter` |

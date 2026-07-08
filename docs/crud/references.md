@@ -137,6 +137,8 @@ With `fetchSelected={false}` and no embedded data, the raw id is shown until the
 | `referencePermissions` | — | `add` / `change` permission strings for the buttons |
 | `referenceTitle` | — | Modal title segment |
 | `referenceActions` | `true` | Set `false` to hide add/edit buttons |
+| `popupMatchSelectWidth` | `false` | When false, dropdown may be wider than the input; pass `true` to match input width |
+| `popupMinWidth` | `360` | Minimum dropdown width (px) when `popupMatchSelectWidth` is false |
 
 ## Add / edit in modal (Django admin–style)
 

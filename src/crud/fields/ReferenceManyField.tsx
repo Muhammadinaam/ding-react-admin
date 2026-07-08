@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { BaseSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
+import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
@@ -18,6 +19,7 @@ export type ReferenceManyFieldProps = BaseSourceProps &
     search?: boolean;
     allowClear?: boolean;
     hideLabel?: boolean;
+    disabled?: boolean;
     referenceForm?: ReactNode;
     referencePermissions?: ResourcePermissions;
     referenceTitle?: string;
@@ -25,6 +27,8 @@ export type ReferenceManyFieldProps = BaseSourceProps &
     referenceModalWidth?: number;
     /** When false, hide add button even if catalog defines a form. Default true. */
     referenceActions?: boolean;
+    popupMatchSelectWidth?: boolean | number;
+    popupMinWidth?: number;
   };
 
 type ReferenceManyFieldSelectProps = Omit<
@@ -56,6 +60,8 @@ function ReferenceManyFieldSelect({
   referenceDefaultValues,
   referenceModalWidth,
   referenceActions = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
 }: ReferenceManyFieldSelectProps) {
   const [searchText, setSearchText] = useState<string | undefined>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -88,6 +94,7 @@ function ReferenceManyFieldSelect({
 
   const select = (
     <Select
+      {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       mode="multiple"
       value={selectValue}
       onChange={onChange}
@@ -149,6 +156,7 @@ export function ReferenceManyField({
   search,
   allowClear = true,
   hideLabel,
+  disabled: disabledProp,
   lazy = true,
   recordSource,
   fetchSelected = true,
@@ -158,6 +166,8 @@ export function ReferenceManyField({
   referenceDefaultValues,
   referenceModalWidth,
   referenceActions = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
 }: ReferenceManyFieldProps) {
   const embeddedRecords = useWatch({
     name: recordSource ?? "",
@@ -185,7 +195,7 @@ export function ReferenceManyField({
           fetchSelected={fetchSelected}
           value={value}
           onChange={onChange}
-          disabled={disabled}
+          disabled={disabled || disabledProp}
           selectedRecords={recordSource ? embeddedRecords : undefined}
           referenceForm={referenceForm}
           referencePermissions={referencePermissions}
@@ -193,6 +203,8 @@ export function ReferenceManyField({
           referenceDefaultValues={referenceDefaultValues}
           referenceModalWidth={referenceModalWidth}
           referenceActions={referenceActions}
+          popupMatchSelectWidth={popupMatchSelectWidth}
+          popupMinWidth={popupMinWidth}
         />
       )}
     </FieldWrapper>

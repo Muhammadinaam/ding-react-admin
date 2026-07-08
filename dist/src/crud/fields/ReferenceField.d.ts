@@ -24,6 +24,8 @@ export type ReferenceFieldProps = BaseSourceProps & ReferenceProps & {
     referenceModalWidth?: number;
     /** When false, hide add/edit buttons. Default true when `referenceForm` is set. */
     referenceActions?: boolean;
+    popupMatchSelectWidth?: boolean | number;
+    popupMinWidth?: number;
 };
-export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, disabled: disabledProp, hideLabel, inputStyle, onValueChange, lazy, recordSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, disabled: disabledProp, hideLabel, inputStyle, onValueChange, lazy, recordSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceField.d.ts.map

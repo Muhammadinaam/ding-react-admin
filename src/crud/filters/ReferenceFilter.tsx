@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import type { BaseSourceProps, ChoiceOption, ReferenceProps } from "../types";
 import { useRegisterFilter } from "../context/FilterContext";
 import { useChoices } from "../utils/useChoices";
+import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 
 export type SelectFilterProps = BaseSourceProps & {
@@ -85,6 +86,8 @@ function ReferenceFilterInput({
   search,
   lazy = true,
   fetchSelected = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
   value,
   onChange,
 }: ReferenceFilterProps & {
@@ -106,6 +109,7 @@ function ReferenceFilterInput({
 
   return (
     <Select
+      {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       allowClear
       mode={multiple ? "multiple" : undefined}
       placeholder={label ?? source}
@@ -141,6 +145,8 @@ export function ReferenceFilter({
   search,
   lazy = true,
   fetchSelected = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
 }: ReferenceFilterProps) {
   const def = useMemo(
     () => ({
@@ -165,6 +171,8 @@ export function ReferenceFilter({
           search={search}
           lazy={lazy}
           fetchSelected={fetchSelected}
+          popupMatchSelectWidth={popupMatchSelectWidth}
+          popupMinWidth={popupMinWidth}
           value={value}
           onChange={onChange}
         />
@@ -181,6 +189,8 @@ export function ReferenceFilter({
       search,
       lazy,
       fetchSelected,
+      popupMatchSelectWidth,
+      popupMinWidth,
     ],
   );
   useRegisterFilter(def);

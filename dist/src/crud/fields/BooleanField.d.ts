@@ -4,6 +4,7 @@ export type BooleanFieldProps = BaseSourceProps & {
     required?: boolean;
     rules?: FieldRules;
     hideLabel?: boolean;
+    disabled?: boolean;
 };
-export declare function BooleanField({ source, name, label, required, rules, hideLabel, }: BooleanFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function BooleanField({ source, name, label, required, rules, hideLabel, disabled: disabledProp, }: BooleanFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=BooleanField.d.ts.map

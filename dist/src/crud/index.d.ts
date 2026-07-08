@@ -15,6 +15,8 @@ export { TextField } from './fields/TextField';
 export { NumberField } from './fields/NumberField';
 export { BooleanField } from './fields/BooleanField';
 export { DateField } from './fields/DateField';
+export { DateTimeField } from './fields/DateTimeField';
+export { TimeField } from './fields/TimeField';
 export { SelectField } from './fields/SelectField';
 export { PasswordField } from './fields/PasswordField';
 export { ReferenceField } from './fields/ReferenceField';

@@ -7,6 +7,7 @@ export type BooleanFieldProps = BaseSourceProps & {
   required?: boolean;
   rules?: FieldRules;
   hideLabel?: boolean;
+  disabled?: boolean;
 };
 
 export function BooleanField({
@@ -16,6 +17,7 @@ export function BooleanField({
   required,
   rules,
   hideLabel,
+  disabled: disabledProp,
 }: BooleanFieldProps) {
   return (
     <FieldWrapper
@@ -30,7 +32,7 @@ export function BooleanField({
         <Switch
           checked={Boolean(value)}
           onChange={onChange}
-          disabled={disabled}
+          disabled={disabled || disabledProp}
         />
       )}
     </FieldWrapper>

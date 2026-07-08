@@ -37,6 +37,13 @@ export type ReferenceProps = {
      * already embedded in the form record. Set `false` to never call `getOne`.
      */
     fetchSelected?: boolean;
+    /**
+     * When false (default), the options dropdown may be wider than the input.
+     * Pass true to match input width, or a number for a fixed popup width.
+     */
+    popupMatchSelectWidth?: boolean | number;
+    /** Minimum popup width in px when `popupMatchSelectWidth` is false. Default 360. */
+    popupMinWidth?: number;
 };
 export type DisplayProps = {
     display?: string | ((record: Record<string, unknown>) => ReactNode);

@@ -8,6 +8,7 @@ export type ReferenceManyFieldProps = BaseSourceProps & ReferenceProps & {
     search?: boolean;
     allowClear?: boolean;
     hideLabel?: boolean;
+    disabled?: boolean;
     referenceForm?: ReactNode;
     referencePermissions?: ResourcePermissions;
     referenceTitle?: string;
@@ -15,6 +16,8 @@ export type ReferenceManyFieldProps = BaseSourceProps & ReferenceProps & {
     referenceModalWidth?: number;
     /** When false, hide add button even if catalog defines a form. Default true. */
     referenceActions?: boolean;
+    popupMatchSelectWidth?: boolean | number;
+    popupMinWidth?: number;
 };
-export declare function ReferenceManyField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, hideLabel, lazy, recordSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, }: ReferenceManyFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReferenceManyField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, hideLabel, disabled: disabledProp, lazy, recordSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceManyFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceManyField.d.ts.map

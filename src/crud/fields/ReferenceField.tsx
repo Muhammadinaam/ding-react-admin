@@ -9,6 +9,7 @@ import type {
   ReferenceProps,
 } from "../types";
 import { valueAsId, resolveOptionLabel } from "../utils/choiceSelectionUtils";
+import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
@@ -42,6 +43,8 @@ export type ReferenceFieldProps = BaseSourceProps &
     referenceModalWidth?: number;
     /** When false, hide add/edit buttons. Default true when `referenceForm` is set. */
     referenceActions?: boolean;
+    popupMatchSelectWidth?: boolean | number;
+    popupMinWidth?: number;
   };
 
 type ReferenceFieldSelectProps = Omit<
@@ -77,6 +80,8 @@ function ReferenceFieldSelect({
   referenceDefaultValues,
   referenceModalWidth,
   referenceActions = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
 }: ReferenceFieldSelectProps) {
   const [searchText, setSearchText] = useState<string | undefined>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -124,6 +129,7 @@ function ReferenceFieldSelect({
 
   const select = (
     <Select
+      {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       value={selectValue}
       onChange={(next) => {
         onChange(next);
@@ -192,6 +198,8 @@ export function ReferenceField({
   referenceDefaultValues,
   referenceModalWidth,
   referenceActions = true,
+  popupMatchSelectWidth,
+  popupMinWidth,
 }: ReferenceFieldProps) {
   const embeddedRecord = useWatch({
     name: recordSource ?? "",
@@ -230,6 +238,8 @@ export function ReferenceField({
           referenceDefaultValues={referenceDefaultValues}
           referenceModalWidth={referenceModalWidth}
           referenceActions={referenceActions}
+          popupMatchSelectWidth={popupMatchSelectWidth}
+          popupMinWidth={popupMinWidth}
         />
       )}
     </FieldWrapper>
