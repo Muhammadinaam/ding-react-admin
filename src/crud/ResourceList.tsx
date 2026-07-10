@@ -1,5 +1,5 @@
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
-import { App, Button, Card, Space, Table, Typography } from "antd";
+import { App, Button, Card, Space, Table, theme, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type {
   SortOrder as AntSortOrder,
@@ -9,9 +9,12 @@ import {
   createContext,
   useCallback,
   useContext,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
   type Key,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { Link } from "react-router-dom";
@@ -33,6 +36,7 @@ import type {
 import { useListQueryState } from "./utils/useListQueryState";
 import { useAbortableEffect } from "./utils/useAbortableEffect";
 import { isAbortError } from "../data/abortError";
+import "./resourceListTable.css";
 
 type ResourceListContextValue = {
   filterValues: Record<string, unknown>;
@@ -83,6 +87,64 @@ export type ResourceListProps = {
   permissions?: ResourcePermissions;
 };
 
+function formatCellValue(value: unknown): ReactNode {
+  if (value == null || value === "") return "—";
+  return String(value);
+}
+
+function withFirstColumnEditLink<T extends Record<string, unknown>>(
+  columns: ColumnsType<T>,
+  options: {
+    showEdit: boolean;
+    showQuickEdit: boolean;
+    pathPrefix: string;
+    openEditModal: (id: string | number) => void;
+  },
+): ColumnsType<T> {
+  if (columns.length === 0 || (!options.showEdit && !options.showQuickEdit)) {
+    return columns;
+  }
+
+  const [first, ...rest] = columns;
+  const originalRender = first.render;
+
+  return [
+    {
+      ...first,
+      render: (value, row, index) => {
+        const rendered = originalRender
+          ? originalRender(value, row, index)
+          : formatCellValue(value);
+        const content = rendered as ReactNode;
+
+        if (options.showEdit) {
+          return (
+            <Link
+              to={`${options.pathPrefix}/${String(row.id)}`}
+              className="ding-admin-row-edit-link"
+            >
+              {content}
+            </Link>
+          );
+        }
+
+        return (
+          <Button
+            type="link"
+            size="small"
+            className="ding-admin-row-edit-link"
+            style={{ padding: 0, height: "auto", textAlign: "inherit" }}
+            onClick={() => options.openEditModal(row.id as string | number)}
+          >
+            {content}
+          </Button>
+        );
+      },
+    },
+    ...rest,
+  ];
+}
+
 function ResourceListTable<T extends Record<string, unknown>>({
   resource,
   title,
@@ -122,7 +184,10 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const dp = useDataProvider();
   const can = usePermissions();
   const { message, modal } = App.useApp();
+  const { token } = theme.useToken();
   const { columns, sortOrders, sortPriorities } = useListContext();
+  const tableWrapRef = useRef<HTMLDivElement>(null);
+  const [tableScrollY, setTableScrollY] = useState<number>();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<T[]>([]);
   const [total, setTotal] = useState(0);
@@ -183,6 +248,18 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const showBulkActions = availableBulkActions.length > 0;
 
   const selectedCount = selectedIds.size;
+
+  useLayoutEffect(() => {
+    const updateScrollY = () => {
+      const top = tableWrapRef.current?.getBoundingClientRect().top ?? 0;
+      setTableScrollY(Math.max(200, window.innerHeight - top - 80));
+    };
+
+    updateScrollY();
+    window.addEventListener("resize", updateScrollY);
+    return () => window.removeEventListener("resize", updateScrollY);
+  }, [showBulkActions, selectedCount]);
+
   const allPageSelected =
     data.length > 0 &&
     data.every((row) => selectedIds.has(row.id as string | number));
@@ -410,7 +487,14 @@ function ResourceListTable<T extends Record<string, unknown>>({
       return col;
     });
 
-    if (!showActionsColumn) return built;
+    if (!showActionsColumn) {
+      return withFirstColumnEditLink(built, {
+        showEdit,
+        showQuickEdit,
+        pathPrefix,
+        openEditModal: queryActions.openEditModal,
+      });
+    }
 
     const rowHelpers: ResourceListRowActionsHelpers = {
       reload: () => void load(),
@@ -453,7 +537,12 @@ function ResourceListTable<T extends Record<string, unknown>>({
         </Space>
       ),
     };
-    return [...built, action];
+    return withFirstColumnEditLink([...built, action], {
+      showEdit,
+      showQuickEdit,
+      pathPrefix,
+      openEditModal: queryActions.openEditModal,
+    });
   }, [
     columns,
     showActionsColumn,
@@ -526,35 +615,49 @@ function ResourceListTable<T extends Record<string, unknown>>({
             running={bulkRunning || loading}
           />
         ) : null}
-        <Table<T>
-          rowKey="id"
-          loading={loading}
-          columns={tableColumns}
-          dataSource={data}
-          scroll={{ x: "max-content" }}
-          rowSelection={
-            showBulkActions
-              ? {
-                  selectedRowKeys,
-                  onChange: handleRowSelectionChange,
-                  preserveSelectedRowKeys: true,
-                }
-              : undefined
+        <div
+          ref={tableWrapRef}
+          className="ding-admin-resource-list-table"
+          style={
+            {
+              "--ding-scroll-thumb": token.colorTextQuaternary,
+              "--ding-scroll-thumb-hover": token.colorTextTertiary,
+            } as CSSProperties
           }
-          pagination={{
-            current: queryState.page,
-            pageSize: queryState.perPage,
-            total,
-            showSizeChanger: true,
-            onChange: (p, ps) => {
-              queryActions.setPage(p);
-              if (ps) queryActions.setPerPage(ps);
-            },
-          }}
-          onChange={(_pag, _filters, sorter) => {
-            handleTableSortChange(sorter as SorterResult<T> | SorterResult<T>[]);
-          }}
-        />
+        >
+          <Table<T>
+            rowKey="id"
+            loading={loading}
+            columns={tableColumns}
+            dataSource={data}
+            scroll={{
+              x: "max-content",
+              ...(tableScrollY ? { y: tableScrollY } : {}),
+            }}
+            rowSelection={
+              showBulkActions
+                ? {
+                    selectedRowKeys,
+                    onChange: handleRowSelectionChange,
+                    preserveSelectedRowKeys: true,
+                  }
+                : undefined
+            }
+            pagination={{
+              current: queryState.page,
+              pageSize: queryState.perPage,
+              total,
+              showSizeChanger: true,
+              onChange: (p, ps) => {
+                queryActions.setPage(p);
+                if (ps) queryActions.setPerPage(ps);
+              },
+            }}
+            onChange={(_pag, _filters, sorter) => {
+              handleTableSortChange(sorter as SorterResult<T> | SorterResult<T>[]);
+            }}
+          />
+        </div>
       </Card>
       {showModal ? (
         <ResourceFormModal
