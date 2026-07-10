@@ -34,4 +34,32 @@ const nav: NavItem[] = [
 
 See **`examples/playground/src/navigation.tsx`** for a nested group plus a badge on a leaf row.
 
+## Menu appearance
+
+`AdminLayout` defaults to **`wrapLabels: true`** and **`itemDivider: "inset"`**. Override via **`navMenu`** on `AdminLayout` (or `layoutProps` on `AdminApp`):
+
+```tsx
+<AdminApp
+  navItems={nav}
+  routes={routes}
+  layoutProps={{
+    brand: "Acme",
+    navMenu: {
+      wrapLabels: false, // ellipsis + instant Ant Design tooltip on hover
+      itemDivider: "none",
+    },
+  }}
+/>
+```
+
+| Option | Effect |
+|--------|--------|
+| **`wrapLabels`** | Long labels wrap onto multiple lines instead of truncating with `…`. Hover tooltips are omitted when wrapping is enabled. Default **`true`**. |
+| **`itemDivider`** | Divider between sibling rows at each submenu level. Default **`"inset"`**. |
+| **`itemDivider: "none"`** | No dividers. |
+| **`itemDivider: "full"`** | Edge-to-edge line across the sidebar. |
+| **`itemDivider: "inset"`** | Shorter line inset from the left and right edges. |
+
+When **`wrapLabels`** is **`false`**, truncated labels show an Ant Design tooltip on hover with **no delay**.
+
 [← Back to README](../README.md)

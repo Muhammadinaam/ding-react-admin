@@ -5,9 +5,16 @@ import { getNavItemLabel } from "./navFilter";
 
 export function navItemsToAntdItems(
   items: NavItem[],
-  options?: { showLabelTooltip?: boolean },
+  options?: {
+    showLabelTooltip?: boolean;
+    wrapLabels?: boolean;
+    /** Collapsed sider: native `title` for icon tooltips only. */
+    collapsed?: boolean;
+  },
 ): NonNullable<MenuProps["items"]> {
   const showLabelTooltip = options?.showLabelTooltip !== false;
+  const wrapLabels = options?.wrapLabels === true;
+  const collapsed = options?.collapsed === true;
 
   return items.map((item) => {
     const IconComp = item.Icon;
@@ -16,6 +23,8 @@ export function navItemsToAntdItems(
     const label =
       title && showLabelTooltip ? (
         <NavMenuLabel label={item.label} title={title} />
+      ) : wrapLabels ? (
+        <NavMenuLabel label={item.label} title="" />
       ) : (
         item.label
       );
@@ -23,7 +32,7 @@ export function navItemsToAntdItems(
     // Expanded: NavMenuLabel tooltip only (omit `title` to avoid native DOM tooltip).
     // Collapsed: string title for the sider icon tooltip.
     const itemTitle: { title?: string } =
-      !showLabelTooltip && title ? { title } : {};
+      collapsed && title ? { title } : {};
 
     if (item.children?.length) {
       return {

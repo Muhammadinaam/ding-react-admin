@@ -114,6 +114,7 @@ export type {
   AuthPageLayoutProps,
   LoginPageProps,
   NavItem,
+  NavMenuItemDivider,
   RouteAccess,
   ThemeDensity,
   ThemeMode,

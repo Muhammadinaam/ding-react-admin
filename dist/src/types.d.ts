@@ -57,6 +57,7 @@ export type AppThemeProviderProps = {
     /** localStorage key for density. Default `ding-react-admin-theme-density`. */
     densityStorageKey?: string;
 };
+export type NavMenuItemDivider = "none" | "full" | "inset";
 export type AdminLayoutProps = {
     navItems: NavItem[];
     /** Shown in sider header when expanded; drawer title on mobile. */
@@ -79,6 +80,21 @@ export type AdminLayoutProps = {
      */
     navSearch?: boolean | {
         placeholder?: string;
+    };
+    /**
+     * Sidebar menu presentation.
+     */
+    navMenu?: {
+        /**
+         * Wrap long labels onto multiple lines instead of truncating with ellipsis.
+         * Default **`true`**. Pass **`false`** for ellipsis + Ant Design hover tooltip.
+         */
+        wrapLabels?: boolean;
+        /**
+         * Divider between sibling rows at each submenu level.
+         * Default **`"inset"`**.
+         */
+        itemDivider?: NavMenuItemDivider;
     };
 };
 export type { AuthPageLayoutProps } from './layouts/AuthPageLayout';

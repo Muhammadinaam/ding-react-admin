@@ -46,7 +46,7 @@ function readStoredDensity(key: string): ThemeDensity {
   } catch {
     /* ignore */
   }
-  return "comfortable";
+  return "compact";
 }
 
 const DEFAULT_MODE_KEY = "ding-react-admin-theme-mode";

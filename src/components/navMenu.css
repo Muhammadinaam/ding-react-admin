@@ -13,6 +13,113 @@
   white-space: nowrap;
 }
 
+.ding-admin-nav-menu--wrap-labels .ant-menu-title-content {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+.ding-admin-nav-menu--wrap-labels .ding-admin-menu-label {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.3;
+}
+
+.ding-admin-nav-menu--item-divider-full.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-full.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-full.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-full.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-full .ant-menu-sub > .ant-menu-item + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-full
+  .ant-menu-sub
+  > .ant-menu-item
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-full
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-full
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-submenu {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-inset .ant-menu-sub > .ant-menu-item + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-item
+  + .ant-menu-submenu,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-item,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-submenu {
+  position: relative;
+}
+
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-item::before,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-item
+  + .ant-menu-submenu::before,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-item::before,
+.ding-admin-nav-menu--item-divider-inset.ant-menu-root
+  > .ant-menu-submenu
+  + .ant-menu-submenu::before,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-item
+  + .ant-menu-item::before,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-item
+  + .ant-menu-submenu::before,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-item::before,
+.ding-admin-nav-menu--item-divider-inset
+  .ant-menu-sub
+  > .ant-menu-submenu
+  + .ant-menu-submenu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
 /* Mobile drawer: wrap long labels instead of truncating */
 .ant-drawer .ding-admin-menu-label {
   white-space: normal;

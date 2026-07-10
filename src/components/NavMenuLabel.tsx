@@ -17,7 +17,7 @@ export function NavMenuLabel({ label, title }: NavMenuLabelProps) {
     <Tooltip
       title={title}
       placement="right"
-      mouseEnterDelay={1}
+      mouseEnterDelay={0}
       destroyOnHidden
     >
       <span className="ding-admin-menu-label">{label}</span>

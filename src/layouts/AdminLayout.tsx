@@ -29,7 +29,7 @@ import {
 } from "./navFilter";
 import { navItemsToAntdItems } from "./navMenuItems";
 import { filterNavByPermission } from "../permissions/resourcePermissions";
-import type { AdminLayoutProps, NavItem } from "../types";
+import type { AdminLayoutProps, NavItem, NavMenuItemDivider } from "../types";
 import "../components/navMenu.css";
 
 const LIGHT_SIDEBAR_BG = "#001529";
@@ -87,15 +87,36 @@ type NavMenuProps = {
   openKeys?: string[];
   onOpenChange?: (keys: string[]) => void;
   onNavigate: (key: string) => void;
+  wrapLabels?: boolean;
+  itemDivider?: NavMenuItemDivider;
 };
 
-type SiderNavPanelProps = NavMenuProps & {
+function navMenuClassName({
+  wrapLabels,
+  itemDivider = "none",
+}: {
+  wrapLabels?: boolean;
+  itemDivider?: NavMenuItemDivider;
+}): string {
+  const classes = ["ding-admin-nav-menu"];
+  if (wrapLabels) classes.push("ding-admin-nav-menu--wrap-labels");
+  if (itemDivider === "full") {
+    classes.push("ding-admin-nav-menu--item-divider-full");
+  } else if (itemDivider === "inset") {
+    classes.push("ding-admin-nav-menu--item-divider-inset");
+  }
+  return classes.join(" ");
+}
+
+type SiderNavPanelProps = Omit<NavMenuProps, "wrapLabels" | "itemDivider"> & {
   navQuery: string;
   onNavQueryChange: (value: string) => void;
   showNavSearch: boolean;
   navSearchPlaceholder?: string;
   scrollVariant: "default" | "on-dark";
   searchVariant: "on-dark" | "app";
+  wrapLabels?: boolean;
+  itemDivider?: NavMenuItemDivider;
 };
 
 function SiderNavPanel({
@@ -111,6 +132,8 @@ function SiderNavPanel({
   navSearchPlaceholder,
   scrollVariant,
   searchVariant,
+  wrapLabels,
+  itemDivider,
 }: SiderNavPanelProps) {
   return (
     <>
@@ -138,6 +161,8 @@ function SiderNavPanel({
           openKeys={openKeys}
           onOpenChange={onOpenChange}
           onNavigate={onNavigate}
+          wrapLabels={wrapLabels}
+          itemDivider={itemDivider}
         />
       </ScrollableArea>
     </>
@@ -151,15 +176,17 @@ function NavMenu({
   openKeys,
   onOpenChange,
   onNavigate,
+  wrapLabels,
+  itemDivider,
 }: NavMenuProps) {
   return (
     <Menu
-      className="ding-admin-nav-menu"
+      className={navMenuClassName({ wrapLabels, itemDivider })}
       mode="inline"
       theme="dark"
       inlineCollapsed={inlineCollapsed}
       selectedKeys={selectedKeys}
-      tooltip={{ placement: "right", mouseEnterDelay: 1 }}
+      tooltip={{ placement: "right", mouseEnterDelay: 0 }}
       {...(!inlineCollapsed && openKeys !== undefined && onOpenChange
         ? { openKeys, onOpenChange }
         : {})}
@@ -181,6 +208,7 @@ export function AdminLayout({
   loginPath = "/login",
   siderCollapsedStorageKey = DEFAULT_SIDER_KEY,
   navSearch = true,
+  navMenu,
 }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -200,6 +228,9 @@ export function AdminLayout({
   const navSearchEnabled = navSearch !== false;
   const navSearchPlaceholder =
     typeof navSearch === "object" ? navSearch.placeholder : undefined;
+  const navMenuWrapLabels = navMenu?.wrapLabels !== false;
+  const navMenuItemDivider: NavMenuItemDivider =
+    navMenu?.itemDivider ?? "inset";
 
   const drawerTitle = mobileDrawerTitle ?? brand;
 
@@ -260,9 +291,11 @@ export function AdminLayout({
   const menuItems: MenuProps["items"] = useMemo(
     () =>
       navItemsToAntdItems(displayNavItems, {
-        showLabelTooltip: !collapsed,
+        showLabelTooltip: !collapsed && !navMenuWrapLabels,
+        wrapLabels: navMenuWrapLabels && !collapsed,
+        collapsed,
       }),
-    [displayNavItems, collapsed],
+    [displayNavItems, collapsed, navMenuWrapLabels],
   );
 
   const filteredOpenKeys = useMemo(
@@ -388,6 +421,8 @@ export function AdminLayout({
               navSearchPlaceholder={navSearchPlaceholder}
               scrollVariant={siderScrollVariant}
               searchVariant={siderSearchVariant}
+              wrapLabels={navMenuWrapLabels}
+              itemDivider={navMenuItemDivider}
             />
           </div>
         </Layout.Sider>
@@ -436,6 +471,8 @@ export function AdminLayout({
               navSearchPlaceholder={navSearchPlaceholder}
               scrollVariant={siderScrollVariant}
               searchVariant={siderSearchVariant}
+              wrapLabels={navMenuWrapLabels}
+              itemDivider={navMenuItemDivider}
             />
           </div>
         </Drawer>
