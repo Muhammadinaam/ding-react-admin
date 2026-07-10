@@ -13,6 +13,11 @@ export type ResourceListProps = {
     newPath?: string;
     /** Merged into every list request (not synced to URL). */
     staticFilter?: Record<string, unknown>;
+    /**
+     * Debounce delay for `TextFilter` before syncing to URL / refetching (ms).
+     * Default 300. Per-field override: `TextFilter debounceMs`.
+     */
+    textFilterDebounceMs?: number;
     editMode?: EditMode;
     syncQueryParams?: boolean;
     children: ReactNode;
@@ -33,6 +38,6 @@ export type ResourceListProps = {
     /** Permission strings for built-in actions. Omit to allow all (demos only). */
     permissions?: ResourcePermissions;
 };
-export declare function ResourceList({ resource, title, pathPrefix, newPath, staticFilter, editMode, syncQueryParams, children, formChildren, actions, rowActions, headerExtra, bulkActions, bulkDelete, bulkActionsEnabled, permissions, }: ResourceListProps): import("react/jsx-runtime").JSX.Element;
+export declare function ResourceList({ resource, title, pathPrefix, newPath, staticFilter, textFilterDebounceMs, editMode, syncQueryParams, children, formChildren, actions, rowActions, headerExtra, bulkActions, bulkDelete, bulkActionsEnabled, permissions, }: ResourceListProps): import("react/jsx-runtime").JSX.Element;
 export {};
 //# sourceMappingURL=ResourceList.d.ts.map

@@ -5,11 +5,14 @@ type FilterContextValue = {
     filters: FilterDefinition[];
     values: Record<string, unknown>;
     setFilterValue: (source: string, value: unknown) => void;
+    /** Default debounce for `TextFilter` controls on this list (ms). */
+    textFilterDebounceMs: number;
 };
-export declare function FilterContextProvider({ children, values, setFilterValue, }: {
+export declare function FilterContextProvider({ children, values, setFilterValue, textFilterDebounceMs, }: {
     children: ReactNode;
     values: Record<string, unknown>;
     setFilterValue: (source: string, value: unknown) => void;
+    textFilterDebounceMs?: number;
 }): import("react/jsx-runtime").JSX.Element;
 export declare function useFilterContext(): FilterContextValue | null;
 export declare function useRegisterFilter(def: FilterDefinition): void;

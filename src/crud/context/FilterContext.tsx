@@ -8,12 +8,15 @@ import {
   type ReactNode,
 } from "react";
 import type { FilterDefinition } from "../types";
+import { DEFAULT_TEXT_FILTER_DEBOUNCE_MS } from "../filters/TextFilter";
 
 type FilterContextValue = {
   registerFilter: (def: FilterDefinition) => () => void;
   filters: FilterDefinition[];
   values: Record<string, unknown>;
   setFilterValue: (source: string, value: unknown) => void;
+  /** Default debounce for `TextFilter` controls on this list (ms). */
+  textFilterDebounceMs: number;
 };
 
 const FilterContext = createContext<FilterContextValue | null>(null);
@@ -22,10 +25,12 @@ export function FilterContextProvider({
   children,
   values,
   setFilterValue,
+  textFilterDebounceMs = DEFAULT_TEXT_FILTER_DEBOUNCE_MS,
 }: {
   children: ReactNode;
   values: Record<string, unknown>;
   setFilterValue: (source: string, value: unknown) => void;
+  textFilterDebounceMs?: number;
 }) {
   const [filters, setFilters] = useState<FilterDefinition[]>([]);
 
@@ -49,8 +54,9 @@ export function FilterContextProvider({
       values,
       setFilterValue,
       registerFilter,
+      textFilterDebounceMs,
     }),
-    [filters, values, setFilterValue, registerFilter],
+    [filters, values, setFilterValue, registerFilter, textFilterDebounceMs],
   );
 
   return (

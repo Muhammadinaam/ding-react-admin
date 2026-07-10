@@ -54,6 +54,11 @@ export type ResourceListProps = {
   newPath?: string;
   /** Merged into every list request (not synced to URL). */
   staticFilter?: Record<string, unknown>;
+  /**
+   * Debounce delay for `TextFilter` before syncing to URL / refetching (ms).
+   * Default 300. Per-field override: `TextFilter debounceMs`.
+   */
+  textFilterDebounceMs?: number;
   editMode?: EditMode;
   syncQueryParams?: boolean;
   children: ReactNode;
@@ -573,6 +578,7 @@ export function ResourceList({
   pathPrefix,
   newPath,
   staticFilter,
+  textFilterDebounceMs,
   editMode = "page",
   syncQueryParams = true,
   children,
@@ -613,7 +619,11 @@ export function ResourceList({
 
   return (
     <ResourceListContext.Provider value={listCtx}>
-      <FilterContextProvider values={filterValues} setFilterValue={setFilterValue}>
+      <FilterContextProvider
+        values={filterValues}
+        setFilterValue={setFilterValue}
+        textFilterDebounceMs={textFilterDebounceMs}
+      >
         <ListContextProvider
           toggleSort={queryActions.toggleSort}
           sort={queryState.sort}

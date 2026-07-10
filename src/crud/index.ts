@@ -47,7 +47,11 @@ export { ReferenceManyColumn } from "./columns/ReferenceManyColumn";
 export { ImageColumn } from "./columns/ImageColumn";
 export { CustomColumn } from "./columns/CustomColumn";
 
-export { TextFilter } from "./filters/TextFilter";
+export {
+  TextFilter,
+  DEFAULT_TEXT_FILTER_DEBOUNCE_MS,
+} from "./filters/TextFilter";
+export type { TextFilterProps } from "./filters/TextFilter";
 export { NumberFilter } from "./filters/NumberFilter";
 export { BooleanFilter } from "./filters/BooleanFilter";
 export { DateFilter } from "./filters/DateFilter";
