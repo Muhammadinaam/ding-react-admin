@@ -34,9 +34,9 @@
 }
 
 .ding-admin-resource-list-table .ding-admin-row-edit-link {
-  color: inherit;
+  color: var(--ant-color-primary);
 }
 
 .ding-admin-resource-list-table .ding-admin-row-edit-link:hover {
-  color: var(--ant-color-primary);
+  color: var(--ant-color-primary-hover, var(--ant-color-primary));
 }
