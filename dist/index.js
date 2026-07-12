@@ -2664,27 +2664,27 @@ function Zr(e, t, n) {
 }
 //#endregion
 //#region src/crud/InlineFormSet.tsx
-function Qr(e) {
-	let t = {};
-	for (let n of e) t[n] = void 0;
-	return t;
+function Qr(e, t) {
+	let n = {};
+	for (let r of e) n[r] = t?.[r] ?? void 0;
+	return n;
 }
-function $r(e, t) {
-	let { control: n } = De(), { fields: r, append: i, remove: a } = Te({
-		control: n,
+function $r(e, t, n) {
+	let { control: r } = De(), { fields: i, append: a, remove: o } = Te({
+		control: r,
 		name: e,
 		keyName: "rowKey"
 	});
 	return {
-		fields: r,
-		remove: a,
-		appendEmpty: () => i(Qr(t))
+		fields: i,
+		remove: o,
+		appendEmpty: () => a(Qr(t, n))
 	};
 }
-function ei({ field: e, label: t, payloadKey: n, transformRows: r, columns: i }) {
-	let a = l(() => i.map((e) => e.source), [i]), { fields: o, remove: s, appendEmpty: c } = $r(e, a);
-	ir(e), lr(e, a, n, r);
-	let u = l(() => i.map((t) => ({
+function ei({ field: e, label: t, payloadKey: n, transformRows: r, columns: i, defaultRow: a }) {
+	let o = l(() => i.map((e) => e.source), [i]), { fields: s, remove: c, appendEmpty: u } = $r(e, o, a);
+	ir(e), lr(e, o, n, r);
+	let d = l(() => i.map((t) => ({
 		title: t.label ?? t.source,
 		key: t.source,
 		width: t.width,
@@ -2707,11 +2707,11 @@ function ei({ field: e, label: t, payloadKey: n, transformRows: r, columns: i })
 				size: "small",
 				pagination: !1,
 				scroll: { x: "max-content" },
-				dataSource: o.map((e) => ({
+				dataSource: s.map((e) => ({
 					...e,
 					key: e.rowKey
 				})),
-				columns: [...u, {
+				columns: [...d, {
 					title: "",
 					key: "__remove",
 					width: 80,
@@ -2719,7 +2719,7 @@ function ei({ field: e, label: t, payloadKey: n, transformRows: r, columns: i })
 						type: "link",
 						danger: !0,
 						size: "small",
-						onClick: () => s(n),
+						onClick: () => c(n),
 						children: "Remove"
 					})
 				}]
@@ -2727,14 +2727,14 @@ function ei({ field: e, label: t, payloadKey: n, transformRows: r, columns: i })
 			/* @__PURE__ */ G(w, {
 				type: "dashed",
 				style: { marginTop: 8 },
-				onClick: c,
+				onClick: u,
 				children: "Add row"
 			})
 		]
 	});
 }
-function ti({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, renderRow: a }) {
-	let { fields: o, remove: s, appendEmpty: c } = $r(e, i);
+function ti({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, renderRow: a, getCardTitle: o, footer: s, defaultRow: c }) {
+	let { fields: l, remove: u, appendEmpty: d } = $r(e, i, c);
 	return ir(e), lr(e, i, n, r), /* @__PURE__ */ K("div", {
 		style: { marginTop: 24 },
 		children: [
@@ -2746,29 +2746,33 @@ function ti({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, r
 				orientation: "vertical",
 				size: "middle",
 				style: { width: "100%" },
-				children: o.map((t, n) => /* @__PURE__ */ G(T, {
-					size: "small",
-					title: `Item ${n + 1}`,
-					extra: /* @__PURE__ */ G(w, {
-						type: "link",
-						danger: !0,
-						size: "small",
-						onClick: () => s(n),
-						children: "Remove"
-					}),
-					children: a({
+				children: l.map((t, n) => {
+					let r = {
 						field: e,
 						index: n,
 						name: (t) => Zr(e, n, t)
-					})
-				}, t.rowKey))
+					};
+					return /* @__PURE__ */ G(T, {
+						size: "small",
+						title: o?.(r) ?? `Item ${n + 1}`,
+						extra: /* @__PURE__ */ G(w, {
+							type: "link",
+							danger: !0,
+							size: "small",
+							onClick: () => u(n),
+							children: "Remove"
+						}),
+						children: a(r)
+					}, t.rowKey);
+				})
 			}),
 			/* @__PURE__ */ G(w, {
 				type: "dashed",
 				style: { marginTop: 8 },
-				onClick: c,
+				onClick: d,
 				children: "Add item"
-			})
+			}),
+			s
 		]
 	});
 }
