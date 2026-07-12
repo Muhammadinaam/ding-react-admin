@@ -17,6 +17,8 @@ export { FormSteps, FormStep } from "./FormSteps";
 export type { FormStepsProps, FormStepProps } from "./FormSteps";
 
 export { TextField } from "./fields/TextField";
+export { TextAreaField } from "./fields/TextAreaField";
+export type { TextAreaFieldProps } from "./fields/TextAreaField";
 export { NumberField } from "./fields/NumberField";
 export { BooleanField } from "./fields/BooleanField";
 export { DateField } from "./fields/DateField";

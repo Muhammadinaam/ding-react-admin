@@ -14,6 +14,8 @@ ResourceForm
       │           ├── useRegisterPayloadField(source)
       │           ├── useRegisterSectionField(source)   → tab/step errors
       │           └── Controller name={source}
+      ├── TextAreaField
+      │     └── FieldWrapper (same as TextField)
       └── InlineFormSet field="lines"
             └── useFieldArray({ name: "lines" })
                   └── cell({ name }) → TextField name={name} hideLabel

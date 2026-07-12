@@ -36,6 +36,19 @@ Use **`PasswordField`** for a single write-only password input. Pass **`confirmS
 
 Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap fields in Ant Design `Row` / `Col` as needed.
 
+## Text area fields
+
+Use **`TextAreaField`** for multi-line text (Django `TextField`, notes, descriptions, comments). It wraps Ant Design `Input.TextArea` and shares the same `source` / validation props as `TextField`.
+
+```tsx
+import { ResourceForm, TextAreaField } from "ding-react-admin";
+
+<ResourceForm resource="reviews" title="Review" listPath="/reviews">
+  <TextAreaField source="goals" label="Goals" rows={4} />
+  <TextAreaField source="comments" label="Comments" rows={3} autoSize={{ minRows: 3, maxRows: 8 }} />
+</ResourceForm>
+```
+
 `ReferenceField` / `ReferenceManyField` load their option list **lazily** (on dropdown open / search). See [references.md](references.md) for embedded relations (`recordSource`), `fetchSelected`, and custom loaders.
 
 ## Image and file uploads
@@ -130,7 +143,7 @@ import { FormTab, FormTabs, ResourceForm, TextField } from "ding-react-admin";
 ```
 
 ```tsx
-import { FormStep, FormSteps, ResourceForm, TextField } from "ding-react-admin";
+import { FormStep, FormSteps, ResourceForm, TextAreaField, TextField } from "ding-react-admin";
 
 <ResourceForm resource="orders" title="Order" listPath="/orders">
   <FormSteps>
@@ -138,7 +151,7 @@ import { FormStep, FormSteps, ResourceForm, TextField } from "ding-react-admin";
       <TextField source="number" label="Number" required />
     </FormStep>
     <FormStep title="Details">
-      <TextField source="notes" label="Notes" />
+      <TextAreaField source="notes" label="Notes" />
     </FormStep>
   </FormSteps>
 </ResourceForm>

@@ -2973,8 +2973,32 @@ function di({ source: e, name: t, label: n, required: r, rules: i, placeholder: 
 	});
 }
 //#endregion
+//#region src/crud/fields/TextAreaField.tsx
+function fi({ source: e, name: t, label: n, required: r, rules: i, placeholder: a, inputStyle: o, hideLabel: s, rows: c = 4, maxLength: l, showCount: u, autoSize: d }) {
+	return /* @__PURE__ */ G($, {
+		source: e,
+		name: t,
+		label: n,
+		required: r,
+		rules: i,
+		hideLabel: s,
+		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ G(P.TextArea, {
+			value: e,
+			onChange: (e) => t(e.target.value),
+			onBlur: n,
+			placeholder: a,
+			disabled: r,
+			style: o,
+			rows: d ? void 0 : c,
+			maxLength: l,
+			showCount: u,
+			autoSize: d
+		})
+	});
+}
+//#endregion
 //#region src/crud/fields/NumberField.tsx
-function fi({ source: e, name: t, label: n, required: r, rules: i, min: a, max: o, step: s, inputStyle: c, hideLabel: l }) {
+function pi({ source: e, name: t, label: n, required: r, rules: i, min: a, max: o, step: s, inputStyle: c, hideLabel: l }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -2999,7 +3023,7 @@ function fi({ source: e, name: t, label: n, required: r, rules: i, min: a, max: 
 }
 //#endregion
 //#region src/crud/fields/BooleanField.tsx
-function pi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, disabled: o }) {
+function mi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, disabled: o }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3016,7 +3040,7 @@ function pi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/utils/parseDayjsValue.ts
-var mi = /* @__PURE__ */ ze((/* @__PURE__ */ Le(((e, t) => {
+var hi = /* @__PURE__ */ ze((/* @__PURE__ */ Le(((e, t) => {
 	(function(n, r) {
 		typeof e == "object" && t !== void 0 ? t.exports = r() : typeof define == "function" && define.amd ? define(r) : (n = typeof globalThis < "u" ? globalThis : n || self).dayjs_plugin_customParseFormat = r();
 	})(e, (function() {
@@ -3173,8 +3197,8 @@ var mi = /* @__PURE__ */ ze((/* @__PURE__ */ Le(((e, t) => {
 		};
 	}));
 })))(), 1);
-Ae.extend(mi.default);
-function hi(e, t) {
+Ae.extend(hi.default);
+function gi(e, t) {
 	if (e == null || e === "") return null;
 	if (Ae.isDayjs(e)) return e;
 	let n = Ae(String(e), t, !0);
@@ -3182,13 +3206,13 @@ function hi(e, t) {
 }
 //#endregion
 //#region src/crud/fields/DateField.tsx
-var gi = "YYYY-MM-DD", _i = `${gi} HH:mm:ss`, vi = [
-	gi,
+var _i = "YYYY-MM-DD", vi = `${_i} HH:mm:ss`, yi = [
 	_i,
+	vi,
 	"YYYY-MM-DDTHH:mm:ss",
 	"YYYY-MM-DDTHH:mm:ssZ"
 ];
-function yi({ source: e, name: t, label: n, required: r, rules: i, showTime: a, hideLabel: o }) {
+function bi({ source: e, name: t, label: n, required: r, rules: i, showTime: a, hideLabel: o }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3197,33 +3221,33 @@ function yi({ source: e, name: t, label: n, required: r, rules: i, showTime: a, 
 		rules: i,
 		hideLabel: o,
 		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ G(D, {
-			value: hi(e, a ? [...vi, _i] : vi),
-			onChange: (e) => t(e ? e.format(a ? _i : gi) : null),
+			value: gi(e, a ? [...yi, vi] : yi),
+			onChange: (e) => t(e ? e.format(a ? vi : _i) : null),
 			onBlur: n,
 			showTime: a,
 			disabled: r,
-			format: a ? _i : gi,
+			format: a ? vi : _i,
 			style: { width: "100%" }
 		})
 	});
 }
 //#endregion
 //#region src/crud/fields/DateTimeField.tsx
-function bi(e) {
-	return /* @__PURE__ */ G(yi, {
+function xi(e) {
+	return /* @__PURE__ */ G(bi, {
 		showTime: !0,
 		...e
 	});
 }
 //#endregion
 //#region src/crud/fields/TimeField.tsx
-var xi = "HH:mm:ss", Si = [
-	xi,
+var Si = "HH:mm:ss", Ci = [
+	Si,
 	"HH:mm",
 	"H:mm:ss",
 	"H:mm"
 ];
-function Ci({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, format: o = xi }) {
+function wi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, format: o = Si }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3232,7 +3256,7 @@ function Ci({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		rules: i,
 		hideLabel: a,
 		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ G(se, {
-			value: hi(e, Si),
+			value: gi(e, Ci),
 			onChange: (e) => t(e ? e.format(o) : null),
 			onBlur: n,
 			disabled: r,
@@ -3243,7 +3267,7 @@ function Ci({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/fields/SelectField.tsx
-function wi({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, allowClear: s, hideLabel: c }) {
+function Ti({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, allowClear: s, hideLabel: c }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3264,7 +3288,7 @@ function wi({ source: e, name: t, label: n, required: r, rules: i, choices: a, m
 }
 //#endregion
 //#region src/crud/fields/PasswordField.tsx
-function Ti({ source: e, name: t, label: n, required: r, rules: i, autoComplete: a, hideLabel: o }) {
+function Ei({ source: e, name: t, label: n, required: r, rules: i, autoComplete: a, hideLabel: o }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3281,12 +3305,12 @@ function Ti({ source: e, name: t, label: n, required: r, rules: i, autoComplete:
 		})
 	});
 }
-function Ei({ source: e, name: t, label: n, required: r, rules: i, confirmSource: a, confirmLabel: o = "Confirm password", autoComplete: s = "new-password", hideLabel: c }) {
+function Di({ source: e, name: t, label: n, required: r, rules: i, confirmSource: a, confirmLabel: o = "Confirm password", autoComplete: s = "new-password", hideLabel: c }) {
 	let l = ke({
 		name: t ?? e,
 		disabled: !a
 	});
-	return a ? /* @__PURE__ */ K(W, { children: [/* @__PURE__ */ G(Ti, {
+	return a ? /* @__PURE__ */ K(W, { children: [/* @__PURE__ */ G(Ei, {
 		source: e,
 		name: t,
 		label: n,
@@ -3294,14 +3318,14 @@ function Ei({ source: e, name: t, label: n, required: r, rules: i, confirmSource
 		rules: i,
 		autoComplete: s,
 		hideLabel: c
-	}), /* @__PURE__ */ G(Ti, {
+	}), /* @__PURE__ */ G(Ei, {
 		source: a,
 		label: o,
 		required: r,
 		autoComplete: s,
 		hideLabel: c,
 		rules: { validate: (e) => !l || e === l || "Passwords do not match" }
-	})] }) : /* @__PURE__ */ G(Ti, {
+	})] }) : /* @__PURE__ */ G(Ei, {
 		source: e,
 		name: t,
 		label: n,
@@ -3313,48 +3337,48 @@ function Ei({ source: e, name: t, label: n, required: r, rules: i, confirmSource
 }
 //#endregion
 //#region src/crud/utils/choiceSelectionUtils.ts
-function Di(e, t) {
+function Oi(e, t) {
 	return typeof e == "object" && !!e && !Array.isArray(e) && t in e;
 }
-function Oi(e, t) {
+function ki(e, t) {
 	if (!(e == null || e === "")) {
-		if (Di(e, t)) {
+		if (Oi(e, t)) {
 			let n = e[t];
 			return typeof n == "string" || typeof n == "number" ? n : void 0;
 		}
 		if (typeof e == "string" || typeof e == "number") return e;
 	}
 }
-function ki(e, t) {
-	return Array.isArray(e) ? e.map((e) => Oi(e, t)).filter((e) => e != null) : [];
-}
 function Ai(e, t) {
-	return e == null ? [] : (Array.isArray(e) ? e : [e]).filter((e) => e != null && e !== "").map((e) => Di(e, t) ? e[t] : e);
+	return Array.isArray(e) ? e.map((e) => ki(e, t)).filter((e) => e != null) : [];
 }
-function ji(e, t, n) {
+function ji(e, t) {
+	return e == null ? [] : (Array.isArray(e) ? e : [e]).filter((e) => e != null && e !== "").map((e) => Oi(e, t) ? e[t] : e);
+}
+function Mi(e, t, n) {
 	let r = [];
-	if (t != null && (Array.isArray(t) ? r.push(...t.filter((e) => Di(e, n))) : Di(t, n) && r.push(t)), e == null) return r;
+	if (t != null && (Array.isArray(t) ? r.push(...t.filter((e) => Oi(e, n))) : Oi(t, n) && r.push(t)), e == null) return r;
 	let i = Array.isArray(e) ? e : [e];
-	for (let e of i) Di(e, n) && r.push(e);
+	for (let e of i) Oi(e, n) && r.push(e);
 	return r;
 }
-function Mi(e, t) {
+function Ni(e, t) {
 	return typeof t == "function" ? t(e) : String(e[t] ?? "");
 }
-function Ni(e, t, n) {
+function Pi(e, t, n) {
 	return e.map((e) => ({
-		label: Mi(e, t),
+		label: Ni(e, t),
 		value: e[n],
 		record: e
 	}));
 }
-function Pi(e, t) {
+function Fi(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let t of e) n.set(t.value, t);
 	for (let e of t) n.set(e.value, e);
 	return Array.from(n.values());
 }
-function Fi(e = {}) {
+function Ii(e = {}) {
 	let t = e.popupMatchSelectWidth ?? !1;
 	return t === !1 ? {
 		popupMatchSelectWidth: !1,
@@ -3363,16 +3387,16 @@ function Fi(e = {}) {
 }
 //#endregion
 //#region src/crud/utils/referenceSelectNotFoundContent.tsx
-function Ii(e) {
+function Li(e) {
 	return e ? /* @__PURE__ */ G(re, { size: "small" }) : void 0;
 }
 //#endregion
 //#region src/crud/utils/useChoices.ts
-var Li = /* @__PURE__ */ new Map(), Ri = /* @__PURE__ */ new Map();
-function zi(e, t) {
+var Ri = /* @__PURE__ */ new Map(), zi = /* @__PURE__ */ new Map();
+function Bi(e, t) {
 	return typeof e == "function" ? `fn:${t ?? ""}` : Array.isArray(e) ? `static:${e.length}` : `res:${e.resource}:${JSON.stringify(e.filter ?? {})}:${t ?? ""}`;
 }
-async function Bi(e, t, n, r, i) {
+async function Vi(e, t, n, r, i) {
 	return typeof e == "function" ? e({
 		dataProvider: t,
 		search: i
@@ -3386,25 +3410,25 @@ async function Bi(e, t, n, r, i) {
 			perPage: 500
 		}
 	})).data.map((e) => ({
-		label: Mi(e, n),
+		label: Ni(e, n),
 		value: e[r],
 		record: e
 	}));
 }
-function Vi(e, t, n, r, i, a) {
-	let o = zi(e, i);
+function Hi(e, t, n, r, i, a) {
+	let o = Bi(e, i);
 	if (a) {
-		let e = Li.get(o);
+		let e = Ri.get(o);
 		if (e && !i) return Promise.resolve(e);
 	}
-	let s = Ri.get(o);
+	let s = zi.get(o);
 	if (s) return s;
-	let c = Bi(e, t, n, r, i).then((e) => (a && !i && Li.set(o, e), e)).finally(() => {
-		Ri.delete(o);
+	let c = Vi(e, t, n, r, i).then((e) => (a && !i && Ri.set(o, e), e)).finally(() => {
+		zi.delete(o);
 	});
-	return Ri.set(o, c), c;
+	return zi.set(o, c), c;
 }
-function Hi(e, t, n = "name", r = "id", i, o = {}) {
+function Ui(e, t, n = "name", r = "id", i, o = {}) {
 	let { lazy: c = !1, active: u = !1, selectedValues: f, selectedRecords: p, fetchSelected: m = !0, cache: h } = o, g = h ?? !c, _ = Ht(), v = l(() => {
 		if (e) return e;
 		if (t) return {
@@ -3415,14 +3439,14 @@ function Hi(e, t, n = "name", r = "id", i, o = {}) {
 		e,
 		t,
 		i
-	]), y = v ? zi(v, i) : void 0, b = l(() => Ai(f, r), [f, r]), x = l(() => Ni(ji(f, p, r), n, r), [
+	]), y = v ? Bi(v, i) : void 0, b = l(() => ji(f, r), [f, r]), x = l(() => Pi(Mi(f, p, r), n, r), [
 		f,
 		p,
 		n,
 		r
-	]), S = !!(v && (!c || u || Array.isArray(v))), [C, w] = d(() => x.length ? x : !y || i || c || !g ? [] : Li.get(y) ?? []), [T, E] = d(() => S ? !g || !y || i ? !!v : !Li.has(y) : !1);
+	]), S = !!(v && (!c || u || Array.isArray(v))), [C, w] = d(() => x.length ? x : !y || i || c || !g ? [] : Ri.get(y) ?? []), [T, E] = d(() => S ? !g || !y || i ? !!v : !Ri.has(y) : !1);
 	s(() => {
-		x.length && w((e) => Pi(e, x));
+		x.length && w((e) => Fi(e, x));
 	}, [x]);
 	let D = a(async () => {
 		if (!v || !S) {
@@ -3430,15 +3454,15 @@ function Hi(e, t, n = "name", r = "id", i, o = {}) {
 			return;
 		}
 		if (g) {
-			let e = zi(v, i), t = Li.get(e);
+			let e = Bi(v, i), t = Ri.get(e);
 			if (t && !i) {
-				w(Pi(x, t)), E(!1);
+				w(Fi(x, t)), E(!1);
 				return;
 			}
 		}
 		E(!0), c && w(x);
 		try {
-			w(Pi(x, await Vi(v, _, n, r, i, g)));
+			w(Fi(x, await Hi(v, _, n, r, i, g)));
 		} catch {
 			!b.length && !x.length ? w([]) : c && w(x);
 		} finally {
@@ -3475,7 +3499,7 @@ function Hi(e, t, n = "name", r = "id", i, o = {}) {
 			for (let i of e) try {
 				let e = (await _.getOne(t, i)).data;
 				a.push({
-					label: Mi(e, n),
+					label: Ni(e, n),
 					value: e[r],
 					record: e
 				});
@@ -3487,7 +3511,7 @@ function Hi(e, t, n = "name", r = "id", i, o = {}) {
 			}
 			i || !a.length || w((e) => {
 				let t = a.filter((t) => !e.some((e) => e.value === t.value));
-				return t.length ? Pi(e, t) : e;
+				return t.length ? Fi(e, t) : e;
 			});
 		})(), () => {
 			i = !0;
@@ -3513,7 +3537,7 @@ function Hi(e, t, n = "name", r = "id", i, o = {}) {
 }
 //#endregion
 //#region src/crud/fields/ReferenceInputActions.tsx
-function Ui({ reference: e, referenceForm: t, referencePermissions: n, referenceTitle: r, referenceDefaultValues: i, referenceModalWidth: a, selectedId: o, disabled: s, onCreated: c, onUpdated: l }) {
+function Wi({ reference: e, referenceForm: t, referencePermissions: n, referenceTitle: r, referenceDefaultValues: i, referenceModalWidth: a, selectedId: o, disabled: s, onCreated: c, onUpdated: l }) {
 	let u = X(), f = r ?? e, p = !!(e && t) && Z(u, n, "add"), m = !!(e && t && o != null && o !== "") && Z(u, n, "change"), [h, g] = d(null);
 	return !p && !m ? null : /* @__PURE__ */ K(W, { children: [/* @__PURE__ */ K(z, {
 		size: 4,
@@ -3553,8 +3577,8 @@ function Ui({ reference: e, referenceForm: t, referencePermissions: n, reference
 }
 //#endregion
 //#region src/crud/fields/ReferenceField.tsx
-function Wi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a, disabled: o, inputStyle: s, onValueChange: c, lazy: u = !0, fetchSelected: f = !0, value: p, onChange: m, fieldName: h, selectedRecords: g, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
-	let [T, E] = d(), [D, O] = d(!1), k = D || !!T, A = Oi(p, r), { options: j, loading: M, optionForValue: N, reload: P } = Hi(t, e, n, r, i ? T : void 0, {
+function Gi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a, disabled: o, inputStyle: s, onValueChange: c, lazy: u = !0, fetchSelected: f = !0, value: p, onChange: m, fieldName: h, selectedRecords: g, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
+	let [T, E] = d(), [D, O] = d(!1), k = D || !!T, A = ki(p, r), { options: j, loading: M, optionForValue: N, reload: P } = Ui(t, e, n, r, i ? T : void 0, {
 		lazy: u,
 		active: k,
 		selectedValues: p,
@@ -3566,12 +3590,12 @@ function Wi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 	})), [j]), ee = (e) => {
 		let t = e[r];
 		m(t), c?.(t, {
-			label: Mi(e, n),
+			label: Ni(e, n),
 			value: t,
 			record: e
 		}, { name: h }), P();
 	}, I = /* @__PURE__ */ G(R, {
-		...Fi({
+		...Ii({
 			popupMatchSelectWidth: C,
 			popupMinWidth: w
 		}),
@@ -3581,7 +3605,7 @@ function Wi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		},
 		options: F,
 		loading: M,
-		notFoundContent: Ii(M),
+		notFoundContent: Li(M),
 		showSearch: i,
 		filterOption: i ? !1 : void 0,
 		onSearch: i ? E : void 0,
@@ -3610,7 +3634,7 @@ function Wi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 				minWidth: 0
 			},
 			children: I
-		}), /* @__PURE__ */ G(Ui, {
+		}), /* @__PURE__ */ G(Wi, {
 			reference: e,
 			referenceForm: _,
 			referencePermissions: v,
@@ -3624,7 +3648,7 @@ function Wi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		})]
 	}) : I;
 }
-function Gi({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u, disabled: d, hideLabel: f, inputStyle: p, onValueChange: m, lazy: h = !0, recordSource: g, fetchSelected: _ = !0, referenceForm: v, referencePermissions: y, referenceTitle: b, referenceDefaultValues: x, referenceModalWidth: S, referenceActions: C = !0, popupMatchSelectWidth: w, popupMinWidth: T }) {
+function Ki({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u, disabled: d, hideLabel: f, inputStyle: p, onValueChange: m, lazy: h = !0, recordSource: g, fetchSelected: _ = !0, referenceForm: v, referencePermissions: y, referenceTitle: b, referenceDefaultValues: x, referenceModalWidth: S, referenceActions: C = !0, popupMatchSelectWidth: w, popupMinWidth: T }) {
 	let E = ke({
 		name: g ?? "",
 		disabled: !g
@@ -3636,7 +3660,7 @@ function Gi({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 		required: s,
 		rules: c,
 		hideLabel: f,
-		children: ({ value: e, onChange: t, disabled: n, name: s }) => /* @__PURE__ */ G(Wi, {
+		children: ({ value: e, onChange: t, disabled: n, name: s }) => /* @__PURE__ */ G(Gi, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
@@ -3665,8 +3689,8 @@ function Gi({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/ReferenceManyField.tsx
-function Ki({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a = !0, lazy: o = !0, fetchSelected: s = !0, value: c, onChange: u, disabled: f, selectedRecords: p, referenceForm: m, referencePermissions: h, referenceTitle: g, referenceDefaultValues: _, referenceModalWidth: v, referenceActions: y = !0, popupMatchSelectWidth: b, popupMinWidth: x }) {
-	let [S, C] = d(), [w, T] = d(!1), E = w || !!S, D = ki(c, r), { options: O, loading: k, reload: A } = Hi(t, e, n, r, i ? S : void 0, {
+function qi({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a = !0, lazy: o = !0, fetchSelected: s = !0, value: c, onChange: u, disabled: f, selectedRecords: p, referenceForm: m, referencePermissions: h, referenceTitle: g, referenceDefaultValues: _, referenceModalWidth: v, referenceActions: y = !0, popupMatchSelectWidth: b, popupMinWidth: x }) {
+	let [S, C] = d(), [w, T] = d(!1), E = w || !!S, D = Ai(c, r), { options: O, loading: k, reload: A } = Ui(t, e, n, r, i ? S : void 0, {
 		lazy: o,
 		active: E,
 		selectedValues: c,
@@ -3676,7 +3700,7 @@ function Ki({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		label: e.label,
 		value: e.value
 	})), [O]), M = /* @__PURE__ */ G(R, {
-		...Fi({
+		...Ii({
 			popupMatchSelectWidth: b,
 			popupMinWidth: x
 		}),
@@ -3685,7 +3709,7 @@ function Ki({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		onChange: u,
 		options: j,
 		loading: k,
-		notFoundContent: Ii(k),
+		notFoundContent: Li(k),
 		showSearch: i,
 		filterOption: i ? !1 : void 0,
 		onSearch: i ? C : void 0,
@@ -3710,7 +3734,7 @@ function Ki({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 				minWidth: 0
 			},
 			children: M
-		}), /* @__PURE__ */ G(Ui, {
+		}), /* @__PURE__ */ G(Wi, {
 			reference: e,
 			referenceForm: m,
 			referencePermissions: h,
@@ -3729,7 +3753,7 @@ function Ki({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		})]
 	}) : M;
 }
-function qi({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u = !0, hideLabel: d, disabled: f, lazy: p = !0, recordSource: m, fetchSelected: h = !0, referenceForm: g, referencePermissions: _, referenceTitle: v, referenceDefaultValues: y, referenceModalWidth: b, referenceActions: x = !0, popupMatchSelectWidth: S, popupMinWidth: C }) {
+function Ji({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u = !0, hideLabel: d, disabled: f, lazy: p = !0, recordSource: m, fetchSelected: h = !0, referenceForm: g, referencePermissions: _, referenceTitle: v, referenceDefaultValues: y, referenceModalWidth: b, referenceActions: x = !0, popupMatchSelectWidth: S, popupMinWidth: C }) {
 	let w = ke({
 		name: m ?? "",
 		disabled: !m
@@ -3741,7 +3765,7 @@ function qi({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 		required: s,
 		rules: c,
 		hideLabel: d,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G(Ki, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G(qi, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
@@ -3767,10 +3791,10 @@ function qi({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/uploadFieldUtils.ts
-function Ji(e) {
+function Yi(e) {
 	return e instanceof File ? !0 : typeof e == "string" && e.length > 0;
 }
-function Yi(e) {
+function Xi(e) {
 	if (e instanceof File) return e.name;
 	if (typeof e == "string" && e.length > 0) try {
 		return new URL(e, "http://local").pathname.split("/").filter(Boolean).pop() || e;
@@ -3780,7 +3804,7 @@ function Yi(e) {
 }
 //#endregion
 //#region src/crud/fields/useUploadPreviewUrl.ts
-function Xi(e) {
+function Zi(e) {
 	let [t, n] = d();
 	if (s(() => {
 		if (e instanceof File) {
@@ -3793,8 +3817,8 @@ function Xi(e) {
 }
 //#endregion
 //#region src/crud/fields/ImageField.tsx
-function Zi({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
-	let o = u(null), s = Xi(e), c = r && Ji(e);
+function Qi({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
+	let o = u(null), s = Zi(e), c = r && Yi(e);
 	return /* @__PURE__ */ K(z, {
 		direction: "vertical",
 		size: "middle",
@@ -3841,7 +3865,7 @@ function Zi({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "ima
 		]
 	});
 }
-function Qi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s, previewWidth: c }) {
+function $i({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s, previewWidth: c }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3849,7 +3873,7 @@ function Qi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		required: r,
 		rules: i,
 		hideLabel: a,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G(Zi, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G(Qi, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -3861,8 +3885,8 @@ function Qi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/fields/FileField.tsx
-function $i({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
-	let a = u(null), o = Yi(e), s = typeof e == "string" && e.length > 0 ? e : void 0, c = r && Ji(e);
+function ea({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
+	let a = u(null), o = Xi(e), s = typeof e == "string" && e.length > 0 ? e : void 0, c = r && Yi(e);
 	return /* @__PURE__ */ K(z, {
 		direction: "vertical",
 		size: "middle",
@@ -3906,7 +3930,7 @@ function $i({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
 		]
 	});
 }
-function ea({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s }) {
+function ta({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, clearable: o, accept: s }) {
 	return /* @__PURE__ */ G($, {
 		source: e,
 		name: t,
@@ -3914,7 +3938,7 @@ function ea({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		required: r,
 		rules: i,
 		hideLabel: a,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G($i, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ G(ea, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -3925,7 +3949,7 @@ function ea({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/columns/TextColumn.tsx
-function ta({ source: e, label: t, sortable: n = !0 }) {
+function na({ source: e, label: t, sortable: n = !0 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -3943,12 +3967,12 @@ function ta({ source: e, label: t, sortable: n = !0 }) {
 		n
 	])), null;
 }
-function na(e, t, n) {
+function ra(e, t, n) {
 	return typeof n == "function" ? n(e) : n ? dr(e, n) : e[t];
 }
 //#endregion
 //#region src/crud/columns/NumberColumn.tsx
-function ra({ source: e, label: t, sortable: n = !0 }) {
+function ia({ source: e, label: t, sortable: n = !0 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -3968,7 +3992,7 @@ function ra({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/BooleanColumn.tsx
-function ia({ source: e, label: t, sortable: n = !0 }) {
+function aa({ source: e, label: t, sortable: n = !0 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -3989,7 +4013,7 @@ function ia({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/DateColumn.tsx
-function aa({ source: e, label: t, sortable: n = !0 }) {
+function oa({ source: e, label: t, sortable: n = !0 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -4010,16 +4034,16 @@ function aa({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/ReferenceColumn.tsx
-function oa({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
-	let { labelForValue: s } = Hi(i, r, a, o), c = e[t];
+function sa({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
+	let { labelForValue: s } = Ui(i, r, a, o), c = e[t];
 	if (typeof n == "function") return /* @__PURE__ */ G(W, { children: n(e) });
 	if (n && n !== t) {
-		let r = na(e, t, n);
+		let r = ra(e, t, n);
 		return /* @__PURE__ */ G(W, { children: r == null ? "—" : String(r) });
 	}
 	return /* @__PURE__ */ G(W, { children: s(c) });
 }
-function sa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: s = !0 }) {
+function ca({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: s = !0 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -4030,7 +4054,7 @@ function sa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: s ? !0 : void 0,
-			render: (s, c) => /* @__PURE__ */ G(oa, {
+			render: (s, c) => /* @__PURE__ */ G(sa, {
 				record: c,
 				source: e,
 				label: t,
@@ -4054,11 +4078,11 @@ function sa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ReferenceManyColumn.tsx
-function ca({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
-	let { labelsForValues: o } = Hi(r, n, i, a), s = e[t];
+function la({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
+	let { labelsForValues: o } = Ui(r, n, i, a), s = e[t];
 	return /* @__PURE__ */ G(W, { children: o(Array.isArray(s) ? s : []) });
 }
-function la({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
+function ua({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -4069,7 +4093,7 @@ function la({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: o ? !0 : void 0,
-			render: (t, o) => /* @__PURE__ */ G(ca, {
+			render: (t, o) => /* @__PURE__ */ G(la, {
 				record: o,
 				source: e,
 				reference: n,
@@ -4090,7 +4114,7 @@ function la({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ImageColumn.tsx
-function ua({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: s = "" }) {
+function da({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: s = "" }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -4125,7 +4149,7 @@ function ua({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 
 }
 //#endregion
 //#region src/crud/columns/CustomColumn.tsx
-function da({ source: e, label: t, sortable: n = !1, render: r }) {
+function fa({ source: e, label: t, sortable: n = !1, render: r }) {
 	return zn(l(() => ({
 		key: e,
 		source: e,
@@ -4145,7 +4169,7 @@ function da({ source: e, label: t, sortable: n = !1, render: r }) {
 }
 //#endregion
 //#region src/crud/filters/NumberFilter.tsx
-function fa({ source: e, label: t }) {
+function pa({ source: e, label: t }) {
 	return Jn(l(() => ({
 		key: e,
 		source: e,
@@ -4160,7 +4184,7 @@ function fa({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/BooleanFilter.tsx
-function pa({ source: e, label: t }) {
+function ma({ source: e, label: t }) {
 	return Jn(l(() => ({
 		key: e,
 		source: e,
@@ -4183,7 +4207,7 @@ function pa({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/DateFilter.tsx
-function ma({ source: e, label: t }) {
+function ha({ source: e, label: t }) {
 	return Jn(l(() => ({
 		key: e,
 		source: e,
@@ -4199,7 +4223,7 @@ function ma({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/SelectFilter.tsx
-function ha({ source: e, label: t, choices: n, multiple: r }) {
+function ga({ source: e, label: t, choices: n, multiple: r }) {
 	return Jn(l(() => ({
 		key: e,
 		source: e,
@@ -4222,15 +4246,15 @@ function ha({ source: e, label: t, choices: n, multiple: r }) {
 }
 //#endregion
 //#region src/crud/filters/ReferenceFilter.tsx
-function ga({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, lazy: c = !0, fetchSelected: l = !0, popupMatchSelectWidth: u, popupMinWidth: f, value: p, onChange: m }) {
-	let [h, g] = d(), [_, v] = d(!1), { options: y, loading: b } = Hi(r, n, i, a, s ? h : void 0, {
+function _a({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, lazy: c = !0, fetchSelected: l = !0, popupMatchSelectWidth: u, popupMinWidth: f, value: p, onChange: m }) {
+	let [h, g] = d(), [_, v] = d(!1), { options: y, loading: b } = Ui(r, n, i, a, s ? h : void 0, {
 		lazy: c,
 		active: _ || !!h,
 		selectedValues: p,
 		fetchSelected: l
 	});
 	return /* @__PURE__ */ G(R, {
-		...Fi({
+		...Ii({
 			popupMatchSelectWidth: u,
 			popupMinWidth: f
 		}),
@@ -4244,7 +4268,7 @@ function ga({ source: e, label: t, reference: n, choices: r, optionLabel: i, opt
 			value: e.value
 		})),
 		loading: b,
-		notFoundContent: Ii(b),
+		notFoundContent: Li(b),
 		showSearch: s,
 		filterOption: s ? !1 : void 0,
 		onSearch: s ? g : void 0,
@@ -4255,12 +4279,12 @@ function ga({ source: e, label: t, reference: n, choices: r, optionLabel: i, opt
 		style: { minWidth: 180 }
 	});
 }
-function _a({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: s, lazy: c = !0, fetchSelected: u = !0, popupMatchSelectWidth: d, popupMinWidth: f }) {
+function va({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: s, lazy: c = !0, fetchSelected: u = !0, popupMatchSelectWidth: d, popupMinWidth: f }) {
 	return Jn(l(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: l, onChange: p }) => /* @__PURE__ */ G(ga, {
+		render: ({ value: l, onChange: p }) => /* @__PURE__ */ G(_a, {
 			source: e,
 			label: t,
 			reference: n,
@@ -4291,11 +4315,11 @@ function _a({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 		f
 	])), null;
 }
-function va(e) {
-	return /* @__PURE__ */ G(_a, {
+function ya(e) {
+	return /* @__PURE__ */ G(va, {
 		...e,
 		multiple: !0
 	});
 }
 //#endregion
-export { zt as AdminApp, Dt as AdminLayout, Ke as AppThemeProvider, kn as AuthAlternateLink, An as AuthPageLayout, it as AuthProvider, ia as BooleanColumn, pi as BooleanField, pa as BooleanFilter, da as CustomColumn, Vn as DEFAULT_TEXT_FILTER_DEBOUNCE_MS, Vt as DataProvider, aa as DateColumn, yi as DateField, ma as DateFilter, bi as DateTimeField, Ye as DensitySwitch, qt as EXPECTED_VALIDATION_BODY_HINT, $ as FieldWrapper, ea as FileField, Yr as FilterBar, ci as FormStep, ui as FormSteps, ai as FormTab, si as FormTabs, Ot as Guard, At as GuestOnly, ua as ImageColumn, Qi as ImageField, ei as InlineFormSet, ti as InlineFormSetStacked, jn as LoginPage, ra as NumberColumn, fi as NumberField, fa as NumberFilter, Ei as PasswordField, lt as PermissionsProvider, Mn as PlaceholderPage, kt as Protected, sa as ReferenceColumn, Gi as ReferenceField, _a as ReferenceFilter, la as ReferenceManyColumn, qi as ReferenceManyField, va as ReferenceManyFilter, jt as RequirePermission, Xr as ResourceForm, Pr as ResourceFormModal, qr as ResourceList, wi as SelectField, ha as SelectFilter, ta as TextColumn, di as TextField, Wn as TextFilter, Ze as ThemeSwitch, Qe as ThemeToolbar, Ci as TimeField, Sn as applyInMemoryListParams, Q as asStringMessages, pr as buildFormPayload, mr as buildInlineRowsPayload, Sr as buildResourceFormSubmitBody, Gt as combineResourceHandlers, Rt as createAdminRouter, Cn as createMemoryResourceHandlers, ut as createPermissionsChecker, wn as createRestResourceHandlers, st as createSessionStorageAuthAdapter, It as deriveAuthPaths, $t as describeNonStandardValidationBody, _t as filterNavByPermission, bn as filterRows, cn as finalizeFormErrors, sn as flattenNestedArrayErrors, nn as getErrorBody, dr as getFormValue, Mt as getRouteAccess, _n as getRowById, hr as hasUploadValues, Kt as isAbortError, Zr as nestedFieldPath, dn as parseDjangoDRFFormErrors, fn as parseDotNetFormErrors, pn as parseNodeFormErrors, Nt as partitionAdminRoutes, xr as prepareFormSubmitBody, an as resolveErrorBody, fr as setFormValue, En as toDjangoRestOrdering, br as toFormData, On as toJsonApiSort, Dn as toODataOrderBy, Ar as useAbortableEffect, at as useAuth, dt as useCan, Hi as useChoices, Ht as useDataProvider, Vr as useListQueryState, X as usePermissions, ir as useRegisterPayloadField, ar as useRegisterSectionField, Ur as useResourceListContext, qe as useThemeMode };
+export { zt as AdminApp, Dt as AdminLayout, Ke as AppThemeProvider, kn as AuthAlternateLink, An as AuthPageLayout, it as AuthProvider, aa as BooleanColumn, mi as BooleanField, ma as BooleanFilter, fa as CustomColumn, Vn as DEFAULT_TEXT_FILTER_DEBOUNCE_MS, Vt as DataProvider, oa as DateColumn, bi as DateField, ha as DateFilter, xi as DateTimeField, Ye as DensitySwitch, qt as EXPECTED_VALIDATION_BODY_HINT, $ as FieldWrapper, ta as FileField, Yr as FilterBar, ci as FormStep, ui as FormSteps, ai as FormTab, si as FormTabs, Ot as Guard, At as GuestOnly, da as ImageColumn, $i as ImageField, ei as InlineFormSet, ti as InlineFormSetStacked, jn as LoginPage, ia as NumberColumn, pi as NumberField, pa as NumberFilter, Di as PasswordField, lt as PermissionsProvider, Mn as PlaceholderPage, kt as Protected, ca as ReferenceColumn, Ki as ReferenceField, va as ReferenceFilter, ua as ReferenceManyColumn, Ji as ReferenceManyField, ya as ReferenceManyFilter, jt as RequirePermission, Xr as ResourceForm, Pr as ResourceFormModal, qr as ResourceList, Ti as SelectField, ga as SelectFilter, fi as TextAreaField, na as TextColumn, di as TextField, Wn as TextFilter, Ze as ThemeSwitch, Qe as ThemeToolbar, wi as TimeField, Sn as applyInMemoryListParams, Q as asStringMessages, pr as buildFormPayload, mr as buildInlineRowsPayload, Sr as buildResourceFormSubmitBody, Gt as combineResourceHandlers, Rt as createAdminRouter, Cn as createMemoryResourceHandlers, ut as createPermissionsChecker, wn as createRestResourceHandlers, st as createSessionStorageAuthAdapter, It as deriveAuthPaths, $t as describeNonStandardValidationBody, _t as filterNavByPermission, bn as filterRows, cn as finalizeFormErrors, sn as flattenNestedArrayErrors, nn as getErrorBody, dr as getFormValue, Mt as getRouteAccess, _n as getRowById, hr as hasUploadValues, Kt as isAbortError, Zr as nestedFieldPath, dn as parseDjangoDRFFormErrors, fn as parseDotNetFormErrors, pn as parseNodeFormErrors, Nt as partitionAdminRoutes, xr as prepareFormSubmitBody, an as resolveErrorBody, fr as setFormValue, En as toDjangoRestOrdering, br as toFormData, On as toJsonApiSort, Dn as toODataOrderBy, Ar as useAbortableEffect, at as useAuth, dt as useCan, Ui as useChoices, Ht as useDataProvider, Vr as useListQueryState, X as usePermissions, ir as useRegisterPayloadField, ar as useRegisterSectionField, Ur as useResourceListContext, qe as useThemeMode };
