@@ -82,6 +82,8 @@ export type InlineFormSetBaseProps = {
   /** API key when different from `field`. */
   payloadKey?: string;
   transformRows?: (rows: Record<string, unknown>[]) => unknown;
+  /** Values applied when appending a new inline row (e.g. `{ is_active: true }`). */
+  defaultRow?: Record<string, unknown>;
 };
 
 /** Passed to each tabular inline column's `cell` renderer. */

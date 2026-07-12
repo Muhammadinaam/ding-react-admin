@@ -20,15 +20,25 @@ export type InlineFormSetStackedProps = InlineFormSetBaseProps & {
   /** Field sources in each row — used when appending an empty row. */
   sources: string[];
   renderRow: (ctx: InlineRowContext) => ReactNode;
+  /** Optional card title per row (defaults to "Item N"). */
+  getCardTitle?: (ctx: InlineRowContext) => ReactNode;
+  /** Optional content below the row list (e.g. combined preview). */
+  footer?: ReactNode;
 };
 
-function emptyRow(sources: string[]) {
+function emptyRow(sources: string[], defaults?: Record<string, unknown>) {
   const row: Record<string, unknown> = {};
-  for (const source of sources) row[source] = undefined;
+  for (const source of sources) {
+    row[source] = defaults?.[source] ?? undefined;
+  }
   return row;
 }
 
-function useInlineRows(field: string, sources: string[]) {
+function useInlineRows(
+  field: string,
+  sources: string[],
+  defaultRow?: Record<string, unknown>,
+) {
   const { control } = useFormContext<FieldValues>();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -36,7 +46,7 @@ function useInlineRows(field: string, sources: string[]) {
     keyName: "rowKey",
   });
 
-  const appendEmpty = () => append(emptyRow(sources));
+  const appendEmpty = () => append(emptyRow(sources, defaultRow));
 
   return { fields, remove, appendEmpty };
 }
@@ -48,12 +58,13 @@ export function InlineFormSet({
   payloadKey,
   transformRows,
   columns,
+  defaultRow,
 }: InlineFormSetProps) {
   const sources = useMemo(
     () => columns.map((col) => col.source),
     [columns],
   );
-  const { fields, remove, appendEmpty } = useInlineRows(field, sources);
+  const { fields, remove, appendEmpty } = useInlineRows(field, sources, defaultRow);
 
   useRegisterPayloadField(field);
   useRegisterInlineField(field, sources, payloadKey, transformRows);
@@ -120,8 +131,11 @@ export function InlineFormSetStacked({
   transformRows,
   sources,
   renderRow,
+  getCardTitle,
+  footer,
+  defaultRow,
 }: InlineFormSetStackedProps) {
-  const { fields, remove, appendEmpty } = useInlineRows(field, sources);
+  const { fields, remove, appendEmpty } = useInlineRows(field, sources, defaultRow);
 
   useRegisterPayloadField(field);
   useRegisterInlineField(field, sources, payloadKey, transformRows);
@@ -130,11 +144,17 @@ export function InlineFormSetStacked({
     <div style={{ marginTop: 24 }}>
       <Typography.Title level={5}>{label ?? "Related items"}</Typography.Title>
       <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
-        {fields.map((rowField, index) => (
+        {fields.map((rowField, index) => {
+          const rowContext = {
+            field,
+            index,
+            name: (source: string) => nestedFieldPath(field, index, source),
+          };
+          return (
           <Card
             key={rowField.rowKey}
             size="small"
-            title={`Item ${index + 1}`}
+            title={getCardTitle?.(rowContext) ?? `Item ${index + 1}`}
             extra={
               <Button
                 type="link"
@@ -146,17 +166,15 @@ export function InlineFormSetStacked({
               </Button>
             }
           >
-            {renderRow({
-              field,
-              index,
-              name: (source) => nestedFieldPath(field, index, source),
-            })}
+            {renderRow(rowContext)}
           </Card>
-        ))}
+          );
+        })}
       </Space>
       <Button type="dashed" style={{ marginTop: 8 }} onClick={appendEmpty}>
         Add item
       </Button>
+      {footer}
     </div>
   );
 }
