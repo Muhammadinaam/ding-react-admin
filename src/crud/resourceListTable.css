@@ -1,3 +1,74 @@
+.ding-admin-scroll.ding-admin-resource-list-scroll,
+.ding-admin-scroll:has(.ding-admin-resource-list-root) {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.ding-admin-resource-list-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.ding-admin-resource-list-root > :not(.ant-card) {
+  flex-shrink: 0;
+}
+
+.ding-admin-resource-list-root > .ant-card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ding-admin-resource-list-root > .ant-card > .ant-card-head {
+  flex-shrink: 0;
+}
+
+.ding-admin-resource-list-root > .ant-card > .ant-card-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ding-admin-resource-list-root > .ant-card > .ant-card-body > :not(.ding-admin-resource-list-table) {
+  flex-shrink: 0;
+}
+
+.ding-admin-resource-list-table {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ding-admin-resource-list-table .ant-spin-nested-loading,
+.ding-admin-resource-list-table .ant-spin-container,
+.ding-admin-resource-list-table .ant-table-wrapper,
+.ding-admin-resource-list-table .ant-table,
+.ding-admin-resource-list-table .ant-table-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ding-admin-resource-list-table .ant-table-header {
+  flex-shrink: 0;
+}
+
+.ding-admin-resource-list-pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
 .ding-admin-resource-list-table .ant-table-body,
 .ding-admin-resource-list-table .ant-table-content {
   scrollbar-width: thin;

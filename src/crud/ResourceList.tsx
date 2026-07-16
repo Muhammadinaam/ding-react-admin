@@ -1,5 +1,5 @@
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
-import { App, Button, Card, Space, Table, theme, Typography } from "antd";
+import { App, Button, Card, Pagination, Space, Table, theme, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type {
   SortOrder as AntSortOrder,
@@ -250,15 +250,63 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const selectedCount = selectedIds.size;
 
   useLayoutEffect(() => {
-    const updateScrollY = () => {
-      const top = tableWrapRef.current?.getBoundingClientRect().top ?? 0;
-      setTableScrollY(Math.max(200, window.innerHeight - top - 80));
+    const wrap = tableWrapRef.current;
+    if (!wrap) return;
+
+    const scrollParent = wrap.closest(".ding-admin-scroll") as HTMLElement | null;
+    scrollParent?.classList.add("ding-admin-resource-list-scroll");
+
+    const applyScrollY = () => {
+      if (wrap.clientHeight <= 0) return;
+
+      const paginationEl = wrap.querySelector(
+        ".ding-admin-resource-list-pagination",
+      ) as HTMLElement | null;
+      const tableHead = wrap.querySelector(
+        ".ant-table-header",
+      ) as HTMLElement | null;
+
+      const paginationHeight = paginationEl?.offsetHeight ?? 0;
+      const paginationMargin = paginationEl
+        ? parseFloat(getComputedStyle(paginationEl).marginTop) +
+          parseFloat(getComputedStyle(paginationEl).marginBottom)
+        : 0;
+      const headHeight = tableHead?.offsetHeight ?? 0;
+      const tableBody = wrap.querySelector(
+        ".ant-table-body",
+      ) as HTMLElement | null;
+      const horizontalScrollbar =
+        tableBody && tableBody.scrollWidth > tableBody.clientWidth
+          ? tableBody.offsetHeight - tableBody.clientHeight
+          : 0;
+
+      const next = Math.max(
+        120,
+        Math.floor(
+          wrap.clientHeight -
+            headHeight -
+            paginationHeight -
+            paginationMargin -
+            horizontalScrollbar -
+            8,
+        ),
+      );
+
+      setTableScrollY((prev) => (prev === next ? prev : next));
     };
 
-    updateScrollY();
-    window.addEventListener("resize", updateScrollY);
-    return () => window.removeEventListener("resize", updateScrollY);
-  }, [showBulkActions, selectedCount]);
+    applyScrollY();
+
+    const resizeObserver = new ResizeObserver(() => applyScrollY());
+    resizeObserver.observe(wrap);
+
+    window.addEventListener("resize", applyScrollY);
+    return () => {
+      scrollParent?.classList.remove("ding-admin-resource-list-scroll");
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", applyScrollY);
+    };
+  }, [showBulkActions, selectedCount, total, loading]);
 
   const allPageSelected =
     data.length > 0 &&
@@ -333,7 +381,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
       }
 
       const field = resolveField(sorter);
-      if (field) {
+      if (field && !Array.isArray(sorter) && sorter.order) {
         queryActions.toggleSort(field);
         return;
       }
@@ -559,6 +607,19 @@ function ResourceListTable<T extends Record<string, unknown>>({
     load,
   ]);
 
+  const handlePaginationChange = useCallback(
+    (page: number, pageSize: number) => {
+      if (pageSize !== queryState.perPage) {
+        queryActions.setPerPage(pageSize);
+        return;
+      }
+      if (page !== queryState.page) {
+        queryActions.setPage(page);
+      }
+    },
+    [queryActions, queryState.page, queryState.perPage],
+  );
+
   const showModal =
     formChildren &&
     (queryState.createModal || queryState.editId != null) &&
@@ -643,20 +704,20 @@ function ResourceListTable<T extends Record<string, unknown>>({
                   }
                 : undefined
             }
-            pagination={{
-              current: queryState.page,
-              pageSize: queryState.perPage,
-              total,
-              showSizeChanger: true,
-              onChange: (p, ps) => {
-                queryActions.setPage(p);
-                if (ps) queryActions.setPerPage(ps);
-              },
-            }}
+            pagination={false}
             onChange={(_pag, _filters, sorter) => {
               handleTableSortChange(sorter as SorterResult<T> | SorterResult<T>[]);
             }}
           />
+          <div className="ding-admin-resource-list-pagination">
+            <Pagination
+              current={queryState.page}
+              pageSize={queryState.perPage}
+              total={total}
+              showSizeChanger
+              onChange={handlePaginationChange}
+            />
+          </div>
         </div>
       </Card>
       {showModal ? (
@@ -731,8 +792,9 @@ export function ResourceList({
           toggleSort={queryActions.toggleSort}
           sort={queryState.sort}
         >
-          {children}
-          <ResourceListTable
+          <div className="ding-admin-resource-list-root">
+            {children}
+            <ResourceListTable
             resource={resource}
             title={title}
             pathPrefix={pathPrefix}
@@ -749,6 +811,7 @@ export function ResourceList({
             queryState={queryState}
             queryActions={queryActions}
           />
+          </div>
         </ListContextProvider>
       </FilterContextProvider>
     </ResourceListContext.Provider>
