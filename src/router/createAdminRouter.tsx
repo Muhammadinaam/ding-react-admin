@@ -60,5 +60,7 @@ export function createAdminRouter({
     element: <Navigate to={homePath} replace />,
   });
 
-  return createBrowserRouter(routerRoutes);
+  return createBrowserRouter(routerRoutes, {
+    basename: import.meta.env.BASE_URL.replace(/\/$/, "") || undefined,
+  });
 }
