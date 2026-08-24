@@ -1342,52 +1342,59 @@ function zn({ title: e }) {
 }
 //#endregion
 //#region src/components/AppHub.tsx
-function Bn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPlaceholder: i = "Search menus across apps…", className: a, maxWidth: o = 960 }) {
-	let s = v(), { token: c } = G.useToken(), [u, f] = d(""), p = (e) => {
+function Bn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPlaceholder: i = "Search menus across apps…", className: a, maxWidth: o = 960, loading: s = !1 }) {
+	let c = v(), { token: u } = G.useToken(), [f, p] = d(""), m = (e) => {
 		if (n) {
 			n(e);
 			return;
 		}
-		s(e.path);
-	}, m = (e) => {
+		c(e.path);
+	}, h = (e) => {
 		if (r) {
 			r(e);
 			return;
 		}
-		s(e.path);
-	}, h = u.trim(), g = l(() => t && h ? bt(t, h) : [], [t, h]), _ = !!(t && h);
+		c(e.path);
+	}, g = f.trim(), _ = l(() => t && g ? bt(t, g) : [], [t, g]), y = !!(t && g);
 	return /* @__PURE__ */ J("div", {
 		className: a,
 		style: {
 			width: "100%",
 			maxWidth: o,
 			marginInline: "auto",
-			paddingInline: c.paddingMD
+			paddingInline: u.paddingMD
 		},
-		children: [t?.length ? /* @__PURE__ */ q("div", {
+		children: [t?.length && !s ? /* @__PURE__ */ q("div", {
 			style: {
 				maxWidth: 480,
 				margin: "0 auto 24px"
 			},
 			children: /* @__PURE__ */ q(it, {
-				value: u,
-				onChange: f,
+				value: f,
+				onChange: p,
 				placeholder: i,
 				variant: "app"
 			})
-		}) : null, _ ? /* @__PURE__ */ q(te, {
+		}) : null, s ? /* @__PURE__ */ q("div", {
+			style: {
+				display: "flex",
+				justifyContent: "center",
+				padding: u.paddingXL
+			},
+			children: /* @__PURE__ */ q(oe, { size: "large" })
+		}) : y ? /* @__PURE__ */ q(te, {
 			bordered: !0,
-			dataSource: g,
+			dataSource: _,
 			locale: { emptyText: "No menus match your search." },
 			style: {
-				background: c.colorBgContainer,
-				borderRadius: c.borderRadiusLG
+				background: u.colorBgContainer,
+				borderRadius: u.borderRadiusLG
 			},
 			renderItem: (e) => {
 				let t = e.Icon;
 				return /* @__PURE__ */ q(te.Item, {
 					style: { cursor: "pointer" },
-					onClick: () => m(e),
+					onClick: () => h(e),
 					children: /* @__PURE__ */ q(te.Item.Meta, {
 						avatar: t ? /* @__PURE__ */ q("span", {
 							style: {
@@ -1414,10 +1421,10 @@ function Bn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 					style: { maxWidth: 200 },
 					children: /* @__PURE__ */ q(T, {
 						hoverable: !0,
-						onClick: () => p(e),
+						onClick: () => m(e),
 						styles: { body: {
 							textAlign: "center",
-							padding: c.paddingLG
+							padding: u.paddingLG
 						} },
 						children: /* @__PURE__ */ J(B, {
 							orientation: "vertical",

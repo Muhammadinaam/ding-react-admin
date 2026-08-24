@@ -29,7 +29,7 @@ export function HomePage() {
 
 Optional `onAppClick` / `onMenuClick` override the default `navigate()` behavior.
 
-When `menuItems` is set, a search field appears at the top. Typing filters menus across all apps (match on menu label or app name).
+Pass `loading={true}` while async data (e.g. subscription bundles) is loading to avoid flashing a partial app grid.
 
 ## Scoped sidebar + back to apps
 

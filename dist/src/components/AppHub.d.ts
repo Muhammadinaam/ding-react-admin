@@ -10,6 +10,8 @@ export type AppHubProps = {
     className?: string;
     /** Max width of the centered hub content. Default `960`. */
     maxWidth?: number;
+    /** When true, shows a centered spinner instead of the app grid. */
+    loading?: boolean;
 };
-export declare function AppHub({ apps, menuItems, onAppClick, onMenuClick, menuSearchPlaceholder, className, maxWidth, }: AppHubProps): import("react/jsx-runtime").JSX.Element;
+export declare function AppHub({ apps, menuItems, onAppClick, onMenuClick, menuSearchPlaceholder, className, maxWidth, loading, }: AppHubProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=AppHub.d.ts.map

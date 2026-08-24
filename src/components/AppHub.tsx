@@ -1,4 +1,4 @@
-import { Card, Col, List, Row, Space, Typography, theme } from "antd";
+import { Card, Col, List, Row, Space, Spin, Typography, theme } from "antd";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +19,8 @@ export type AppHubProps = {
   className?: string;
   /** Max width of the centered hub content. Default `960`. */
   maxWidth?: number;
+  /** When true, shows a centered spinner instead of the app grid. */
+  loading?: boolean;
 };
 
 export function AppHub({
@@ -29,6 +31,7 @@ export function AppHub({
   menuSearchPlaceholder = "Search menus across apps…",
   className,
   maxWidth = 960,
+  loading = false,
 }: AppHubProps) {
   const navigate = useNavigate();
   const { token } = theme.useToken();
@@ -70,7 +73,7 @@ export function AppHub({
         paddingInline: token.paddingMD,
       }}
     >
-      {menuItems?.length ? (
+      {menuItems?.length && !loading ? (
         <div style={{ maxWidth: 480, margin: "0 auto 24px" }}>
           <NavMenuSearch
             value={query}
@@ -81,7 +84,11 @@ export function AppHub({
         </div>
       ) : null}
 
-      {isSearching ? (
+      {loading ? (
+        <div style={{ display: "flex", justifyContent: "center", padding: token.paddingXL }}>
+          <Spin size="large" />
+        </div>
+      ) : isSearching ? (
         <List
           bordered
           dataSource={menuResults}
