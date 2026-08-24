@@ -9,7 +9,6 @@ import {
   type RouteObject,
 } from "react-router-dom";
 import {
-  AdminLayout,
   AppThemeProvider,
   AuthProvider,
   DataProvider,
@@ -25,7 +24,7 @@ import {
 } from "./api/playgroundAuth";
 import { createPlaygroundDataProvider } from "./api/playgroundDataProvider";
 import { PlaygroundMemoryApi } from "./api/memoryApi";
-import { PLAYGROUND_NAV } from "./navigation";
+import { PlaygroundShell } from "./PlaygroundShell";
 import { playgroundRoutes } from "./routes";
 
 const LOGIN_PATH = "/login";
@@ -83,12 +82,7 @@ const router = createBrowserRouter(
           path: "/",
           element: (
             <Protected redirectTo={LOGIN_PATH}>
-              <AdminLayout
-                navItems={PLAYGROUND_NAV}
-                loginPath={LOGIN_PATH}
-                brand="Playground"
-                collapsedBrand="P"
-              />
+              <PlaygroundShell />
             </Protected>
           ),
           children: playgroundRoutes as RouteObject[],

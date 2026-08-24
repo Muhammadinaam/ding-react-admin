@@ -133,7 +133,7 @@ export function PurchaseOrderFormPage() {
     <ResourceForm<PurchaseOrderRow>
       resource={PURCHASE_ORDER_RESOURCE}
       title="Purchase order"
-      listPath="/purchase-orders"
+      listPath="/sales/purchase-orders"
     >
       <PurchaseOrderFormFields />
     </ResourceForm>

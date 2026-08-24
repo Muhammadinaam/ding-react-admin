@@ -1,3 +1,5 @@
+export { AppHub } from "./AppHub";
+export { AppLauncherButton } from "./AppLauncherButton";
 export { AuthAlternateLink } from "./AuthAlternateLink";
 export { NavMenuLabel } from "./NavMenuLabel";
 export { NavMenuSearch } from "./NavMenuSearch";

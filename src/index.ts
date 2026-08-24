@@ -89,6 +89,8 @@ export { LoginPage } from "./pages/LoginPage";
 export { PlaceholderPage } from "./pages/PlaceholderPage";
 export { AuthPageLayout } from "./layouts/AuthPageLayout";
 export {
+  AppHub,
+  AppLauncherButton,
   AuthAlternateLink,
   DensitySwitch,
   ThemeSwitch,
@@ -110,6 +112,8 @@ export type {
   LoginCredentials,
   AuthRedirects,
   CreateAdminRouterOptions,
+  AppHubProps,
+  AppLauncherButtonProps,
   AuthAlternateLinkProps,
   AuthPageLayoutProps,
   LoginPageProps,

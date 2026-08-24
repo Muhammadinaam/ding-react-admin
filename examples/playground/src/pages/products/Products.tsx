@@ -143,7 +143,7 @@ export function ProductListPage() {
     <ResourceList
       resource={PRODUCT_RESOURCE}
       title="Products"
-      pathPrefix="/products"
+      pathPrefix="/catalog/products"
       editMode="both"
       permissions={{
         add: PRODUCT_PERMS.add,
@@ -218,7 +218,7 @@ export function ProductFormPage() {
     <ResourceForm<ProductRow>
       resource={PRODUCT_RESOURCE}
       title="Product"
-      listPath="/products"
+      listPath="/catalog/products"
       permissions={{
         add: PRODUCT_PERMS.add,
         change: PRODUCT_PERMS.change,

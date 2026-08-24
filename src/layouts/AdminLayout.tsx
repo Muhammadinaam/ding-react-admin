@@ -209,6 +209,7 @@ export function AdminLayout({
   siderCollapsedStorageKey = DEFAULT_SIDER_KEY,
   navSearch = true,
   navMenu,
+  hideSider = false,
 }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -368,7 +369,7 @@ export function AdminLayout({
         background: token.colorBgLayout,
       }}
     >
-      {!isMobile && (
+      {!hideSider && !isMobile && (
         <Layout.Sider
           collapsible
           collapsed={collapsed}
@@ -427,7 +428,7 @@ export function AdminLayout({
           </div>
         </Layout.Sider>
       )}
-      {isMobile && (
+      {!hideSider && isMobile && (
         <Drawer
           title={
             <Typography.Text
@@ -498,7 +499,7 @@ export function AdminLayout({
             flexShrink: 0,
           }}
         >
-          {isMobile && (
+          {!hideSider && isMobile && (
             <Button
               type="text"
               icon={<MenuOutlined />}

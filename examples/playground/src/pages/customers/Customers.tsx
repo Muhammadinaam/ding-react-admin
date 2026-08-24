@@ -114,7 +114,7 @@ export function CustomerFormPage() {
     <ResourceForm<CustomerRow>
       resource={CUSTOMER_RESOURCE}
       title="Customer"
-      listPath="/customers"
+      listPath="/sales/customers"
     >
       <CustomerFormFields />
     </ResourceForm>

@@ -237,7 +237,7 @@ Use **`createSessionStorageAuthAdapter`** for demos; replace with an adapter tha
 | Login / register layout | [docs/auth-pages.md](docs/auth-pages.md) |
 | Quick start (`<AdminApp />`) | [docs/quick-start.md](docs/quick-start.md) |
 | Composition (your own router) | [docs/composition.md](docs/composition.md) |
-| Odoo-style app hub | [docs/app-hub.md](docs/app-hub.md) |
+| Odoo-style app hub (`AppHub`, `AppLauncherButton`, `hideSider`) | [docs/app-hub.md](docs/app-hub.md) |
 | `createAdminRouter` shortcut | [docs/admin-router.md](docs/admin-router.md) |
 | Developing next to your app (Vite) | [docs/developing.md](docs/developing.md) |
 

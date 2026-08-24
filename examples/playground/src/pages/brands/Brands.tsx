@@ -14,7 +14,7 @@ export function BrandListPage() {
     <ResourceList
       resource={BRAND_RESOURCE}
       title="Brands"
-      pathPrefix="/brands"
+      pathPrefix="/catalog/brands"
     >
       <TextColumn source="name" label="Name" />
       <TextColumn source="productId" label="Linked product id" sortable={false} />
@@ -27,7 +27,7 @@ export function BrandFormPage() {
     <ResourceForm<BrandRow>
       resource={BRAND_RESOURCE}
       title="Brand"
-      listPath="/brands"
+      listPath="/catalog/brands"
     >
       <TextField source="name" label="Name" required />
     </ResourceForm>

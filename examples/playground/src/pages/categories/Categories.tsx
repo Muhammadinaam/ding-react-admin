@@ -26,7 +26,7 @@ export function CategoryFormPage() {
     <ResourceForm<CategoryRow>
       resource={CATEGORY_RESOURCE}
       title="Category"
-      listPath="/categories"
+      listPath="/catalog/categories"
     >
       <TextField source="name" label="Name" required />
     </ResourceForm>

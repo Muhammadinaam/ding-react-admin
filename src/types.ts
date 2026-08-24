@@ -104,9 +104,16 @@ export type AdminLayoutProps = {
      */
     itemDivider?: NavMenuItemDivider;
   };
+  /**
+   * Hide the sidebar and mobile nav drawer (e.g. on an Odoo-style app hub home).
+   * Default **`false`**.
+   */
+  hideSider?: boolean;
 };
 
 export type { AuthPageLayoutProps } from "./layouts/AuthPageLayout";
+export type { AppHubProps } from "./components/AppHub";
+export type { AppLauncherButtonProps } from "./components/AppLauncherButton";
 export type { AuthAlternateLinkProps } from "./components/AuthAlternateLink";
 
 export type LoginPageProps = {

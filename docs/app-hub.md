@@ -1,35 +1,60 @@
 # Odoo-style app hub (boxed icons)
 
-Home screen is a grid of tiles; each tile navigates into a module—no persistent sidebar:
+Home screen is a grid of tiles; each tile navigates into a module. Hide the sidebar on the hub and show a scoped sidebar inside each app.
+
+## `AppHub`
 
 ```tsx
-import { Card, Col, Row, Space, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
-import type { NavItem } from "ding-react-admin";
+import { AppHub, type NavItem } from "ding-react-admin";
+import { GiftOutlined, ShoppingOutlined } from "@ant-design/icons";
 
-export function AppHub({ apps }: { apps: NavItem[] }) {
-  const navigate = useNavigate();
-  return (
-    <Row gutter={[16, 16]}>
-      {apps.map((app) => (
-        <Col key={app.path} xs={12} sm={8} md={6} lg={4}>
-          <Card
-            hoverable
-            onClick={() => navigate(app.path)}
-            styles={{ body: { textAlign: "center" } }}
-          >
-            <Space orientation="vertical" size="small">
-              <app.Icon style={{ fontSize: 32 }} />
-              <Typography.Text strong>{app.label}</Typography.Text>
-            </Space>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  );
+const apps: NavItem[] = [
+  { path: "/catalog", label: "Catalog", Icon: GiftOutlined },
+  { path: "/sales", label: "Sales", Icon: ShoppingOutlined },
+];
+
+export function HomePage() {
+  return <AppHub apps={apps} />;
 }
 ```
 
-Use that as the index route inside whatever shell you prefer.
+Optional `onAppClick` overrides the default `navigate(app.path)` behavior.
+
+## Scoped sidebar + back to apps
+
+Derive the active app from the URL and pass only that app's `navItems` to `AdminLayout`. On the hub route, set `hideSider` and disable nav search.
+
+```tsx
+import {
+  AdminLayout,
+  AppHub,
+  AppLauncherButton,
+  type NavItem,
+} from "ding-react-admin";
+import { Outlet, useLocation } from "react-router-dom";
+
+const hubApps: NavItem[] = [/* top-level app tiles */];
+const catalogNav: NavItem[] = [/* sidebar for /catalog/* */];
+
+function Shell() {
+  const { pathname } = useLocation();
+  const isHub = pathname === "/";
+
+  return (
+    <AdminLayout
+      navItems={isHub ? [] : catalogNav}
+      hideSider={isHub}
+      navSearch={!isHub}
+      headerExtras={
+        !isHub ? <AppLauncherButton hubPath="/" /> : undefined
+      }
+    />
+  );
+}
+
+// Routes: index → <AppHub apps={hubApps} />, /catalog/* → module pages
+```
+
+See the [playground](../examples/playground) for a full demo.
 
 [← Back to README](../README.md)

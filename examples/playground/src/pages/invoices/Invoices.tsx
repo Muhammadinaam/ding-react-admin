@@ -128,7 +128,7 @@ export function InvoiceFormPage() {
     <ResourceForm<InvoiceRow>
       resource={INVOICE_RESOURCE}
       title="Invoice"
-      listPath="/invoices"
+      listPath="/sales/invoices"
     >
       <TextField source="number" label="Number" required />
       <TextField source="customer" label="Customer" required />
