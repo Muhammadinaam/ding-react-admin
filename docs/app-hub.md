@@ -5,7 +5,11 @@ Home screen is a grid of tiles; each tile navigates into a module. Hide the side
 ## `AppHub`
 
 ```tsx
-import { AppHub, type NavItem } from "ding-react-admin";
+import {
+  AppHub,
+  flattenNavLeaves,
+  type NavItem,
+} from "ding-react-admin";
 import { GiftOutlined, ShoppingOutlined } from "@ant-design/icons";
 
 const apps: NavItem[] = [
@@ -13,16 +17,25 @@ const apps: NavItem[] = [
   { path: "/sales", label: "Sales", Icon: ShoppingOutlined },
 ];
 
+const menuItems = [
+  ...flattenNavLeaves(catalogNav, { group: "Catalog" }),
+  ...flattenNavLeaves(salesNav, { group: "Sales" }),
+];
+
 export function HomePage() {
-  return <AppHub apps={apps} />;
+  return <AppHub apps={apps} menuItems={menuItems} />;
 }
 ```
 
-Optional `onAppClick` overrides the default `navigate(app.path)` behavior.
+Optional `onAppClick` / `onMenuClick` override the default `navigate()` behavior.
+
+When `menuItems` is set, a search field appears at the top. Typing filters menus across all apps (match on menu label or app name).
 
 ## Scoped sidebar + back to apps
 
 Derive the active app from the URL and pass only that app's `navItems` to `AdminLayout`. On the hub route, set `hideSider` and disable nav search.
+
+**Use `useLocation()` from React Router** so the shell re-renders when navigating between hub and apps:
 
 ```tsx
 import {
@@ -31,7 +44,7 @@ import {
   AppLauncherButton,
   type NavItem,
 } from "ding-react-admin";
-import { Outlet, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const hubApps: NavItem[] = [/* top-level app tiles */];
 const catalogNav: NavItem[] = [/* sidebar for /catalog/* */];

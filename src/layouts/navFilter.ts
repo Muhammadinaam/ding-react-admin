@@ -1,6 +1,14 @@
+import type { ReactNode } from "react";
 import type { NavItem } from "../types";
 
-export function getNavItemLabel(item: NavItem): string {
+export type FlatNavItem = {
+  path: string;
+  label: ReactNode;
+  group?: string;
+  Icon?: NavItem["Icon"];
+};
+
+export function getNavItemLabel(item: Pick<NavItem, "label">): string {
   const { label } = item;
   if (typeof label === "string") return label;
   if (typeof label === "number") return String(label);
@@ -32,6 +40,47 @@ export function filterNavItems(items: NavItem[], query: string): NavItem[] {
   }
 
   return walk(items);
+}
+
+/** Leaf menu rows from a nav tree, optionally tagged with an app/group name. */
+export function flattenNavLeaves(
+  items: NavItem[],
+  options?: { group?: string },
+): FlatNavItem[] {
+  const group = options?.group;
+  const result: FlatNavItem[] = [];
+
+  function walk(nodes: NavItem[]) {
+    for (const node of nodes) {
+      if (node.children?.length) {
+        walk(node.children);
+      } else {
+        result.push({
+          path: node.path,
+          label: node.label,
+          Icon: node.Icon,
+          group,
+        });
+      }
+    }
+  }
+
+  walk(items);
+  return result;
+}
+
+export function filterFlatNavItems(
+  items: FlatNavItem[],
+  query: string,
+): FlatNavItem[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+
+  return items.filter((item) => {
+    const label = getNavItemLabel(item).toLowerCase();
+    const group = (item.group ?? "").toLowerCase();
+    return label.includes(q) || group.includes(q);
+  });
 }
 
 export function collectSubmenuKeys(items: NavItem[]): string[] {

@@ -83,6 +83,13 @@ export type {
 } from "./data/resourceHandlers";
 export type { ResourcePermissions } from "./permissions/resourcePermissions";
 export { filterNavByPermission } from "./permissions/resourcePermissions";
+export {
+  flattenNavLeaves,
+  filterFlatNavItems,
+  filterNavItems,
+  getNavItemLabel,
+} from "./layouts/navFilter";
+export type { FlatNavItem } from "./layouts/navFilter";
 export type { MemoryResourceHandlersConfig } from "./data/createMemoryResourceHandlers";
 export type { PermissionsChecker } from "./context/PermissionsProvider";
 export { LoginPage } from "./pages/LoginPage";
