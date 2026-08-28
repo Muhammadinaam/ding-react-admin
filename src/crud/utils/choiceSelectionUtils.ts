@@ -114,3 +114,28 @@ export function mergeOptions(
   for (const option of incoming) byValue.set(option.value, option);
   return Array.from(byValue.values());
 }
+
+/** Selected ids that do not yet have a matching option (label still unresolved). */
+export function unresolvedSelectedIds(
+  selectedIds: unknown[],
+  knownOptions: ChoiceOption[],
+): unknown[] {
+  return selectedIds.filter(
+    (value) => !knownOptions.some((option) => option.value === value),
+  );
+}
+
+/**
+ * Keep options for currently selected ids when replacing the dropdown list
+ * (e.g. closing a lazy select) so selected labels do not flash back to raw ids.
+ */
+export function keepSelectedOptions(
+  previous: ChoiceOption[],
+  selectedIds: unknown[],
+  embeddedOptions: ChoiceOption[] = [],
+): ChoiceOption[] {
+  const keep = previous.filter((option) =>
+    selectedIds.some((value) => option.value === value),
+  );
+  return mergeOptions(embeddedOptions, keep);
+}

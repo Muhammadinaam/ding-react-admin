@@ -5,6 +5,10 @@ import { useRegisterFilter } from "../context/FilterContext";
 import { useChoices } from "../utils/useChoices";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
+import {
+  referenceSelectDisplayValue,
+  referenceSelectSelectedProps,
+} from "../utils/referenceSelectSelectedProps";
 
 export type SelectFilterProps = BaseSourceProps & {
   choices: ChoiceOption[];
@@ -98,7 +102,7 @@ function ReferenceFilterInput({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const active = dropdownOpen || Boolean(searchText);
 
-  const { options, loading } = useChoices(
+  const { options, loading, selectedLoading } = useChoices(
     choices,
     reference,
     optionLabel,
@@ -106,6 +110,12 @@ function ReferenceFilterInput({
     search ? searchText : undefined,
     { lazy, active, selectedValues: value, fetchSelected },
   );
+  const selectState = referenceSelectSelectedProps(loading, selectedLoading);
+  const selectValue = value as
+    | string
+    | number
+    | (string | number)[]
+    | undefined;
 
   return (
     <Select
@@ -113,14 +123,19 @@ function ReferenceFilterInput({
       allowClear
       mode={multiple ? "multiple" : undefined}
       placeholder={label ?? source}
-      value={value as string | number | (string | number)[] | undefined}
+      value={referenceSelectDisplayValue(
+        selectedLoading,
+        selectValue,
+        (multiple ? [] : undefined) as typeof selectValue,
+      )}
       onChange={onChange}
       options={options.map((o) => ({
         label: o.label,
         value: o.value as string | number,
       }))}
-      loading={loading}
-      notFoundContent={referenceSelectNotFoundContent(loading)}
+      loading={selectState.loading}
+      disabled={selectState.disabled}
+      notFoundContent={referenceSelectNotFoundContent(selectState.loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}

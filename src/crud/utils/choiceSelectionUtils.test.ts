@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   collectSelectedRecords,
   isRecordObject,
+  keepSelectedOptions,
   normalizeSelectedIds,
   recordsToOptions,
+  unresolvedSelectedIds,
   valueAsId,
   valuesAsIds,
 } from "./choiceSelectionUtils";
@@ -41,5 +43,26 @@ describe("choiceSelectionUtils", () => {
         record: { id: 1, name: "Branch 1" },
       },
     ]);
+  });
+
+  it("finds selected ids that do not yet have options", () => {
+    const options = [{ label: "One", value: "1" }];
+    expect(unresolvedSelectedIds(["1", "2"], [])).toEqual(["1", "2"]);
+    expect(unresolvedSelectedIds(["1", "2"], options)).toEqual(["2"]);
+    expect(unresolvedSelectedIds(["1"], options)).toEqual([]);
+    expect(unresolvedSelectedIds([], options)).toEqual([]);
+  });
+
+  it("keeps selected options when replacing a lazy dropdown list", () => {
+    const previous = [
+      { label: "One", value: "1" },
+      { label: "Two", value: "2" },
+    ];
+    const embedded = [{ label: "Embedded", value: "3" }];
+    expect(keepSelectedOptions(previous, ["2"], embedded)).toEqual([
+      { label: "Embedded", value: "3" },
+      { label: "Two", value: "2" },
+    ]);
+    expect(keepSelectedOptions(previous, [], [])).toEqual([]);
   });
 });

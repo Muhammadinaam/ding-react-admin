@@ -107,7 +107,7 @@ For many-to-many / multi-select with embedded arrays:
 />
 ```
 
-3. **`getOne` fallback** — if the value is a primitive id and no embedded record is available, the library calls `dataProvider.getOne(reference, id)` once per missing id. Disable this when your API never supports single-record fetch:
+3. **`getOne` fallback** — if the value is a primitive id and no embedded record is available, the library calls `dataProvider.getOne(reference, id)` once per missing id. While that request is in flight, the Select is **disabled**, shows a spinner, and **does not** display the raw id (UUID). After labels resolve, the field becomes interactive. Disable this when your API never supports single-record fetch:
 
 ```tsx
 <ReferenceField

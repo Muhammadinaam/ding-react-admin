@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDataProvider } from "../../context/DataProvider";
 import type { Identifier } from "../../data/dataProviderTypes";
 import type { ChoiceOption, ChoicesLoader } from "../types";
 import {
   collectSelectedRecords,
+  keepSelectedOptions,
   mergeOptions,
   normalizeSelectedIds,
   recordsToOptions,
   resolveOptionLabel,
+  unresolvedSelectedIds,
 } from "./choiceSelectionUtils";
 
 const choicesCache = new Map<string, ChoiceOption[]>();
@@ -174,6 +176,19 @@ export function useChoices(
     return !choicesCache.has(cacheKey);
   });
 
+  const [selectedLoading, setSelectedLoading] = useState(() =>
+    Boolean(
+      fetchSelected &&
+        reference &&
+        unresolvedSelectedIds(normalizedSelected, embeddedOptions).length,
+    ),
+  );
+
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+  const normalizedSelectedRef = useRef(normalizedSelected);
+  normalizedSelectedRef.current = normalizedSelected;
+
   useEffect(() => {
     if (!embeddedOptions.length) return;
     setOptions((prev) => mergeOptions(prev, embeddedOptions));
@@ -192,7 +207,16 @@ export function useChoices(
       const key = loaderKey(effectiveLoader, search);
       const cached = choicesCache.get(key);
       if (cached && !search) {
-        setOptions(mergeOptions(embeddedOptions, cached));
+        setOptions((prev) =>
+          mergeOptions(
+            keepSelectedOptions(
+              prev,
+              normalizedSelectedRef.current,
+              embeddedOptions,
+            ),
+            cached,
+          ),
+        );
         setLoading(false);
         return;
       }
@@ -200,7 +224,13 @@ export function useChoices(
 
     setLoading(true);
     if (lazy) {
-      setOptions(embeddedOptions);
+      setOptions((prev) =>
+        keepSelectedOptions(
+          prev,
+          normalizedSelectedRef.current,
+          embeddedOptions,
+        ),
+      );
     }
 
     try {
@@ -212,12 +242,27 @@ export function useChoices(
         search,
         useCache,
       );
-      setOptions(mergeOptions(embeddedOptions, result));
+      setOptions((prev) =>
+        mergeOptions(
+          keepSelectedOptions(
+            prev,
+            normalizedSelectedRef.current,
+            embeddedOptions,
+          ),
+          result,
+        ),
+      );
     } catch {
       if (!normalizedSelected.length && !embeddedOptions.length) {
         setOptions([]);
       } else if (lazy) {
-        setOptions(embeddedOptions);
+        setOptions((prev) =>
+          keepSelectedOptions(
+            prev,
+            normalizedSelectedRef.current,
+            embeddedOptions,
+          ),
+        );
       }
     } finally {
       setLoading(false);
@@ -241,20 +286,30 @@ export function useChoices(
 
   useEffect(() => {
     if (lazy && !active && !search) {
-      setOptions(embeddedOptions);
+      setOptions((prev) =>
+        keepSelectedOptions(prev, normalizedSelected, embeddedOptions),
+      );
       setLoading(false);
     }
-  }, [lazy, active, search, embeddedOptions]);
+  }, [lazy, active, search, embeddedOptions, normalizedSelected]);
 
   useEffect(() => {
-    if (!fetchSelected || !reference || !normalizedSelected.length) return;
+    if (!fetchSelected || !reference || !normalizedSelected.length) {
+      setSelectedLoading(false);
+      return;
+    }
 
-    const idsToFetch = normalizedSelected.filter(
-      (value) => !embeddedOptions.some((option) => option.value === value),
+    const idsToFetch = unresolvedSelectedIds(
+      normalizedSelected,
+      mergeOptions(embeddedOptions, optionsRef.current),
     );
-    if (!idsToFetch.length) return;
+    if (!idsToFetch.length) {
+      setSelectedLoading(false);
+      return;
+    }
 
     let cancelled = false;
+    setSelectedLoading(true);
 
     void (async () => {
       const resolved: ChoiceOption[] = [];
@@ -274,14 +329,17 @@ export function useChoices(
           });
         }
       }
-      if (cancelled || !resolved.length) return;
+      if (cancelled) return;
 
-      setOptions((prev) => {
-        const missing = resolved.filter(
-          (option) => !prev.some((existing) => existing.value === option.value),
-        );
-        return missing.length ? mergeOptions(prev, missing) : prev;
-      });
+      if (resolved.length) {
+        setOptions((prev) => {
+          const missing = resolved.filter(
+            (option) => !prev.some((existing) => existing.value === option.value),
+          );
+          return missing.length ? mergeOptions(prev, missing) : prev;
+        });
+      }
+      setSelectedLoading(false);
     })();
 
     return () => {
@@ -322,6 +380,7 @@ export function useChoices(
   return {
     options,
     loading,
+    selectedLoading,
     labelForValue,
     labelsForValues,
     optionForValue,

@@ -11,6 +11,10 @@ import type {
 import { valueAsId, resolveOptionLabel } from "../utils/choiceSelectionUtils";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
+import {
+  referenceSelectDisplayValue,
+  referenceSelectSelectedProps,
+} from "../utils/referenceSelectSelectedProps";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
 import { ReferenceInputActions } from "./ReferenceInputActions";
@@ -88,19 +92,25 @@ function ReferenceFieldSelect({
   const active = dropdownOpen || Boolean(searchText);
   const selectValue = valueAsId(value, optionValue);
 
-  const { options, loading, optionForValue, reload } = useChoices(
-    choices,
-    reference,
-    optionLabel,
-    optionValue,
-    search ? searchText : undefined,
-    {
-      lazy,
-      active,
-      selectedValues: value,
-      selectedRecords,
-      fetchSelected,
-    },
+  const { options, loading, selectedLoading, optionForValue, reload } =
+    useChoices(
+      choices,
+      reference,
+      optionLabel,
+      optionValue,
+      search ? searchText : undefined,
+      {
+        lazy,
+        active,
+        selectedValues: value,
+        selectedRecords,
+        fetchSelected,
+      },
+    );
+  const selectState = referenceSelectSelectedProps(
+    loading,
+    selectedLoading,
+    disabled,
   );
 
   const selectOptions = useMemo(
@@ -130,14 +140,14 @@ function ReferenceFieldSelect({
   const select = (
     <Select
       {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
-      value={selectValue}
+      value={referenceSelectDisplayValue(selectedLoading, selectValue, undefined)}
       onChange={(next) => {
         onChange(next);
         onValueChange?.(next, optionForValue(next), { name: fieldName });
       }}
       options={selectOptions}
-      loading={loading}
-      notFoundContent={referenceSelectNotFoundContent(loading)}
+      loading={selectState.loading}
+      notFoundContent={referenceSelectNotFoundContent(selectState.loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
@@ -146,7 +156,7 @@ function ReferenceFieldSelect({
         if (!open) setSearchText(undefined);
       }}
       allowClear={allowClear}
-      disabled={disabled}
+      disabled={selectState.disabled}
       optionFilterProp="label"
       style={{ width: "100%", minWidth: 160, ...inputStyle }}
     />
@@ -165,7 +175,7 @@ function ReferenceFieldSelect({
         referenceDefaultValues={referenceDefaultValues}
         referenceModalWidth={referenceModalWidth}
         selectedId={selectValue}
-        disabled={disabled}
+        disabled={selectState.disabled}
         onCreated={applyRecord}
         onUpdated={() => void reload()}
       />

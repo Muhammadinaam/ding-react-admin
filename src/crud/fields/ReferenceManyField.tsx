@@ -5,6 +5,10 @@ import type { BaseSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
+import {
+  referenceSelectDisplayValue,
+  referenceSelectSelectedProps,
+} from "../utils/referenceSelectSelectedProps";
 import { useChoices } from "../utils/useChoices";
 import { FieldWrapper } from "./FieldWrapper";
 import { ReferenceInputActions } from "./ReferenceInputActions";
@@ -68,7 +72,7 @@ function ReferenceManyFieldSelect({
   const active = dropdownOpen || Boolean(searchText);
   const selectValue = valuesAsIds(value, optionValue);
 
-  const { options, loading, reload } = useChoices(
+  const { options, loading, selectedLoading, reload } = useChoices(
     choices,
     reference,
     optionLabel,
@@ -81,6 +85,11 @@ function ReferenceManyFieldSelect({
       selectedRecords,
       fetchSelected,
     },
+  );
+  const selectState = referenceSelectSelectedProps(
+    loading,
+    selectedLoading,
+    disabled,
   );
 
   const selectOptions = useMemo(
@@ -96,11 +105,11 @@ function ReferenceManyFieldSelect({
     <Select
       {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       mode="multiple"
-      value={selectValue}
+      value={referenceSelectDisplayValue(selectedLoading, selectValue, [])}
       onChange={onChange}
       options={selectOptions}
-      loading={loading}
-      notFoundContent={referenceSelectNotFoundContent(loading)}
+      loading={selectState.loading}
+      notFoundContent={referenceSelectNotFoundContent(selectState.loading)}
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
@@ -109,7 +118,7 @@ function ReferenceManyFieldSelect({
         if (!open) setSearchText(undefined);
       }}
       allowClear={allowClear}
-      disabled={disabled}
+      disabled={selectState.disabled}
       optionFilterProp="label"
       style={{ width: "100%" }}
     />
@@ -127,7 +136,7 @@ function ReferenceManyFieldSelect({
         referenceTitle={referenceTitle}
         referenceDefaultValues={referenceDefaultValues}
         referenceModalWidth={referenceModalWidth}
-        disabled={disabled}
+        disabled={selectState.disabled}
         onCreated={(record) => {
           const id = record[optionValue];
           const current = Array.isArray(selectValue) ? selectValue : [];
