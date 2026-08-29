@@ -77,7 +77,7 @@ import { FileField, ImageField, ResourceForm, TextField } from "ding-react-admin
 
 When the save payload contains any `File` or `Blob` (including in inline rows), **`ResourceForm`** and **`ResourceFormModal`** automatically convert the body to **`FormData`** before calling your `DataProvider`. Text-only forms still submit as a plain object.
 
-Nested fields and inline arrays use bracket notation, e.g. `lines[0][label]`, `lines[0][photo]`.
+Nested fields use Django REST Framework HTML form keys, e.g. `lines[0]label`, `lines[0]photo`, `address.city`.
 
 | Form value | In multipart body |
 | --- | --- |

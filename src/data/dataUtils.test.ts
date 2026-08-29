@@ -102,15 +102,24 @@ describe("toFormData", () => {
     expect(fd.get("title")).toBe("Hello");
   });
 
-  it("encodes inline rows with bracket notation", () => {
+  it("encodes inline rows with Django REST Framework HTML keys", () => {
     const file = new File(["x"], "line.png", { type: "image/png" });
     const fd = toFormData({
       lines: [{ id: 10, label: "A", photo: file }],
     });
 
-    expect(fd.get("lines[0][id]")).toBe("10");
-    expect(fd.get("lines[0][label]")).toBe("A");
-    expect(fd.get("lines[0][photo]")).toBe(file);
+    expect(fd.get("lines[0]id")).toBe("10");
+    expect(fd.get("lines[0]label")).toBe("A");
+    expect(fd.get("lines[0]photo")).toBe(file);
+  });
+
+  it("encodes nested objects with dotted keys", () => {
+    const fd = toFormData({
+      address: { city: "Lahore", zip: 54000 },
+    });
+
+    expect(fd.get("address.city")).toBe("Lahore");
+    expect(fd.get("address.zip")).toBe("54000");
   });
 });
 

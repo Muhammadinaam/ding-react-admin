@@ -1,4 +1,4 @@
-/** Parse multipart save bodies from the playground (bracket notation → nested object). */
+/** Parse multipart save bodies from the playground (DRF HTML keys → nested object). */
 export function formDataToRecord(formData: FormData): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of formData.entries()) {
@@ -26,15 +26,22 @@ function resolveFormDataValue(value: FormDataEntryValue): unknown {
 function parseFormDataKey(key: string): string[] {
   const parts: string[] = [];
   let i = 0;
-  let head = "";
-  while (i < key.length && key[i] !== "[") {
-    head += key[i++]!;
-  }
-  if (head) parts.push(head);
   while (i < key.length) {
-    const close = key.indexOf("]", i);
-    parts.push(key.slice(i + 1, close));
-    i = close + 1;
+    if (key[i] === "[") {
+      const close = key.indexOf("]", i);
+      parts.push(key.slice(i + 1, close));
+      i = close + 1;
+      continue;
+    }
+    if (key[i] === ".") {
+      i += 1;
+      continue;
+    }
+    let chunk = "";
+    while (i < key.length && key[i] !== "[" && key[i] !== ".") {
+      chunk += key[i++]!;
+    }
+    if (chunk) parts.push(chunk);
   }
   return parts;
 }

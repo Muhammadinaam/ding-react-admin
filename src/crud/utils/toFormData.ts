@@ -8,6 +8,14 @@ export type ToFormDataOptions = {
   skipExistingUploadUrls?: boolean;
 };
 
+/** DRF `parse_html_list` expects `lines[0]label`; nested dicts use `address.city`. */
+function nestedObjectKey(parentKey: string, childKey: string): string {
+  if (/\[[0-9]+\]$/.test(parentKey)) {
+    return `${parentKey}${childKey}`;
+  }
+  return `${parentKey}.${childKey}`;
+}
+
 function appendFormDataValue(
   formData: FormData,
   key: string,
@@ -50,7 +58,12 @@ function appendFormDataValue(
     for (const [childKey, childValue] of Object.entries(
       value as Record<string, unknown>,
     )) {
-      appendFormDataValue(formData, `${key}[${childKey}]`, childValue, options);
+      appendFormDataValue(
+        formData,
+        nestedObjectKey(key, childKey),
+        childValue,
+        options,
+      );
     }
     return;
   }
@@ -59,8 +72,8 @@ function appendFormDataValue(
 }
 
 /**
- * Flatten a save payload into `FormData` using bracket notation for nested fields
- * and arrays (e.g. `lines[0][label]`, `address[city]`).
+ * Flatten a save payload into `FormData` using Django REST Framework HTML form
+ * keys for nested fields and arrays (e.g. `lines[0]label`, `address.city`).
  */
 export function toFormData(
   data: Record<string, unknown>,
