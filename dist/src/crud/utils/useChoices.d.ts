@@ -28,6 +28,7 @@ export type UseChoicesOptions = {
 export declare function useChoices(loader: ChoicesLoader | undefined, reference: string | undefined, optionLabel?: string | ((record: Record<string, unknown>) => string), optionValue?: string, search?: string, hookOptions?: UseChoicesOptions): {
     options: ChoiceOption[];
     loading: boolean;
+    selectedLoading: boolean;
     labelForValue: (value: unknown) => string;
     labelsForValues: (values: unknown[]) => string;
     optionForValue: (value: unknown) => ChoiceOption | undefined;

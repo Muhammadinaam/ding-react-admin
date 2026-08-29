@@ -6,8 +6,8 @@ export type ToFormDataOptions = {
     skipExistingUploadUrls?: boolean;
 };
 /**
- * Flatten a save payload into `FormData` using bracket notation for nested fields
- * and arrays (e.g. `lines[0][label]`, `address[city]`).
+ * Flatten a save payload into `FormData` using Django REST Framework HTML form
+ * keys for nested fields and arrays (e.g. `lines[0]label`, `address.city`).
  */
 export declare function toFormData(data: Record<string, unknown>, options?: ToFormDataOptions): FormData;
 //# sourceMappingURL=toFormData.d.ts.map
