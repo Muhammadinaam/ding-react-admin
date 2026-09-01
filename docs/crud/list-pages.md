@@ -84,7 +84,7 @@ List and form pages pass `AbortSignal` to `getList` / `getOne` and cancel on unm
 </ResourceList>
 ```
 
-**Built-in row actions** — Edit, Quick edit, and Delete are shown when the user has `write` / `delete` permission. Hide individual actions with `actions` (permissions still apply; `false` only suppresses the button):
+**Built-in row actions** — Edit, Quick edit, and Delete are shown when the user has `write` / `delete` permission. **Delete** asks for confirmation (same modal as bulk **Delete selected**). Hide individual actions with `actions` (permissions still apply; `false` only suppresses the button):
 
 ```tsx
 <ResourceList
@@ -102,7 +102,7 @@ List and form pages pass `AbortSignal` to `getList` / `getOne` and cancel on unm
 |---------------|--------|
 | `edit` | Navigate-to-form **Edit** link (`editMode` `"page"` or `"both"`) |
 | `quickEdit` | Modal **Edit** / **Quick edit** (`editMode` `"modal"` or `"both"`) |
-| `delete` | **Delete** button |
+| `delete` | **Delete** button (confirmation modal) |
 
 **Custom row actions** — append links or buttons in the Actions column with `rowActions`. The second argument exposes `reload()` and `openEditModal(id)`:
 

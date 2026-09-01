@@ -471,6 +471,15 @@ function ResourceListTable<T extends Record<string, unknown>>({
   const handleDelete = useCallback(
     async (row: T) => {
       if (!canDelete) return;
+      const confirmed = await new Promise<boolean>((resolve) => {
+        modal.confirm({
+          title: "Delete this item? This cannot be undone.",
+          okType: "danger",
+          onOk: () => resolve(true),
+          onCancel: () => resolve(false),
+        });
+      });
+      if (!confirmed) return;
       try {
         await dp.delete(resource, row.id as string | number);
         message.success("Deleted");
@@ -479,7 +488,7 @@ function ResourceListTable<T extends Record<string, unknown>>({
         message.error(e instanceof Error ? e.message : "Delete failed");
       }
     },
-    [canDelete, dp, resource, load, message],
+    [canDelete, dp, resource, load, message, modal],
   );
 
   const tableColumns = useMemo((): ColumnsType<T> => {

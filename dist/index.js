@@ -2528,7 +2528,14 @@ function ni({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		D,
 		E
 	]), Ee = a(async (t) => {
-		if (U) try {
+		if (U && await new Promise((e) => {
+			D.confirm({
+				title: "Delete this item? This cannot be undone.",
+				okType: "danger",
+				onOk: () => e(!0),
+				onCancel: () => e(!1)
+			});
+		})) try {
 			await x.delete(e, t.id), E.success("Deleted"), X();
 		} catch (e) {
 			E.error(e instanceof Error ? e.message : "Delete failed");
@@ -2538,7 +2545,8 @@ function ni({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		x,
 		e,
 		X,
-		E
+		E,
+		D
 	]), De = l(() => {
 		let e = k.map((e) => {
 			let t = e.buildColumn();
