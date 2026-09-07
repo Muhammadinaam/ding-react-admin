@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { BaseSourceProps } from "../types";
+import { columnDataIndex } from "../utils/columnDataIndex";
 import { getFormValue } from "../utils/getFormValue";
 import { useRegisterColumn } from "../context/ListContext";
 
@@ -16,7 +17,7 @@ export function TextColumn({ source, label, sortable = true }: TextColumnProps) 
       sortable,
       buildColumn: () => ({
         title: label ?? source,
-        dataIndex: source,
+        dataIndex: columnDataIndex(source),
         key: source,
         sorter: sortable ? true : undefined,
       }),
@@ -34,5 +35,5 @@ export function renderDisplayValue(
 ): unknown {
   if (typeof display === "function") return display(record);
   if (display) return getFormValue(record, display);
-  return record[source];
+  return getFormValue(record, source);
 }

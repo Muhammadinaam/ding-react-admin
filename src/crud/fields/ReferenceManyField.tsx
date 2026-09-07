@@ -1,7 +1,7 @@
 import { Select } from "antd";
 import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
-import type { BaseSourceProps, FieldRules, ReferenceProps } from "../types";
+import type { FieldSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
@@ -15,7 +15,7 @@ import { ReferenceInputActions } from "./ReferenceInputActions";
 import type { ResourcePermissions } from "../../permissions/resourcePermissions";
 import type { ReactNode } from "react";
 
-export type ReferenceManyFieldProps = BaseSourceProps &
+export type ReferenceManyFieldProps = FieldSourceProps &
   ReferenceProps & {
     name?: string;
     required?: boolean;
@@ -165,6 +165,7 @@ export function ReferenceManyField({
   search,
   allowClear = true,
   hideLabel,
+  hidden,
   disabled: disabledProp,
   lazy = true,
   recordSource,
@@ -191,6 +192,7 @@ export function ReferenceManyField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <ReferenceManyFieldSelect

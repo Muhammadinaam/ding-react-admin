@@ -7,6 +7,8 @@ import type {
   InlineRowContext,
 } from "./types";
 import { nestedFieldPath } from "./utils/nestedFieldPath";
+import { getFormValue } from "./utils/getFormValue";
+import { setFormValue } from "./utils/setFormValue";
 import { useRegisterInlineField } from "./context/InlineFieldsRegistry";
 import { useRegisterPayloadField } from "./context/PayloadFieldsContext";
 
@@ -29,7 +31,8 @@ export type InlineFormSetStackedProps = InlineFormSetBaseProps & {
 function emptyRow(sources: string[], defaults?: Record<string, unknown>) {
   const row: Record<string, unknown> = {};
   for (const source of sources) {
-    row[source] = defaults?.[source] ?? undefined;
+    const value = defaults ? getFormValue(defaults, source) : undefined;
+    setFormValue(row, source, value);
   }
   return row;
 }

@@ -7,6 +7,8 @@ import {
   useRegisterPayloadField,
   useRegisterSectionField,
 } from "../context/PayloadFieldsContext";
+import { shouldRegisterSourceInPayload } from "../utils/shouldRegisterSourceInPayload";
+import { isSourceHidden, useHiddenSources } from "../HiddenSources";
 
 export type FieldWrapperProps = {
   /** Logical field name — used for submit payload tracking on top-level fields. */
@@ -18,6 +20,8 @@ export type FieldWrapperProps = {
   rules?: FieldRules;
   /** Tabular inline cells: column header replaces the label. */
   hideLabel?: boolean;
+  /** Hide the control but keep the value in the form and save payload. */
+  hidden?: boolean;
   children: (props: {
     value: unknown;
     onChange: (value: unknown) => void;
@@ -34,10 +38,12 @@ export function FieldWrapper({
   required,
   rules,
   hideLabel,
+  hidden,
   children,
 }: FieldWrapperProps) {
   const fieldName = name ?? source;
-  const isTopLevel = !fieldName.includes(".");
+  const registerSource = shouldRegisterSourceInPayload(source, name);
+  const isHidden = isSourceHidden(source, hidden, useHiddenSources());
 
   // react-hook-form: connect this field to the form from <ResourceForm>'s FormProvider.
   // `control` is passed to <Controller> below so value, onChange, and validation work.
@@ -49,13 +55,20 @@ export function FieldWrapper({
   const fieldLabel = hideLabel ? undefined : (label ?? source);
   const requiredMessage = label ?? source;
 
-  // Add this field's `source` to the Save payload (ResourceForm → buildFormPayload).
-  // `isTopLevel` is false when `name` contains "." (e.g. inline cell `__inline_lines.0.label`) —
-  // those values live in the inline array and are saved by saveInlineRows, not the parent PATCH.
-  useRegisterPayloadField(source, isTopLevel);
+  // Nested parent fields (`source="address.city"`) register; inline cells
+  // (`name="lines.0.label"`, `source="label"`) do not — those go through the inline array.
+  useRegisterPayloadField(source, registerSource);
+  useRegisterSectionField(source, registerSource);
 
-  // Same top-level check: attach this field to the current FormTab / FormStep for error highlighting.
-  useRegisterSectionField(source, isTopLevel);
+  if (isHidden) {
+    return (
+      <Controller
+        name={fieldName}
+        control={control}
+        render={() => <></>}
+      />
+    );
+  }
 
   return (
     <Controller

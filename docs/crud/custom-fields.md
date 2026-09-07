@@ -15,10 +15,10 @@ Use **`FieldWrapper`** — it wires react-hook-form `Controller`, Ant Design `Fo
 ```tsx
 // src/crud/fields/ColorField.tsx
 import { ColorPicker } from "antd";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type ColorFieldProps = BaseSourceProps & {
+export type ColorFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -32,6 +32,7 @@ export function ColorField({
   required,
   rules,
   hideLabel,
+  hidden,
 }: ColorFieldProps) {
   return (
     <FieldWrapper
@@ -41,6 +42,7 @@ export function ColorField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <ColorPicker
@@ -85,6 +87,7 @@ Register with `useRegisterColumn` inside a null-rendering component:
 ```tsx
 // src/crud/columns/ColorColumn.tsx
 import { useMemo } from "react";
+import { columnDataIndex } from "../utils/columnDataIndex";
 import { useRegisterColumn } from "../context/ListContext";
 
 export function ColorColumn({ source, label }: { source: string; label?: string }) {
@@ -96,7 +99,7 @@ export function ColorColumn({ source, label }: { source: string; label?: string 
       sortable: false,
       buildColumn: () => ({
         title: label ?? source,
-        dataIndex: source,
+        dataIndex: columnDataIndex(source),
         key: source,
         render: (v: string) => (
           <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -172,7 +175,7 @@ For one-off renderers, use `CustomColumn`:
 ## Tips
 
 - **Reference data:** reuse `useChoices` with `lazy`, `recordSource`, and `fetchSelected` — see [references.md](references.md).
-- **Nested paths:** `display="brand.name"` on columns uses `getFormValue`.
+- **Nested paths:** dotted `source` on columns uses Ant Design nested `dataIndex`. `display="brand.name"` on columns uses `getFormValue`.
 - **Permissions:** `ResourceList` respects `usePermissions()` for New / Edit / Delete / bulk delete. Use `actions={{ delete: false }}` etc. to hide built-in buttons even when permitted; use `headerExtra`, `rowActions`, and `bulkActions` for custom controls.
 - **Playground:** see `examples/playground/src/pages/` for full examples.
 

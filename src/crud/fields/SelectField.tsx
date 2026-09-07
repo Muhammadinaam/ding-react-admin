@@ -1,8 +1,8 @@
 import { Select } from "antd";
-import type { BaseSourceProps, ChoiceOption, FieldRules } from "../types";
+import type { FieldSourceProps, ChoiceOption, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type SelectFieldProps = BaseSourceProps & {
+export type SelectFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -22,6 +22,7 @@ export function SelectField({
   mode,
   allowClear,
   hideLabel,
+  hidden,
 }: SelectFieldProps) {
   return (
     <FieldWrapper
@@ -31,6 +32,7 @@ export function SelectField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <Select

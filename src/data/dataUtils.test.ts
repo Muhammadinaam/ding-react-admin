@@ -2,6 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { buildFormPayload } from "../crud/utils/buildFormPayload";
 import { buildInlineRowsPayload } from "../crud/utils/buildInlineRowsPayload";
 import { nestedFieldPath } from "../crud/utils/nestedFieldPath";
+import { columnDataIndex } from "../crud/utils/columnDataIndex";
+import { shouldRegisterSourceInPayload } from "../crud/utils/shouldRegisterSourceInPayload";
+import { isSourceHidden } from "../crud/HiddenSources";
 import { hasUploadValues } from "../crud/utils/hasUploadValues";
 import { prepareFormSubmitBody } from "../crud/utils/prepareFormSubmitBody";
 import { toFormData } from "../crud/utils/toFormData";
@@ -17,7 +20,7 @@ describe("buildFormPayload", () => {
     const values = {
       username: "jane",
       email: "jane@example.com",
-      tenants: [{ id: 1 }],
+      tags: [{ id: 1 }],
     };
     expect(buildFormPayload(values, ["username", "email"])).toEqual({
       username: "jane",
@@ -34,6 +37,16 @@ describe("buildFormPayload", () => {
       buildFormPayload(values, ["invoiceLine.product", "invoiceLine.quantity"]),
     ).toEqual({
       invoiceLine: { product: "SKU-1", quantity: 2 },
+    });
+  });
+
+  it("picks JSON nested sources", () => {
+    const values = {
+      address: { city: "Lahore", notes: "x" },
+      extra: "ignored",
+    };
+    expect(buildFormPayload(values, ["address.city"])).toEqual({
+      address: { city: "Lahore" },
     });
   });
 
@@ -61,6 +74,15 @@ describe("buildInlineRowsPayload", () => {
       transformRows: (cleaned) => cleaned.map((r) => ({ ...r, kind: "line" })),
     });
     expect(result).toEqual([{ label: "A", kind: "line" }]);
+  });
+
+  it("picks nested sources on each row", () => {
+    const rows = [
+      { rowKey: "a", id: 10, address: { city: "Lahore" }, extra: "x" },
+    ];
+    expect(buildInlineRowsPayload(rows, ["address.city"])).toEqual([
+      { address: { city: "Lahore" }, id: 10 },
+    ]);
   });
 });
 
@@ -233,5 +255,34 @@ describe("createRestResourceHandlers", () => {
     await handlers.create(fd);
     expect(transformCreate).not.toHaveBeenCalled();
     expect(create).toHaveBeenCalledWith(fd);
+  });
+});
+
+describe("shouldRegisterSourceInPayload", () => {
+  it("registers parent fields including nested sources", () => {
+    expect(shouldRegisterSourceInPayload("email")).toBe(true);
+    expect(shouldRegisterSourceInPayload("address.city")).toBe(true);
+    expect(shouldRegisterSourceInPayload("address.city", "address.city")).toBe(true);
+  });
+
+  it("does not register inline cells", () => {
+    expect(shouldRegisterSourceInPayload("label", "lines.0.label")).toBe(false);
+  });
+});
+
+describe("columnDataIndex", () => {
+  it("splits dotted sources for Ant Design", () => {
+    expect(columnDataIndex("name")).toBe("name");
+    expect(columnDataIndex("address.city")).toEqual(["address", "city"]);
+  });
+});
+
+describe("isSourceHidden", () => {
+  it("hides from the prop or the source set", () => {
+    const hide = new Set(["phone"]);
+    expect(isSourceHidden("phone", undefined, hide)).toBe(true);
+    expect(isSourceHidden("email", undefined, hide)).toBe(false);
+    expect(isSourceHidden("email", true, hide)).toBe(true);
+    expect(isSourceHidden("email", false, new Set())).toBe(false);
   });
 });

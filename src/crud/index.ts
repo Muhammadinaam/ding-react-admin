@@ -5,6 +5,7 @@ export { ResourceForm } from "./ResourceForm";
 export type { ResourceFormProps } from "./ResourceForm";
 export { ResourceFormModal } from "./ResourceFormModal";
 export type { ResourceFormModalProps } from "./ResourceFormModal";
+export { HiddenSources } from "./HiddenSources";
 export { InlineFormSet, InlineFormSetStacked } from "./InlineFormSet";
 export type {
   InlineFormSetProps,
@@ -75,6 +76,7 @@ export { getFormValue } from "./utils/getFormValue";
 export { setFormValue } from "./utils/setFormValue";
 export { buildFormPayload } from "./utils/buildFormPayload";
 export { buildInlineRowsPayload } from "./utils/buildInlineRowsPayload";
+export { columnDataIndex } from "./utils/columnDataIndex";
 export { buildResourceFormSubmitBody } from "./utils/buildResourceFormSubmitBody";
 export { prepareFormSubmitBody } from "./utils/prepareFormSubmitBody";
 export { toFormData } from "./utils/toFormData";
@@ -90,6 +92,7 @@ export type { InlineFieldRegistration } from "./context/InlineFieldsRegistry";
 
 export type {
   BaseSourceProps,
+  FieldSourceProps,
   ChoiceOption,
   ChoicesLoader,
   ReferenceProps,

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { BaseSourceProps, DisplayProps, ReferenceProps } from "../types";
 import { useRegisterColumn } from "../context/ListContext";
+import { getFormValue } from "../utils/getFormValue";
 import { useChoices } from "../utils/useChoices";
 
 export type ReferenceManyColumnProps = BaseSourceProps &
@@ -23,7 +24,7 @@ function ReferenceManyColumnCell({
     optionLabel,
     optionValue,
   );
-  const raw = record[source];
+  const raw = getFormValue(record, source);
   const values = Array.isArray(raw) ? raw : [];
   return <>{labelsForValues(values)}</>;
 }

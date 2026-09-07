@@ -1,9 +1,9 @@
 import { Input } from "antd";
 import { useWatch } from "react-hook-form";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type PasswordFieldProps = BaseSourceProps & {
+export type PasswordFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -22,6 +22,7 @@ function PasswordInputField({
   rules,
   autoComplete,
   hideLabel,
+  hidden,
 }: PasswordFieldProps) {
   return (
     <FieldWrapper
@@ -31,6 +32,7 @@ function PasswordInputField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, onBlur, disabled }) => (
         <Input.Password
@@ -55,6 +57,7 @@ export function PasswordField({
   confirmLabel = "Confirm password",
   autoComplete = "new-password",
   hideLabel,
+  hidden,
 }: PasswordFieldProps) {
   const password = useWatch({ name: name ?? source, disabled: !confirmSource });
 
@@ -68,6 +71,7 @@ export function PasswordField({
         rules={rules}
         autoComplete={autoComplete}
         hideLabel={hideLabel}
+        hidden={hidden}
       />
     );
   }
@@ -82,6 +86,7 @@ export function PasswordField({
         rules={rules}
         autoComplete={autoComplete}
         hideLabel={hideLabel}
+        hidden={hidden}
       />
       <PasswordInputField
         source={confirmSource}
@@ -93,6 +98,7 @@ export function PasswordField({
           validate: (value: string) =>
             !password || value === password || "Passwords do not match",
         }}
+        hidden={hidden}
       />
     </>
   );

@@ -67,6 +67,8 @@ export function ProductListPage() {
 
 `editMode`: `"page"` (default), `"modal"`, or `"both"`.
 
+Dotted `source` values work on built-in columns (`TextColumn source="address.city"`). Filters use the query key you pass (`source="brandId"`, or whatever lookup your API expects).
+
 List and form pages pass `AbortSignal` to `getList` / `getOne` and cancel on unmount or filter changes. Forward `params.signal` in your handlers for real HTTP cancellation — see [request-cancellation.md](../request-cancellation.md).
 
 ## List header and row actions

@@ -1,9 +1,9 @@
 import { Input } from "antd";
 import type { CSSProperties } from "react";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type TextFieldProps = BaseSourceProps & {
+export type TextFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -21,6 +21,7 @@ export function TextField({
   placeholder,
   inputStyle,
   hideLabel,
+  hidden,
 }: TextFieldProps) {
   return (
     <FieldWrapper
@@ -30,6 +31,7 @@ export function TextField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, onBlur, disabled }) => (
         <Input

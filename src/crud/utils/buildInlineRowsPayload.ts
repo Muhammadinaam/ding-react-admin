@@ -1,3 +1,6 @@
+import { getFormValue } from "./getFormValue";
+import { setFormValue } from "./setFormValue";
+
 export type BuildInlineRowsPayloadOptions = {
   transformRows?: (rows: Record<string, unknown>[]) => unknown;
 };
@@ -16,9 +19,9 @@ export function buildInlineRowsPayload(
     const out: Record<string, unknown> = {};
 
     for (const source of sources) {
-      const value = record[source];
+      const value = getFormValue(record, source);
       if (value !== undefined) {
-        out[source] = value;
+        setFormValue(out, source, value);
       }
     }
 

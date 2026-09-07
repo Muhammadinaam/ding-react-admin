@@ -32,13 +32,13 @@ Create mode skips the fetch; use `defaultValues` for initial state.
 
 ## Field components
 
-Each field is `FieldWrapper` + an Ant Design input. Top-level fields use `name={source}`. Inline cells pass an explicit nested `name` (e.g. `lines.0.label`).
+Each field is `FieldWrapper` + an Ant Design input. Top-level fields use `name={source}` (including nested sources like `address.city`). Inline cells pass an explicit nested `name` (e.g. `lines.0.label`).
 
 ## Save payload (`useRegisterPayloadField`)
 
 RHF stores all form values. On save, only **fields you rendered** are sent.
 
-Top-level fields call `useRegisterPayloadField(source)`. Inline arrays register their `field` name from `InlineFormSet`. On submit:
+Fields register when `name` is omitted or equals `source` — so nested parent fields (`source="address.city"`) are included. Inline cells pass a different `name` (`lines.0.label`) and are saved via the inline array, not the parent PATCH. On submit:
 
 ```ts
 buildResourceFormSubmitBody(values, [...payloadFieldsRef.current], inlineRegistry)

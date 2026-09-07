@@ -1,9 +1,9 @@
 import { InputNumber } from "antd";
 import type { CSSProperties } from "react";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type NumberFieldProps = BaseSourceProps & {
+export type NumberFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -25,6 +25,7 @@ export function NumberField({
   step,
   inputStyle,
   hideLabel,
+  hidden,
 }: NumberFieldProps) {
   return (
     <FieldWrapper
@@ -34,6 +35,7 @@ export function NumberField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, onBlur, disabled }) => (
         <InputNumber

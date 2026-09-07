@@ -8,6 +8,12 @@ export type BaseSourceProps = {
   label?: string;
 };
 
+/** Form fields only — columns and filters do not hide-and-keep a value. */
+export type FieldSourceProps = BaseSourceProps & {
+  /** Hide the control but keep the value in the form and save payload. */
+  hidden?: boolean;
+};
+
 export type ChoiceOption = {
   label: string;
   value: unknown;

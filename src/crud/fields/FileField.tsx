@@ -1,7 +1,7 @@
 import { DeleteOutlined, PaperClipOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Space, Typography } from "antd";
 import { useRef } from "react";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 import {
   getUploadFileName,
@@ -9,7 +9,7 @@ import {
   type UploadFieldValue,
 } from "./uploadFieldUtils";
 
-export type FileFieldProps = BaseSourceProps & {
+export type FileFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -97,6 +97,7 @@ export function FileField({
   required,
   rules,
   hideLabel,
+  hidden,
   clearable,
   accept,
 }: FileFieldProps) {
@@ -108,6 +109,7 @@ export function FileField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <FileFieldInput

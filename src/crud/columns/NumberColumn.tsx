@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { BaseSourceProps } from "../types";
+import { columnDataIndex } from "../utils/columnDataIndex";
 import { useRegisterColumn } from "../context/ListContext";
 
 export type NumberColumnProps = BaseSourceProps & {
@@ -19,7 +20,7 @@ export function NumberColumn({
       sortable,
       buildColumn: () => ({
         title: label ?? source,
-        dataIndex: source,
+        dataIndex: columnDataIndex(source),
         key: source,
         sorter: sortable ? true : undefined,
       }),

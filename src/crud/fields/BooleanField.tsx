@@ -1,8 +1,8 @@
 import { Switch } from "antd";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 
-export type BooleanFieldProps = BaseSourceProps & {
+export type BooleanFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -17,6 +17,7 @@ export function BooleanField({
   required,
   rules,
   hideLabel,
+  hidden,
   disabled: disabledProp,
 }: BooleanFieldProps) {
   return (
@@ -27,6 +28,7 @@ export function BooleanField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <Switch

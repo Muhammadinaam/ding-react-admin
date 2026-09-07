@@ -1,5 +1,6 @@
 import { useMemo, type CSSProperties } from "react";
 import type { BaseSourceProps } from "../types";
+import { columnDataIndex } from "../utils/columnDataIndex";
 import { useRegisterColumn } from "../context/ListContext";
 
 export type ImageColumnProps = BaseSourceProps & {
@@ -31,7 +32,7 @@ export function ImageColumn({
       sortable,
       buildColumn: () => ({
         title: label ?? source,
-        dataIndex: source,
+        dataIndex: columnDataIndex(source),
         key: source,
         sorter: sortable ? true : undefined,
         render: (value: unknown) => {

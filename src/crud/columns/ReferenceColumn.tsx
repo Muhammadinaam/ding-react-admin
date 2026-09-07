@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { BaseSourceProps, DisplayProps, ReferenceProps } from "../types";
 import { useRegisterColumn } from "../context/ListContext";
+import { getFormValue } from "../utils/getFormValue";
 import { useChoices } from "../utils/useChoices";
 import { renderDisplayValue } from "./TextColumn";
 
@@ -25,7 +26,7 @@ function ReferenceColumnCell({
     optionLabel,
     optionValue,
   );
-  const raw = record[source];
+  const raw = getFormValue(record, source);
   if (typeof display === "function") return <>{display(record)}</>;
   if (display && display !== source) {
     const nested = renderDisplayValue(record, source, display);

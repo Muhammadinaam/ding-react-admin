@@ -1,12 +1,12 @@
 import { DeleteOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Image, Space } from "antd";
 import { useRef } from "react";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { FieldWrapper } from "./FieldWrapper";
 import { hasUploadValue, type UploadFieldValue } from "./uploadFieldUtils";
 import { useUploadPreviewUrl } from "./useUploadPreviewUrl";
 
-export type ImageFieldProps = BaseSourceProps & {
+export type ImageFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -92,6 +92,7 @@ export function ImageField({
   required,
   rules,
   hideLabel,
+  hidden,
   clearable,
   accept,
   previewWidth,
@@ -104,6 +105,7 @@ export function ImageField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled }) => (
         <ImageFieldInput

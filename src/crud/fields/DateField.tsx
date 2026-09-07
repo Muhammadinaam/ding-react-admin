@@ -1,5 +1,5 @@
 import { DatePicker } from "antd";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { parseDayjsValue } from "../utils/parseDayjsValue";
 import { FieldWrapper } from "./FieldWrapper";
 
@@ -7,7 +7,7 @@ const DATE_FORMAT = "YYYY-MM-DD";
 const DATE_TIME_FORMAT = `${DATE_FORMAT} HH:mm:ss`;
 const PARSE_FORMATS = [DATE_FORMAT, DATE_TIME_FORMAT, "YYYY-MM-DDTHH:mm:ss", "YYYY-MM-DDTHH:mm:ssZ"];
 
-export type DateFieldProps = BaseSourceProps & {
+export type DateFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -23,6 +23,7 @@ export function DateField({
   rules,
   showTime,
   hideLabel,
+  hidden,
 }: DateFieldProps) {
   return (
     <FieldWrapper
@@ -32,6 +33,7 @@ export function DateField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, onBlur, disabled }) => (
         <DatePicker

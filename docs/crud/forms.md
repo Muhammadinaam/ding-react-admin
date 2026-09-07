@@ -36,6 +36,32 @@ Use **`PasswordField`** for a single write-only password input. Pass **`confirmS
 
 Forms use **react-hook-form** under the hood. Layout is plain JSX — wrap fields in Ant Design `Row` / `Col` as needed.
 
+## Nested sources
+
+`source` may be a dotted path. The value is stored nested in the form and save payload (`address.city` → `{ address: { city } }`):
+
+```tsx
+<TextField source="address.city" label="City" />
+```
+
+Inline cells still pass a separate `name` (`name={cell.name}`) so the parent PATCH does not also send the column `source`.
+
+## Hidden fields
+
+`hidden` keeps the value in the form and save payload but does not render the control. Use it when the UI should omit a field that still needs a defaulted value on save:
+
+```tsx
+<TextField source="phone" label="Phone" hidden={hide.has("phone")} />
+```
+
+To hide several fields without touching each one, wrap the form in **`HiddenSources`**. It uses React context, so it works through nested field components:
+
+```tsx
+<HiddenSources sources={["phone", "description"]}>
+  <ProductFormFields />
+</HiddenSources>
+```
+
 ## Text area fields
 
 Use **`TextAreaField`** for multi-line text (Django `TextField`, notes, descriptions, comments). It wraps Ant Design `Input.TextArea` and shares the same `source` / validation props as `TextField`.

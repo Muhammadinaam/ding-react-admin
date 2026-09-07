@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type {
-  BaseSourceProps,
+  FieldSourceProps,
   ChoiceOption,
   FieldRules,
   ReferenceProps,
@@ -21,7 +21,7 @@ import { ReferenceInputActions } from "./ReferenceInputActions";
 import type { ResourcePermissions } from "../../permissions/resourcePermissions";
 import type { ReactNode } from "react";
 
-export type ReferenceFieldProps = BaseSourceProps &
+export type ReferenceFieldProps = FieldSourceProps &
   ReferenceProps & {
     name?: string;
     required?: boolean;
@@ -197,6 +197,7 @@ export function ReferenceField({
   allowClear,
   disabled: disabledProp,
   hideLabel,
+  hidden,
   inputStyle,
   onValueChange,
   lazy = true,
@@ -224,6 +225,7 @@ export function ReferenceField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, disabled, name: fieldName }) => (
         <ReferenceFieldSelect

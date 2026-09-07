@@ -1,12 +1,12 @@
 import { TimePicker } from "antd";
-import type { BaseSourceProps, FieldRules } from "../types";
+import type { FieldSourceProps, FieldRules } from "../types";
 import { parseDayjsValue } from "../utils/parseDayjsValue";
 import { FieldWrapper } from "./FieldWrapper";
 
 const DEFAULT_TIME_FORMAT = "HH:mm:ss";
 const PARSE_FORMATS = [DEFAULT_TIME_FORMAT, "HH:mm", "H:mm:ss", "H:mm"];
 
-export type TimeFieldProps = BaseSourceProps & {
+export type TimeFieldProps = FieldSourceProps & {
   name?: string;
   required?: boolean;
   rules?: FieldRules;
@@ -22,6 +22,7 @@ export function TimeField({
   required,
   rules,
   hideLabel,
+  hidden,
   format = DEFAULT_TIME_FORMAT,
 }: TimeFieldProps) {
   return (
@@ -32,6 +33,7 @@ export function TimeField({
       required={required}
       rules={rules}
       hideLabel={hideLabel}
+      hidden={hidden}
     >
       {({ value, onChange, onBlur, disabled }) => (
         <TimePicker
