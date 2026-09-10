@@ -142,8 +142,10 @@ function ReferenceFieldSelect({
       {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       value={referenceSelectDisplayValue(selectedLoading, selectValue, undefined)}
       onChange={(next) => {
-        onChange(next);
-        onValueChange?.(next, optionForValue(next), { name: fieldName });
+        // Ant Design clear emits undefined; RHF Controller ignores that.
+        const value = next ?? null;
+        onChange(value);
+        onValueChange?.(value, optionForValue(next), { name: fieldName });
       }}
       options={selectOptions}
       loading={selectState.loading}

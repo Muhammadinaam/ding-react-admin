@@ -106,7 +106,7 @@ function ReferenceManyFieldSelect({
       {...referenceSelectDropdownProps({ popupMatchSelectWidth, popupMinWidth })}
       mode="multiple"
       value={referenceSelectDisplayValue(selectedLoading, selectValue, [])}
-      onChange={onChange}
+      onChange={(next) => onChange(next ?? [])}
       options={selectOptions}
       loading={selectState.loading}
       notFoundContent={referenceSelectNotFoundContent(selectState.loading)}

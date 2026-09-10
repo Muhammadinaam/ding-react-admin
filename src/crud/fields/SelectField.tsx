@@ -37,7 +37,7 @@ export function SelectField({
       {({ value, onChange, disabled }) => (
         <Select
           value={value as string | number | (string | number)[] | undefined}
-          onChange={onChange}
+          onChange={(next) => onChange(next ?? null)}
           options={choices}
           mode={mode}
           allowClear={allowClear}
