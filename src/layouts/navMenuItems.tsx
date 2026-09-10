@@ -1,7 +1,7 @@
 import type { MenuProps } from "antd";
 import { NavMenuLabel } from "../components/NavMenuLabel";
 import type { NavItem } from "../types";
-import { getNavItemLabel } from "./navFilter";
+import { getNavItemLabel, navSubmenuKey } from "./navFilter";
 
 export function navItemsToAntdItems(
   items: NavItem[],
@@ -36,7 +36,7 @@ export function navItemsToAntdItems(
 
     if (item.children?.length) {
       return {
-        key: item.path,
+        key: navSubmenuKey(item.path),
         icon,
         label,
         ...itemTitle,

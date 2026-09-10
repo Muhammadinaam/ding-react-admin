@@ -38,7 +38,7 @@ function ImageFieldInput({
   const showClear = clearable && hasUploadValue(value);
 
   return (
-    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+    <Space orientation="vertical" size="middle" style={{ width: "100%" }}>
       {previewUrl ? (
         <Image
           src={previewUrl}

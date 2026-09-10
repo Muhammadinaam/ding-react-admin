@@ -83,12 +83,17 @@ export function filterFlatNavItems(
   });
 }
 
+/** Menu key for a parent row so it never collides with a child that shares `path`. */
+export function navSubmenuKey(path: string): string {
+  return `${path}__submenu`;
+}
+
 export function collectSubmenuKeys(items: NavItem[]): string[] {
   const keys: string[] = [];
   function walk(nodes: NavItem[]) {
     for (const node of nodes) {
       if (node.children?.length) {
-        keys.push(node.path);
+        keys.push(navSubmenuKey(node.path));
         walk(node.children);
       }
     }

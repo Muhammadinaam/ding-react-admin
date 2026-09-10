@@ -153,7 +153,7 @@ function ReferenceFieldSelect({
       showSearch={search}
       filterOption={search ? false : undefined}
       onSearch={search ? setSearchText : undefined}
-      onDropdownVisibleChange={(open) => {
+      onOpenChange={(open) => {
         setDropdownOpen(open);
         if (!open) setSearchText(undefined);
       }}

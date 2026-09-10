@@ -26,6 +26,7 @@ import { useThemeMode } from "../context/AppThemeProvider";
 import {
   collectSubmenuKeys,
   filterNavItems,
+  navSubmenuKey,
 } from "./navFilter";
 import { navItemsToAntdItems } from "./navMenuItems";
 import { filterNavByPermission } from "../permissions/resourcePermissions";
@@ -70,7 +71,7 @@ function ancestorKeysForActivePath(
     for (const node of nodes) {
       if (node.children?.length) {
         const sub = dfs(node.children);
-        if (sub !== null) return [node.path, ...sub];
+        if (sub !== null) return [navSubmenuKey(node.path), ...sub];
       } else if (node.path === pathname) {
         return [];
       }
