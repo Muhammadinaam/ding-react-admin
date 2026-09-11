@@ -1,9 +1,9 @@
 import { Select } from "antd";
 import { useMemo, useState } from "react";
-import { useWatch } from "react-hook-form";
 import type { FieldSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
 import { resolveLabelSourcePath } from "../utils/resolveLabelSourcePath";
+import { useFormPathValue } from "../utils/useFormPathValue";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import {
@@ -184,18 +184,15 @@ export function ReferenceManyField({
   popupMatchSelectWidth,
   popupMinWidth,
 }: ReferenceManyFieldProps) {
-  const embeddedRecords = useWatch({
-    name: recordSource ?? "",
-    disabled: !recordSource,
-  }) as Record<string, unknown> | Record<string, unknown>[] | undefined;
+  const embeddedRecords = useFormPathValue(recordSource) as
+    | Record<string, unknown>
+    | Record<string, unknown>[]
+    | undefined;
 
   const labelPath = labelSource
     ? resolveLabelSourcePath(labelSource, name, source)
-    : "";
-  const selectedLabels = useWatch({
-    name: labelPath,
-    disabled: !labelSource,
-  });
+    : undefined;
+  const selectedLabels = useFormPathValue(labelPath);
 
   return (
     <FieldWrapper

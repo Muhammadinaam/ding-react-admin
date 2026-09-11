@@ -114,7 +114,7 @@ Multi-select: pass a string array in the same order as the ids. The library reme
 { "tagIds": ["1", "2"], "tagNames": ["Red", "Blue"] }
 ```
 
-`labelSource` is an RHF path. A single segment with no dots is resolved as a **sibling** of the field `name` (so `name="rules.0.shift"` + `labelSource="shift_display"` watches `rules.0.shift_display`).
+`labelSource` is an RHF path. A single segment with no dots is resolved as a **sibling** of the field `name` (so `name="rules.0.shift"` + `labelSource="shift_display"` watches `rules.0.shift_display`). The sibling does not need its own input — retrieve `reset` is enough.
 
 3. **Embedded relation on the form record** — if retrieve returns `{ branch_id: 1, branch: { id: 1, name: "Branch 1" } }`, use `recordSource`:
 
