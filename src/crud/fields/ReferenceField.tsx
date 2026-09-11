@@ -250,7 +250,9 @@ export function ReferenceField({
           inputStyle={inputStyle}
           onValueChange={onValueChange}
           lazy={lazy}
-          fetchSelected={fetchSelected}
+          fetchSelected={
+            fetchSelected && !(labelSource && selectedLabels === undefined)
+          }
           value={value}
           onChange={onChange}
           fieldName={fieldName}

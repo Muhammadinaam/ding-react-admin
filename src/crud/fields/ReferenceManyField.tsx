@@ -213,7 +213,9 @@ export function ReferenceManyField({
           search={search}
           allowClear={allowClear}
           lazy={lazy}
-          fetchSelected={fetchSelected}
+          fetchSelected={
+            fetchSelected && !(labelSource && selectedLabels === undefined)
+          }
           value={value}
           onChange={onChange}
           disabled={disabled || disabledProp}
