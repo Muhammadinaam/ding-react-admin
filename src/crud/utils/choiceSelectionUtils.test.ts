@@ -3,12 +3,15 @@ import {
   collectSelectedRecords,
   isRecordObject,
   keepSelectedOptions,
+  mergeSelectedLabelMap,
   normalizeSelectedIds,
+  optionsFromLabelMap,
   recordsToOptions,
   unresolvedSelectedIds,
   valueAsId,
   valuesAsIds,
 } from "./choiceSelectionUtils";
+import { resolveLabelSourcePath } from "./resolveLabelSourcePath";
 
 describe("choiceSelectionUtils", () => {
   it("detects nested record objects", () => {
@@ -64,5 +67,45 @@ describe("choiceSelectionUtils", () => {
       { label: "Two", value: "2" },
     ]);
     expect(keepSelectedOptions(previous, [], [])).toEqual([]);
+  });
+
+  it("maps a single selected label onto the current id", () => {
+    const map = mergeSelectedLabelMap(["12"], "Jane Doe", new Map());
+    expect(optionsFromLabelMap(["12"], map)).toEqual([
+      { label: "Jane Doe", value: "12" },
+    ]);
+  });
+
+  it("zips multi-select labels by index, then keeps them by id after removal", () => {
+    const initial = mergeSelectedLabelMap(
+      ["1", "2"],
+      ["Red", "Blue"],
+      new Map(),
+    );
+    expect(optionsFromLabelMap(["1", "2"], initial)).toEqual([
+      { label: "Red", value: "1" },
+      { label: "Blue", value: "2" },
+    ]);
+
+    const afterRemove = mergeSelectedLabelMap(
+      ["2"],
+      ["Red", "Blue"],
+      initial,
+    );
+    expect(optionsFromLabelMap(["2"], afterRemove)).toEqual([
+      { label: "Blue", value: "2" },
+    ]);
+  });
+
+  it("resolves a single-segment labelSource as a sibling of the field name", () => {
+    expect(resolveLabelSourcePath("branch_display", undefined, "branch")).toBe(
+      "branch_display",
+    );
+    expect(
+      resolveLabelSourcePath("shift_display", "rules.0.shift", "shift"),
+    ).toBe("rules.0.shift_display");
+    expect(
+      resolveLabelSourcePath("rules.0.shift_display", "rules.0.shift", "shift"),
+    ).toBe("rules.0.shift_display");
   });
 });

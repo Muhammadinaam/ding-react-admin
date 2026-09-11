@@ -82,13 +82,47 @@ Custom loader:
 On edit, the field must display labels for already-selected ids **without** loading the full dropdown list. ding-react-admin resolves labels in this order:
 
 1. **Nested object on the field value** — if the value is `{ id: 1, name: "Branch 1" }`, the label comes from that object.
-2. **Embedded relation on the form record** — if retrieve returns `{ branch_id: 1, branch: { id: 1, name: "Branch 1" } }`, use `recordSource`:
+2. **Sibling label on the form record** — if retrieve returns a string (or string array) next to the id, use `labelSource`:
+
+```tsx
+<ReferenceField
+  source="authorId"
+  reference="authors"
+  optionLabel="name"
+  labelSource="authorName"
+  search
+/>
+```
+
+```json
+{ "authorId": 12, "authorName": "Jane Doe" }
+```
+
+Multi-select: pass a string array in the same order as the ids. The library remembers `id → label` so removing a chip does not scramble names.
+
+```tsx
+<ReferenceManyField
+  source="tagIds"
+  reference="tags"
+  optionLabel="name"
+  labelSource="tagNames"
+  search
+/>
+```
+
+```json
+{ "tagIds": ["1", "2"], "tagNames": ["Red", "Blue"] }
+```
+
+`labelSource` is an RHF path. A single segment with no dots is resolved as a **sibling** of the field `name` (so `name="rules.0.shift"` + `labelSource="shift_display"` watches `rules.0.shift_display`).
+
+3. **Embedded relation on the form record** — if retrieve returns `{ branch_id: 1, branch: { id: 1, name: "Branch 1" } }`, use `recordSource`:
 
 ```tsx
 <ReferenceField
   source="branch_id"
   recordSource="branch"
-  reference="branches"
+  reference="brands"
   optionLabel="name"
   search
 />
@@ -107,7 +141,7 @@ For many-to-many / multi-select with embedded arrays:
 />
 ```
 
-3. **`getOne` fallback** — if the value is a primitive id and no embedded record is available, the library calls `dataProvider.getOne(reference, id)` once per missing id. While that request is in flight, the Select is **disabled**, shows a spinner, and **does not** display the raw id (UUID). After labels resolve, the field becomes interactive. Disable this when your API never supports single-record fetch:
+4. **`getOne` fallback** — if the value is a primitive id and no label or embedded record is available, the library calls `dataProvider.getOne(reference, id)` once per missing id. While that request is in flight, the Select is **disabled**, shows a spinner, and **does not** display the raw id (UUID). After labels resolve, the field becomes interactive. Disable this when your API never supports single-record fetch:
 
 ```tsx
 <ReferenceField
@@ -131,6 +165,7 @@ With `fetchSelected={false}` and no embedded data, the raw id is shown until the
 | `search` | `false` | Enable server-side search (`filter.q`) |
 | `lazy` | `true` | Load list only on open / search |
 | `cache` | `!lazy` | When `false`, refetch on every dropdown open |
+| `labelSource` | — | Form path of a string / string[] for selected labels (skips `getOne`) |
 | `recordSource` | — | Form key with embedded related object(s) |
 | `fetchSelected` | `true` | Call `getOne` for unresolved primitive ids |
 | `referenceForm` | — | Form fields for add/edit modal; omit to hide buttons |
@@ -207,6 +242,7 @@ const { options, loading } = useChoices(
     active: dropdownOpen || Boolean(searchText),
     selectedValues: value,
     selectedRecords: record.branch,
+    selectedLabels: record.authorName,
     fetchSelected: true,
   },
 );

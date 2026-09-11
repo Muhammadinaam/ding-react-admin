@@ -185,6 +185,7 @@ export {
   toFormData,
   hasUploadValues,
   nestedFieldPath,
+  resolveLabelSourcePath,
   useResourceListContext,
   useRegisterPayloadField,
   useRegisterSectionField,

@@ -126,6 +126,55 @@ export function unresolvedSelectedIds(
 }
 
 /**
+ * Remember selected labels from a sibling string / string[] on the form record.
+ * When ids and labels are the same length, rebuild the map (retrieve / reset).
+ * When the user adds or removes ids, keep previous id→label entries so order
+ * changes do not scramble labels.
+ */
+export function mergeSelectedLabelMap(
+  selectedIds: unknown[],
+  selectedLabels: unknown,
+  previous: ReadonlyMap<unknown, string>,
+): Map<unknown, string> {
+  if (typeof selectedLabels === "string") {
+    if (selectedIds.length === 1 && selectedLabels !== "") {
+      const next = new Map(previous);
+      next.set(selectedIds[0], selectedLabels);
+      return next;
+    }
+    return new Map(previous);
+  }
+
+  if (Array.isArray(selectedLabels) && selectedIds.length === selectedLabels.length) {
+    const next = new Map<unknown, string>();
+    for (let i = 0; i < selectedIds.length; i++) {
+      const label = selectedLabels[i];
+      const id = selectedIds[i];
+      if (typeof label === "string" && id != null && id !== "") {
+        next.set(id, label);
+      }
+    }
+    return next;
+  }
+
+  return new Map(previous);
+}
+
+export function optionsFromLabelMap(
+  selectedIds: unknown[],
+  labelMap: ReadonlyMap<unknown, string>,
+): ChoiceOption[] {
+  const options: ChoiceOption[] = [];
+  for (const id of selectedIds) {
+    const label = labelMap.get(id);
+    if (typeof label === "string") {
+      options.push({ label, value: id });
+    }
+  }
+  return options;
+}
+
+/**
  * Keep options for currently selected ids when replacing the dropdown list
  * (e.g. closing a lazy select) so selected labels do not flash back to raw ids.
  */

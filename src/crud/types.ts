@@ -44,6 +44,12 @@ export type ReferenceProps = {
    */
   recordSource?: string;
   /**
+   * Form path of a string (single select) or string[] (multi-select) used as the
+   * selected option label(s). Skips `getOne` when the label is already present.
+   * A single path segment is resolved as a sibling of the field `name`.
+   */
+  labelSource?: string;
+  /**
    * When true (default), fetch labels for primitive ids via `getOne` if they are not
    * already embedded in the form record. Set `false` to never call `getOne`.
    */

@@ -84,6 +84,7 @@ export { hasUploadValues } from "./utils/hasUploadValues";
 export type { ToFormDataOptions } from "./utils/toFormData";
 export type { PrepareFormSubmitBodyOptions } from "./utils/prepareFormSubmitBody";
 export { nestedFieldPath } from "./utils/nestedFieldPath";
+export { resolveLabelSourcePath } from "./utils/resolveLabelSourcePath";
 export {
   useRegisterPayloadField,
   useRegisterSectionField,

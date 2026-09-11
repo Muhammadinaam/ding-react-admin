@@ -9,6 +9,7 @@ import type {
   ReferenceProps,
 } from "../types";
 import { valueAsId, resolveOptionLabel } from "../utils/choiceSelectionUtils";
+import { resolveLabelSourcePath } from "../utils/resolveLabelSourcePath";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import {
@@ -60,6 +61,7 @@ type ReferenceFieldSelectProps = Omit<
   disabled?: boolean;
   fieldName: string;
   selectedRecords?: Record<string, unknown> | Record<string, unknown>[];
+  selectedLabels?: unknown;
 };
 
 function ReferenceFieldSelect({
@@ -78,6 +80,7 @@ function ReferenceFieldSelect({
   onChange,
   fieldName,
   selectedRecords,
+  selectedLabels,
   referenceForm,
   referencePermissions,
   referenceTitle,
@@ -104,6 +107,7 @@ function ReferenceFieldSelect({
         active,
         selectedValues: value,
         selectedRecords,
+        selectedLabels,
         fetchSelected,
       },
     );
@@ -204,6 +208,7 @@ export function ReferenceField({
   onValueChange,
   lazy = true,
   recordSource,
+  labelSource,
   fetchSelected = true,
   referenceForm,
   referencePermissions,
@@ -218,6 +223,14 @@ export function ReferenceField({
     name: recordSource ?? "",
     disabled: !recordSource,
   }) as Record<string, unknown> | undefined;
+
+  const labelPath = labelSource
+    ? resolveLabelSourcePath(labelSource, name, source)
+    : "";
+  const selectedLabels = useWatch({
+    name: labelPath,
+    disabled: !labelSource,
+  });
 
   return (
     <FieldWrapper
@@ -246,6 +259,7 @@ export function ReferenceField({
           onChange={onChange}
           fieldName={fieldName}
           selectedRecords={recordSource ? embeddedRecord : undefined}
+          selectedLabels={labelSource ? selectedLabels : undefined}
           referenceForm={referenceForm}
           referencePermissions={referencePermissions}
           referenceTitle={referenceTitle}

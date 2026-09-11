@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 import type { FieldSourceProps, FieldRules, ReferenceProps } from "../types";
 import { valuesAsIds } from "../utils/choiceSelectionUtils";
+import { resolveLabelSourcePath } from "../utils/resolveLabelSourcePath";
 import { referenceSelectDropdownProps } from "../utils/referenceSelectDropdownProps";
 import { referenceSelectNotFoundContent } from "../utils/referenceSelectNotFoundContent";
 import {
@@ -43,6 +44,7 @@ type ReferenceManyFieldSelectProps = Omit<
   onChange: (value: unknown) => void;
   disabled?: boolean;
   selectedRecords?: Record<string, unknown> | Record<string, unknown>[];
+  selectedLabels?: unknown;
 };
 
 function ReferenceManyFieldSelect({
@@ -58,6 +60,7 @@ function ReferenceManyFieldSelect({
   onChange,
   disabled,
   selectedRecords,
+  selectedLabels,
   referenceForm,
   referencePermissions,
   referenceTitle,
@@ -83,6 +86,7 @@ function ReferenceManyFieldSelect({
       active,
       selectedValues: value,
       selectedRecords,
+      selectedLabels,
       fetchSelected,
     },
   );
@@ -169,6 +173,7 @@ export function ReferenceManyField({
   disabled: disabledProp,
   lazy = true,
   recordSource,
+  labelSource,
   fetchSelected = true,
   referenceForm,
   referencePermissions,
@@ -183,6 +188,14 @@ export function ReferenceManyField({
     name: recordSource ?? "",
     disabled: !recordSource,
   }) as Record<string, unknown> | Record<string, unknown>[] | undefined;
+
+  const labelPath = labelSource
+    ? resolveLabelSourcePath(labelSource, name, source)
+    : "";
+  const selectedLabels = useWatch({
+    name: labelPath,
+    disabled: !labelSource,
+  });
 
   return (
     <FieldWrapper
@@ -208,6 +221,7 @@ export function ReferenceManyField({
           onChange={onChange}
           disabled={disabled || disabledProp}
           selectedRecords={recordSource ? embeddedRecords : undefined}
+          selectedLabels={labelSource ? selectedLabels : undefined}
           referenceForm={referenceForm}
           referencePermissions={referencePermissions}
           referenceTitle={referenceTitle}

@@ -174,7 +174,7 @@ For one-off renderers, use `CustomColumn`:
 
 ## Tips
 
-- **Reference data:** reuse `useChoices` with `lazy`, `recordSource`, and `fetchSelected` — see [references.md](references.md).
+- **Reference data:** reuse `useChoices` with `lazy`, `labelSource` / `selectedLabels`, `recordSource`, and `fetchSelected` — see [references.md](references.md).
 - **Nested paths:** dotted `source` on columns uses Ant Design nested `dataIndex`. `display="brand.name"` on columns uses `getFormValue`.
 - **Permissions:** `ResourceList` respects `usePermissions()` for New / Edit / Delete / bulk delete. Use `actions={{ delete: false }}` etc. to hide built-in buttons even when permitted; use `headerExtra`, `rowActions`, and `bulkActions` for custom controls.
 - **Playground:** see `examples/playground/src/pages/` for full examples.

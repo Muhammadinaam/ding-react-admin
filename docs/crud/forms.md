@@ -75,7 +75,7 @@ import { ResourceForm, TextAreaField } from "ding-react-admin";
 </ResourceForm>
 ```
 
-`ReferenceField` / `ReferenceManyField` load their option list **lazily** (on dropdown open / search). See [references.md](references.md) for embedded relations (`recordSource`), `fetchSelected`, and custom loaders.
+`ReferenceField` / `ReferenceManyField` load their option list **lazily** (on dropdown open / search). See [references.md](references.md) for selected labels (`labelSource`), embedded relations (`recordSource`), `fetchSelected`, and custom loaders.
 
 ## Image and file uploads
 
