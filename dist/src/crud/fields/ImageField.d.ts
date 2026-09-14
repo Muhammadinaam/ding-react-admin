@@ -1,5 +1,5 @@
-import { BaseSourceProps, FieldRules } from '../types';
-export type ImageFieldProps = BaseSourceProps & {
+import { FieldSourceProps, FieldRules } from '../types';
+export type ImageFieldProps = FieldSourceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -10,5 +10,5 @@ export type ImageFieldProps = BaseSourceProps & {
     /** Max preview width in pixels. */
     previewWidth?: number;
 };
-export declare function ImageField({ source, name, label, required, rules, hideLabel, clearable, accept, previewWidth, }: ImageFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ImageField({ source, name, label, required, rules, hideLabel, hidden, clearable, accept, previewWidth, }: ImageFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ImageField.d.ts.map

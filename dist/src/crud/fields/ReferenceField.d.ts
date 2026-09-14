@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from 'react';
-import { BaseSourceProps, ChoiceOption, FieldRules, ReferenceProps } from '../types';
+import { FieldSourceProps, ChoiceOption, FieldRules, ReferenceProps } from '../types';
 import { ResourcePermissions } from '../../permissions/resourcePermissions';
-export type ReferenceFieldProps = BaseSourceProps & ReferenceProps & {
+export type ReferenceFieldProps = FieldSourceProps & ReferenceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -27,5 +27,5 @@ export type ReferenceFieldProps = BaseSourceProps & ReferenceProps & {
     popupMatchSelectWidth?: boolean | number;
     popupMinWidth?: number;
 };
-export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, disabled: disabledProp, hideLabel, inputStyle, onValueChange, lazy, recordSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, disabled: disabledProp, hideLabel, hidden, inputStyle, onValueChange, lazy, recordSource, labelSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceField.d.ts.map

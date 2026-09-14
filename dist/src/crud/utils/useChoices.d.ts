@@ -15,8 +15,13 @@ export type UseChoicesOptions = {
      */
     selectedRecords?: Record<string, unknown> | Record<string, unknown>[];
     /**
+     * String or string[] from the form record (e.g. `labelSource="authorName"`).
+     * Used as selected labels so edit forms can skip `getOne`.
+     */
+    selectedLabels?: unknown;
+    /**
      * When true (default), fetch labels for primitive ids via `getOne` if they are
-     * not already known from `selectedValues` / `selectedRecords`.
+     * not already known from `selectedValues` / `selectedRecords` / `selectedLabels`.
      */
     fetchSelected?: boolean;
     /**

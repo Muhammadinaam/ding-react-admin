@@ -10,6 +10,8 @@ export type FieldWrapperProps = {
     rules?: FieldRules;
     /** Tabular inline cells: column header replaces the label. */
     hideLabel?: boolean;
+    /** Hide the control but keep the value in the form and save payload. */
+    hidden?: boolean;
     children: (props: {
         value: unknown;
         onChange: (value: unknown) => void;
@@ -18,5 +20,5 @@ export type FieldWrapperProps = {
         name: string;
     }) => ReactNode;
 };
-export declare function FieldWrapper({ source, name, label, required, rules, hideLabel, children, }: FieldWrapperProps): import("react/jsx-runtime").JSX.Element;
+export declare function FieldWrapper({ source, name, label, required, rules, hideLabel, hidden, children, }: FieldWrapperProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=FieldWrapper.d.ts.map

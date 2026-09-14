@@ -5,7 +5,7 @@ export type ThemeDensity = "comfortable" | "compact";
 /**
  * Sidebar / app-hub navigation row. Maps to Ant Design `Menu` items.
  *
- * - **`children`** — nested submenu; parent rows should use a `path` that you **do not** navigate to as a leaf (for example `/catalog`), unless you define that route.
+ * - **`children`** — nested submenu. The menu key is `${path}__submenu` so it does not collide with a child that reuses `path`.
  * - **`label`** — string or any React node (badges, extra markup).
  * - **`Icon`** — optional; omit on group-only rows if you prefer text-only labels.
  */

@@ -10,6 +10,14 @@ export declare function mergeOptions(existing: ChoiceOption[], incoming: ChoiceO
 /** Selected ids that do not yet have a matching option (label still unresolved). */
 export declare function unresolvedSelectedIds(selectedIds: unknown[], knownOptions: ChoiceOption[]): unknown[];
 /**
+ * Remember selected labels from a sibling string / string[] on the form record.
+ * When ids and labels are the same length, rebuild the map (retrieve / reset).
+ * When the user adds or removes ids, keep previous id→label entries so order
+ * changes do not scramble labels.
+ */
+export declare function mergeSelectedLabelMap(selectedIds: unknown[], selectedLabels: unknown, previous: ReadonlyMap<unknown, string>): Map<unknown, string>;
+export declare function optionsFromLabelMap(selectedIds: unknown[], labelMap: ReadonlyMap<unknown, string>): ChoiceOption[];
+/**
  * Keep options for currently selected ids when replacing the dropdown list
  * (e.g. closing a lazy select) so selected labels do not flash back to raw ids.
  */

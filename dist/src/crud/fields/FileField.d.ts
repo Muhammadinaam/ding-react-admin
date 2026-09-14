@@ -1,5 +1,5 @@
-import { BaseSourceProps, FieldRules } from '../types';
-export type FileFieldProps = BaseSourceProps & {
+import { FieldSourceProps, FieldRules } from '../types';
+export type FileFieldProps = FieldSourceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -8,5 +8,5 @@ export type FileFieldProps = BaseSourceProps & {
     clearable?: boolean;
     accept?: string;
 };
-export declare function FileField({ source, name, label, required, rules, hideLabel, clearable, accept, }: FileFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function FileField({ source, name, label, required, rules, hideLabel, hidden, clearable, accept, }: FileFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=FileField.d.ts.map

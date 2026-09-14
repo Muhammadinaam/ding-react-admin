@@ -13,5 +13,7 @@ export declare function flattenNavLeaves(items: NavItem[], options?: {
     group?: string;
 }): FlatNavItem[];
 export declare function filterFlatNavItems(items: FlatNavItem[], query: string): FlatNavItem[];
+/** Menu key for a parent row so it never collides with a child that shares `path`. */
+export declare function navSubmenuKey(path: string): string;
 export declare function collectSubmenuKeys(items: NavItem[]): string[];
 //# sourceMappingURL=navFilter.d.ts.map

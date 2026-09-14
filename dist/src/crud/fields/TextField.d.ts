@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import { BaseSourceProps, FieldRules } from '../types';
-export type TextFieldProps = BaseSourceProps & {
+import { FieldSourceProps, FieldRules } from '../types';
+export type TextFieldProps = FieldSourceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -8,5 +8,5 @@ export type TextFieldProps = BaseSourceProps & {
     inputStyle?: CSSProperties;
     hideLabel?: boolean;
 };
-export declare function TextField({ source, name, label, required, rules, placeholder, inputStyle, hideLabel, }: TextFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function TextField({ source, name, label, required, rules, placeholder, inputStyle, hideLabel, hidden, }: TextFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=TextField.d.ts.map

@@ -6,6 +6,11 @@ export type BaseSourceProps = {
     source: string;
     label?: string;
 };
+/** Form fields only — columns and filters do not hide-and-keep a value. */
+export type FieldSourceProps = BaseSourceProps & {
+    /** Hide the control but keep the value in the form and save payload. */
+    hidden?: boolean;
+};
 export type ChoiceOption = {
     label: string;
     value: unknown;
@@ -32,6 +37,12 @@ export type ReferenceProps = {
      * Use when retrieve embeds relations, e.g. `source="branch_id"` + `recordSource="branch"`.
      */
     recordSource?: string;
+    /**
+     * Form path of a string (single select) or string[] (multi-select) used as the
+     * selected option label(s). Skips `getOne` when the label is already present.
+     * A single path segment is resolved as a sibling of the field `name`.
+     */
+    labelSource?: string;
     /**
      * When true (default), fetch labels for primitive ids via `getOne` if they are not
      * already embedded in the form record. Set `false` to never call `getOne`.

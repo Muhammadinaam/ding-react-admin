@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import { BaseSourceProps, FieldRules } from '../types';
-export type NumberFieldProps = BaseSourceProps & {
+import { FieldSourceProps, FieldRules } from '../types';
+export type NumberFieldProps = FieldSourceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -10,5 +10,5 @@ export type NumberFieldProps = BaseSourceProps & {
     inputStyle?: CSSProperties;
     hideLabel?: boolean;
 };
-export declare function NumberField({ source, name, label, required, rules, min, max, step, inputStyle, hideLabel, }: NumberFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function NumberField({ source, name, label, required, rules, min, max, step, inputStyle, hideLabel, hidden, }: NumberFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=NumberField.d.ts.map

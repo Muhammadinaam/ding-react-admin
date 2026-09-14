@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
-import { BaseSourceProps, FieldRules } from '../types';
-export type TextAreaFieldProps = BaseSourceProps & {
+import { FieldSourceProps, FieldRules } from '../types';
+export type TextAreaFieldProps = FieldSourceProps & {
     name?: string;
     required?: boolean;
     rules?: FieldRules;
@@ -15,5 +15,5 @@ export type TextAreaFieldProps = BaseSourceProps & {
         maxRows?: number;
     };
 };
-export declare function TextAreaField({ source, name, label, required, rules, placeholder, inputStyle, hideLabel, rows, maxLength, showCount, autoSize, }: TextAreaFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function TextAreaField({ source, name, label, required, rules, placeholder, inputStyle, hideLabel, hidden, rows, maxLength, showCount, autoSize, }: TextAreaFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=TextAreaField.d.ts.map
