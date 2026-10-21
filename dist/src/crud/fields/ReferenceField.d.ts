@@ -6,7 +6,6 @@ export type ReferenceFieldProps = FieldSourceProps & ReferenceProps & {
     required?: boolean;
     rules?: FieldRules;
     search?: boolean;
-    allowClear?: boolean;
     disabled?: boolean;
     hideLabel?: boolean;
     /** Applied to the underlying Select / input control. */
@@ -27,5 +26,5 @@ export type ReferenceFieldProps = FieldSourceProps & ReferenceProps & {
     popupMatchSelectWidth?: boolean | number;
     popupMinWidth?: number;
 };
-export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, disabled: disabledProp, hideLabel, hidden, inputStyle, onValueChange, lazy, recordSource, labelSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReferenceField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, disabled: disabledProp, hideLabel, hidden, inputStyle, onValueChange, lazy, recordSource, labelSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceField.d.ts.map

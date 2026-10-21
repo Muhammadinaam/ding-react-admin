@@ -67,7 +67,6 @@ function PurchaseOrderFormFields() {
           source="warehouse"
           label="Warehouse"
           choices={WAREHOUSE_CHOICES}
-          allowClear
         />
         <SelectField
           source="incoterms"

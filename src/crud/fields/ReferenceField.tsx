@@ -28,7 +28,6 @@ export type ReferenceFieldProps = FieldSourceProps &
     required?: boolean;
     rules?: FieldRules;
     search?: boolean;
-    allowClear?: boolean;
     disabled?: boolean;
     hideLabel?: boolean;
     /** Applied to the underlying Select / input control. */
@@ -70,7 +69,6 @@ function ReferenceFieldSelect({
   optionLabel = "name",
   optionValue = "id",
   search,
-  allowClear,
   disabled,
   inputStyle,
   onValueChange,
@@ -161,7 +159,7 @@ function ReferenceFieldSelect({
         setDropdownOpen(open);
         if (!open) setSearchText(undefined);
       }}
-      allowClear={allowClear}
+      allowClear
       disabled={selectState.disabled}
       optionFilterProp="label"
       style={{ width: "100%", minWidth: 160, ...inputStyle }}
@@ -200,7 +198,6 @@ export function ReferenceField({
   required,
   rules,
   search,
-  allowClear,
   disabled: disabledProp,
   hideLabel,
   hidden,
@@ -245,7 +242,6 @@ export function ReferenceField({
           optionLabel={optionLabel}
           optionValue={optionValue}
           search={search}
-          allowClear={allowClear}
           disabled={disabled || disabledProp}
           inputStyle={inputStyle}
           onValueChange={onValueChange}

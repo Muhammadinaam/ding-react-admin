@@ -1,6 +1,6 @@
 import { Children as e, createContext as t, createElement as n, forwardRef as r, isValidElement as i, useCallback as a, useContext as o, useEffect as s, useLayoutEffect as c, useMemo as l, useRef as u, useState as d } from "react";
 import { Link as f, Navigate as p, Outlet as m, RouterProvider as h, createBrowserRouter as g, useLocation as _, useNavigate as v, useParams as y, useSearchParams as b } from "react-router-dom";
-import { Alert as x, App as S, Avatar as C, Button as w, Card as T, Col as E, ConfigProvider as D, DatePicker as O, Drawer as k, Dropdown as ee, Flex as A, Form as j, Grid as M, Image as N, Input as P, InputNumber as F, Layout as I, List as te, Menu as L, Modal as ne, Pagination as re, Popover as ie, Row as R, Segmented as ae, Select as z, Space as B, Spin as oe, Steps as V, Switch as se, Table as ce, Tabs as H, TimePicker as le, Tooltip as U, Typography as W, theme as G } from "antd";
+import { Alert as x, App as S, Avatar as C, Button as w, Card as T, Col as E, ConfigProvider as D, DatePicker as O, Drawer as k, Dropdown as A, Flex as j, Form as M, Grid as N, Image as P, Input as F, InputNumber as I, Layout as L, List as ee, Menu as R, Modal as te, Pagination as ne, Popover as re, Row as ie, Segmented as ae, Select as z, Space as B, Spin as oe, Steps as V, Switch as se, Table as ce, Tabs as H, TimePicker as le, Tooltip as U, Typography as W, theme as G } from "antd";
 import { Fragment as K, jsx as q, jsxs as J } from "react/jsx-runtime";
 import { AppstoreOutlined as ue, ArrowLeftOutlined as de, CaretDownOutlined as fe, CaretUpOutlined as pe, ColumnHeightOutlined as me, DeleteOutlined as he, DesktopOutlined as ge, EditOutlined as _e, LayoutOutlined as ve, LogoutOutlined as ye, MenuOutlined as be, MoonOutlined as xe, PaperClipOutlined as Se, PlusOutlined as Ce, SearchOutlined as we, SettingOutlined as Y, SunOutlined as Te, UploadOutlined as Ee, UserOutlined as De } from "@ant-design/icons";
 import { Controller as Oe, FormProvider as ke, useFieldArray as Ae, useForm as je, useFormContext as Me, useFormState as Ne, useWatch as Pe } from "react-hook-form";
@@ -132,8 +132,8 @@ function nt() {
 //#region src/components/ThemeToolbar.tsx
 function rt() {
 	let { token: e } = G.useToken();
-	return /* @__PURE__ */ q(ie, {
-		placement: M.useBreakpoint().lg ? "bottomRight" : "bottom",
+	return /* @__PURE__ */ q(re, {
+		placement: N.useBreakpoint().lg ? "bottomRight" : "bottom",
 		trigger: "click",
 		content: /* @__PURE__ */ J(B, {
 			orientation: "vertical",
@@ -164,7 +164,7 @@ function it({ value: e, onChange: t, placeholder: n = "Search menu…", variant:
 		},
 		children: /* @__PURE__ */ q(D, {
 			theme: a ? { token: { colorTextPlaceholder: "rgba(255, 255, 255, 0.45)" } } : void 0,
-			children: /* @__PURE__ */ q(P, {
+			children: /* @__PURE__ */ q(F, {
 				allowClear: !0,
 				size: "small",
 				value: e,
@@ -396,7 +396,7 @@ function kt(e) {
 	}
 }
 function At() {
-	return M.useBreakpoint().lg !== !0;
+	return N.useBreakpoint().lg !== !0;
 }
 function jt(e) {
 	let t = /* @__PURE__ */ new Set();
@@ -446,7 +446,7 @@ function Pt({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, on
 	})] });
 }
 function Ft({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, onOpenChange: i, onNavigate: a, wrapLabels: o, itemDivider: s }) {
-	return /* @__PURE__ */ q(L, {
+	return /* @__PURE__ */ q(R, {
 		className: Nt({
 			wrapLabels: o,
 			itemDivider: s
@@ -472,38 +472,38 @@ function Ft({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, on
 	});
 }
 function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDrawerTitle: r, headerExtras: i, userMenuItems: o, onUserMenuClick: c, loginPath: f = "/login", siderCollapsedStorageKey: p = Ot, navSearch: h = !0, navMenu: g, hideSider: y = !1 }) {
-	let b = v(), x = _(), { resolved: S } = Qe(), T = S === "dark", { logout: E, userLabel: D } = ut(), O = ht(), [A, j] = d(() => kt(p)), [M, N] = d(!1), P = At(), { token: F } = G.useToken(), te = u(null), [L, ne] = d(""), re = h !== !1, ie = typeof h == "object" ? h.placeholder : void 0, R = g?.wrapLabels !== !1, ae = g?.itemDivider ?? "inset", z = r ?? t, B = () => {
+	let b = v(), x = _(), { resolved: S } = Qe(), T = S === "dark", { logout: E, userLabel: D } = ut(), O = ht(), [j, M] = d(() => kt(p)), [N, P] = d(!1), F = At(), { token: I } = G.useToken(), ee = u(null), [R, te] = d(""), ne = h !== !1, re = typeof h == "object" ? h.placeholder : void 0, ie = g?.wrapLabels !== !1, ae = g?.itemDivider ?? "inset", z = r ?? t, B = () => {
 		E(), b(f, { replace: !0 });
 	}, oe = a((e) => {
-		j(e);
+		M(e);
 		try {
 			localStorage.setItem(p, e ? "1" : "0");
 		} catch {}
 	}, [p]);
 	s(() => {
-		P || N(!1);
-	}, [P]), s(() => {
-		N(!1);
+		F || P(!1);
+	}, [F]), s(() => {
+		P(!1);
 	}, [x.pathname]), s(() => {
-		te.current?.scrollTo({
+		ee.current?.scrollTo({
 			top: 0,
 			left: 0
 		});
 	}, [x.pathname]), s(() => {
-		A && ne("");
-	}, [A]);
-	let V = l(() => Et(e, O), [e, O]), se = L.trim(), ce = se.length > 0, H = l(() => ce ? yt(V, se) : V, [
+		j && te("");
+	}, [j]);
+	let V = l(() => Et(e, O), [e, O]), se = R.trim(), ce = se.length > 0, H = l(() => ce ? yt(V, se) : V, [
 		V,
 		se,
 		ce
 	]), le = l(() => jt(H), [H]), U = l(() => Tt(H, {
-		showLabelTooltip: !A && !R,
-		wrapLabels: R && !A,
-		collapsed: A
+		showLabelTooltip: !j && !ie,
+		wrapLabels: ie && !j,
+		collapsed: j
 	}), [
 		H,
-		A,
-		R
+		j,
+		ie
 	]), K = l(() => Ct(H), [H]), ue = l(() => Mt(V, x.pathname), [V, x.pathname]), [de, fe] = d(() => Mt(V, x.pathname));
 	s(() => {
 		fe((e) => [...new Set([...e, ...ue])]);
@@ -511,7 +511,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 	let pe = a((e) => {
 		fe(e);
 	}, []), me = ce ? K : de, he = a((e) => {
-		ne(e);
+		te(e);
 	}, []), ge = l(() => [{
 		key: "logout",
 		icon: /* @__PURE__ */ q(ye, {}),
@@ -523,27 +523,27 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 			return;
 		}
 		e.key === "logout" && B();
-	}, xe = T ? F.colorBgContainer : Dt, Se = T ? "default" : "on-dark", Ce = T ? "app" : "on-dark", we = [x.pathname], Y = (e) => {
-		le.has(e) && (b(e), P && N(!1));
+	}, xe = T ? I.colorBgContainer : Dt, Se = T ? "default" : "on-dark", Ce = T ? "app" : "on-dark", we = [x.pathname], Y = (e) => {
+		le.has(e) && (b(e), F && P(!1));
 	};
-	return /* @__PURE__ */ J(I, {
+	return /* @__PURE__ */ J(L, {
 		style: {
 			height: "100vh",
 			width: "100%",
 			overflow: "hidden",
-			background: F.colorBgLayout
+			background: I.colorBgLayout
 		},
 		children: [
-			!y && !P && /* @__PURE__ */ q(I.Sider, {
+			!y && !F && /* @__PURE__ */ q(L.Sider, {
 				collapsible: !0,
-				collapsed: A,
+				collapsed: j,
 				onCollapse: oe,
 				collapsedWidth: 64,
 				style: {
 					background: xe,
 					height: "100vh",
 					overflow: "hidden",
-					borderInlineEnd: T ? `1px solid ${F.colorSplit}` : void 0
+					borderInlineEnd: T ? `1px solid ${I.colorSplit}` : void 0
 				},
 				children: /* @__PURE__ */ J("div", {
 					style: {
@@ -563,41 +563,41 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						},
 						children: /* @__PURE__ */ q(W.Text, {
 							strong: !0,
-							style: { color: F.colorTextLightSolid },
-							children: A ? n : t
+							style: { color: I.colorTextLightSolid },
+							children: j ? n : t
 						})
 					}), /* @__PURE__ */ q(Pt, {
 						menuItems: U,
 						selectedKeys: we,
-						inlineCollapsed: A,
+						inlineCollapsed: j,
 						openKeys: me,
 						onOpenChange: pe,
 						onNavigate: Y,
-						navQuery: L,
+						navQuery: R,
 						onNavQueryChange: he,
-						showNavSearch: re,
-						navSearchPlaceholder: ie,
+						showNavSearch: ne,
+						navSearchPlaceholder: re,
 						scrollVariant: Se,
 						searchVariant: Ce,
-						wrapLabels: R,
+						wrapLabels: ie,
 						itemDivider: ae
 					})]
 				})
 			}),
-			!y && P && /* @__PURE__ */ q(k, {
+			!y && F && /* @__PURE__ */ q(k, {
 				title: /* @__PURE__ */ q(W.Text, {
 					strong: !0,
-					style: { color: F.colorTextLightSolid },
+					style: { color: I.colorTextLightSolid },
 					children: z
 				}),
 				placement: "left",
 				size: 280,
-				onClose: () => N(!1),
-				open: M,
+				onClose: () => P(!1),
+				open: N,
 				styles: {
 					header: {
 						background: xe,
-						borderBottom: `1px solid ${F.colorSplit}`
+						borderBottom: `1px solid ${I.colorSplit}`
 					},
 					body: {
 						padding: 0,
@@ -619,18 +619,18 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						openKeys: me,
 						onOpenChange: pe,
 						onNavigate: Y,
-						navQuery: L,
+						navQuery: R,
 						onNavQueryChange: he,
-						showNavSearch: re,
-						navSearchPlaceholder: ie,
+						showNavSearch: ne,
+						navSearchPlaceholder: re,
 						scrollVariant: Se,
 						searchVariant: Ce,
-						wrapLabels: R,
+						wrapLabels: ie,
 						itemDivider: ae
 					})
 				})
 			}),
-			/* @__PURE__ */ J(I, {
+			/* @__PURE__ */ J(L, {
 				style: {
 					minWidth: 0,
 					flex: 1,
@@ -639,21 +639,21 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 					display: "flex",
 					flexDirection: "column"
 				},
-				children: [/* @__PURE__ */ J(I.Header, {
+				children: [/* @__PURE__ */ J(L.Header, {
 					style: {
-						background: F.colorBgContainer,
-						paddingInline: F.paddingLG,
+						background: I.colorBgContainer,
+						paddingInline: I.paddingLG,
 						display: "flex",
 						alignItems: "center",
-						gap: F.marginSM,
+						gap: I.marginSM,
 						lineHeight: "normal",
 						flexShrink: 0
 					},
 					children: [
-						!y && P && /* @__PURE__ */ q(w, {
+						!y && F && /* @__PURE__ */ q(w, {
 							type: "text",
 							icon: /* @__PURE__ */ q(be, {}),
-							onClick: () => N(!0),
+							onClick: () => P(!0),
 							"aria-label": "Open navigation"
 						}),
 						/* @__PURE__ */ q("div", { style: {
@@ -662,7 +662,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						} }),
 						i,
 						/* @__PURE__ */ q(rt, {}),
-						/* @__PURE__ */ q(ee, {
+						/* @__PURE__ */ q(A, {
 							menu: {
 								items: _e,
 								onClick: ve
@@ -673,15 +673,15 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 								style: {
 									display: "inline-flex",
 									alignItems: "center",
-									gap: F.marginXS,
-									maxWidth: P ? 44 : void 0,
-									paddingInline: P ? F.paddingXS : void 0
+									gap: I.marginXS,
+									maxWidth: F ? 44 : void 0,
+									paddingInline: F ? I.paddingXS : void 0
 								},
 								"aria-label": "Account menu",
 								children: [/* @__PURE__ */ q(C, {
 									size: "small",
 									icon: /* @__PURE__ */ q(De, {})
-								}), !P && /* @__PURE__ */ q(W.Text, {
+								}), !F && /* @__PURE__ */ q(W.Text, {
 									type: "secondary",
 									ellipsis: !0,
 									style: { maxWidth: 160 },
@@ -690,7 +690,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 							})
 						})
 					]
-				}), /* @__PURE__ */ q(I.Content, {
+				}), /* @__PURE__ */ q(L.Content, {
 					style: {
 						minWidth: 0,
 						flex: 1,
@@ -699,9 +699,9 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						flexDirection: "column"
 					},
 					children: /* @__PURE__ */ q(at, {
-						ref: te,
+						ref: ee,
 						style: {
-							margin: P ? F.marginSM : F.marginLG,
+							margin: F ? I.marginSM : I.marginLG,
 							flex: 1,
 							minHeight: 0,
 							overflow: "auto"
@@ -1211,7 +1211,7 @@ function Rn({ prompt: e, linkText: t, to: n }) {
 //#region src/layouts/AuthPageLayout.tsx
 function zn({ children: e, brand: t, footer: n, showThemeToolbar: r = !0 }) {
 	let { token: i } = G.useToken();
-	return /* @__PURE__ */ J(A, {
+	return /* @__PURE__ */ J(j, {
 		vertical: !0,
 		align: "stretch",
 		style: {
@@ -1222,7 +1222,7 @@ function zn({ children: e, brand: t, footer: n, showThemeToolbar: r = !0 }) {
 			background: i.colorBgLayout
 		},
 		children: [
-			r ? /* @__PURE__ */ q(A, {
+			r ? /* @__PURE__ */ q(j, {
 				justify: "flex-end",
 				style: {
 					flexShrink: 0,
@@ -1247,7 +1247,7 @@ function zn({ children: e, brand: t, footer: n, showThemeToolbar: r = !0 }) {
 					width: "100%",
 					background: i.colorBgLayout
 				},
-				children: /* @__PURE__ */ J(A, {
+				children: /* @__PURE__ */ J(j, {
 					vertical: !0,
 					align: "center",
 					justify: "flex-start",
@@ -1291,7 +1291,7 @@ function Bn({ title: e = "Sign in", description: t = "Use any username and passw
 				type: "secondary",
 				style: { marginTop: 0 },
 				children: t
-			}) : null, /* @__PURE__ */ J(j, {
+			}) : null, /* @__PURE__ */ J(M, {
 				layout: "vertical",
 				onFinish: async (e) => {
 					await l({
@@ -1301,26 +1301,26 @@ function Bn({ title: e = "Sign in", description: t = "Use any username and passw
 					}), u(o, { replace: !0 });
 				},
 				children: [
-					/* @__PURE__ */ q(j.Item, {
+					/* @__PURE__ */ q(M.Item, {
 						name: "username",
 						label: "Username",
 						rules: [{
 							required: !0,
 							message: "Required"
 						}],
-						children: /* @__PURE__ */ q(P, { autoComplete: "username" })
+						children: /* @__PURE__ */ q(F, { autoComplete: "username" })
 					}),
-					/* @__PURE__ */ q(j.Item, {
+					/* @__PURE__ */ q(M.Item, {
 						name: "password",
 						label: "Password",
 						rules: [{
 							required: !0,
 							message: "Required"
 						}],
-						children: /* @__PURE__ */ q(P.Password, { autoComplete: "current-password" })
+						children: /* @__PURE__ */ q(F.Password, { autoComplete: "current-password" })
 					}),
 					i,
-					/* @__PURE__ */ q(j.Item, {
+					/* @__PURE__ */ q(M.Item, {
 						style: { marginBottom: 0 },
 						children: /* @__PURE__ */ q(w, {
 							type: "primary",
@@ -1385,7 +1385,7 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 				padding: u.paddingXL
 			},
 			children: /* @__PURE__ */ q(oe, { size: "large" })
-		}) : y ? /* @__PURE__ */ q(te, {
+		}) : y ? /* @__PURE__ */ q(ee, {
 			bordered: !0,
 			dataSource: _,
 			locale: { emptyText: "No menus match your search." },
@@ -1395,10 +1395,10 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 			},
 			renderItem: (e) => {
 				let t = e.Icon;
-				return /* @__PURE__ */ q(te.Item, {
+				return /* @__PURE__ */ q(ee.Item, {
 					style: { cursor: "pointer" },
 					onClick: () => h(e),
-					children: /* @__PURE__ */ q(te.Item.Meta, {
+					children: /* @__PURE__ */ q(ee.Item.Meta, {
 						avatar: t ? /* @__PURE__ */ q("span", {
 							style: {
 								fontSize: 20,
@@ -1411,7 +1411,7 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 					})
 				});
 			}
-		}) : /* @__PURE__ */ q(R, {
+		}) : /* @__PURE__ */ q(ie, {
 			gutter: [16, 16],
 			justify: "center",
 			children: e.map((e) => {
@@ -1572,7 +1572,7 @@ function er({ value: e, onChange: t, placeholder: n, debounceMs: r }) {
 		r,
 		t,
 		e
-	]), /* @__PURE__ */ q(P, {
+	]), /* @__PURE__ */ q(F, {
 		allowClear: !0,
 		placeholder: n,
 		value: i,
@@ -2057,15 +2057,15 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 		inlineRegistryRef: y,
 		setGlobalErrors: x,
 		onSuccess: l
-	}), k = T || O, ee = () => {
+	}), k = T || O, A = () => {
 		C.handleSubmit(D, () => {
 			_.warning("Please fix the errors below.");
 		})();
-	}, A = /* @__PURE__ */ q(w, {
+	}, j = /* @__PURE__ */ q(w, {
 		disabled: k,
 		onClick: c ? void 0 : s,
 		children: "Cancel"
-	}), M = /* @__PURE__ */ q(sr, {
+	}), N = /* @__PURE__ */ q(sr, {
 		resource: e,
 		isNew: m,
 		children: /* @__PURE__ */ q(pr, {
@@ -2087,9 +2087,9 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 					}) : null, /* @__PURE__ */ n(ke, {
 						...C,
 						key: E
-					}, /* @__PURE__ */ J(j, {
+					}, /* @__PURE__ */ J(M, {
 						layout: "vertical",
-						onFinish: ee,
+						onFinish: A,
 						style: p === "overlay" ? {
 							opacity: k ? .4 : 1,
 							pointerEvents: k ? "none" : void 0
@@ -2097,7 +2097,7 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 						children: [
 							/* @__PURE__ */ q(xr, { errors: b }),
 							r,
-							/* @__PURE__ */ q(j.Item, {
+							/* @__PURE__ */ q(M.Item, {
 								style: {
 									marginTop: 16,
 									marginBottom: 0
@@ -2110,8 +2110,8 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 									children: "Save"
 								}), c ? /* @__PURE__ */ q(f, {
 									to: c,
-									children: A
-								}) : A] })
+									children: j
+								}) : j] })
 							})
 						]
 					}))]
@@ -2119,13 +2119,13 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 			})
 		})
 	});
-	return T && !O && p === "replace" ? /* @__PURE__ */ q(oe, {}) : M;
+	return T && !O && p === "replace" ? /* @__PURE__ */ q(oe, {}) : N;
 }
 //#endregion
 //#region src/crud/ResourceFormModal.tsx
 function Gr({ resource: e, editId: t, onClose: n, children: r, title: i, permissions: a, defaultValues: o, width: s = 560, onSuccess: c }) {
 	let l = t === "new", u = t != null, d = ht(), f = i ?? (l ? `New ${e}` : `Edit ${e}`), p = a ? X(d, a, l ? "add" : "change") : !0;
-	return /* @__PURE__ */ q(ne, {
+	return /* @__PURE__ */ q(te, {
 		open: u,
 		title: f,
 		onCancel: n,
@@ -2375,8 +2375,8 @@ function ni(e, t) {
 	}, ...r];
 }
 function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "page", formChildren: o, actions: s, rowActions: p, headerExtra: m, bulkActions: h, bulkDelete: g = !0, bulkActionsEnabled: _ = !0, permissions: v, queryState: y, queryActions: b }) {
-	let x = Zt(), C = ht(), { message: E, modal: D } = S.useApp(), { token: O } = G.useToken(), { columns: k, sortOrders: ee, sortPriorities: A } = Yn(), j = u(null), [M, N] = d(), [P, F] = d(!1), [I, te] = d([]), [L, ne] = d(0), [ie, R] = d(() => /* @__PURE__ */ new Set()), [ae, z] = d(!1), oe = r ?? `${n}/new`, V = X(C, v, "add"), se = X(C, v, "change"), H = X(C, v, "delete"), le = se && (i === "page" || i === "both") && s?.edit !== !1, U = se && (i === "modal" || i === "both") && s?.quickEdit !== !1, ue = H && s?.delete !== !1, de = le || U || ue || p, me = a(() => {
-		R(/* @__PURE__ */ new Set());
+	let x = Zt(), C = ht(), { message: E, modal: D } = S.useApp(), { token: O } = G.useToken(), { columns: k, sortOrders: A, sortPriorities: j } = Yn(), M = u(null), [N, P] = d(), [F, I] = d(!1), [L, ee] = d([]), [R, te] = d(0), [re, ie] = d(() => /* @__PURE__ */ new Set()), [ae, z] = d(!1), oe = r ?? `${n}/new`, V = X(C, v, "add"), se = X(C, v, "change"), H = X(C, v, "delete"), le = se && (i === "page" || i === "both") && s?.edit !== !1, U = se && (i === "modal" || i === "both") && s?.quickEdit !== !1, ue = H && s?.delete !== !1, de = le || U || ue || p, me = a(() => {
+		ie(/* @__PURE__ */ new Set());
 	}, []), he = l(() => {
 		if (!_) return [];
 		let t = [];
@@ -2396,16 +2396,16 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		x,
 		e,
 		E
-	]), ge = he.length > 0, _e = ie.size;
+	]), ge = he.length > 0, _e = re.size;
 	c(() => {
-		let e = j.current;
+		let e = M.current;
 		if (!e) return;
 		let t = e.closest(".ding-admin-scroll");
 		t?.classList.add("ding-admin-resource-list-scroll");
 		let n = () => {
 			if (e.clientHeight <= 0) return;
 			let t = e.querySelector(".ding-admin-resource-list-pagination"), n = e.querySelector(".ant-table-header"), r = t?.offsetHeight ?? 0, i = t ? parseFloat(getComputedStyle(t).marginTop) + parseFloat(getComputedStyle(t).marginBottom) : 0, a = n?.offsetHeight ?? 0, o = e.querySelector(".ant-table-body"), s = o && o.scrollWidth > o.clientWidth ? o.offsetHeight - o.clientHeight : 0, c = Math.max(120, Math.floor(e.clientHeight - a - r - i - s - 8));
-			N((e) => e === c ? e : c);
+			P((e) => e === c ? e : c);
 		};
 		n();
 		let r = new ResizeObserver(() => n());
@@ -2415,29 +2415,29 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 	}, [
 		ge,
 		_e,
-		L,
-		P
+		R,
+		F
 	]);
-	let ve = I.length > 0 && I.every((e) => ie.has(e.id)), ye = L > 0 && _e >= L, be = l(() => I.filter((e) => ie.has(e.id)).map((e) => e.id), [I, ie]), xe = a((e) => {
-		R((t) => {
-			let n = new Set(t), r = I.map((e) => e.id);
+	let ve = L.length > 0 && L.every((e) => re.has(e.id)), ye = R > 0 && _e >= R, be = l(() => L.filter((e) => re.has(e.id)).map((e) => e.id), [L, re]), xe = a((e) => {
+		ie((t) => {
+			let n = new Set(t), r = L.map((e) => e.id);
 			for (let t of r) e.includes(t) || n.delete(t);
 			for (let t of e) n.add(t);
 			return n;
 		});
-	}, [I]), Se = a(async () => {
-		if (!(L <= 0)) {
+	}, [L]), Se = a(async () => {
+		if (!(R <= 0)) {
 			z(!0);
 			try {
 				let t = y.sort.length === 0 ? void 0 : y.sort.length === 1 ? y.sort[0] : y.sort, n = await x.getList(e, {
 					pagination: {
 						page: 1,
-						perPage: L
+						perPage: R
 					},
 					sort: t,
 					filter: y.filter
 				});
-				R(new Set(n.data.map((e) => e.id)));
+				ie(new Set(n.data.map((e) => e.id)));
 			} catch (e) {
 				E.error(e instanceof Error ? e.message : "Load failed");
 			} finally {
@@ -2447,7 +2447,7 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 	}, [
 		x,
 		e,
-		L,
+		R,
 		y.sort,
 		y.filter,
 		E
@@ -2483,18 +2483,18 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 			filter: y.filter
 		};
 	}, [y]), Y = a(async (t) => {
-		F(!0);
+		I(!0);
 		try {
 			let n = await x.getList(e, {
 				...we,
 				signal: t
 			});
 			if (t?.aborted) return;
-			te(n.data), ne(n.total);
+			ee(n.data), te(n.total);
 		} catch (e) {
 			tn(e) || E.error(e instanceof Error ? e.message : "Load failed");
 		} finally {
-			t?.aborted || F(!1);
+			t?.aborted || I(!1);
 		}
 	}, [
 		x,
@@ -2554,7 +2554,7 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		let e = k.map((e) => {
 			let t = e.buildColumn();
 			if (e.sortable) {
-				let n = ee.get(e.source), r = A.get(e.source), i = n === "ASC" ? "ascend" : n === "DESC" ? "descend" : void 0, a = i == null ? void 0 : /* @__PURE__ */ J("span", {
+				let n = A.get(e.source), r = j.get(e.source), i = n === "ASC" ? "ascend" : n === "DESC" ? "descend" : void 0, a = i == null ? void 0 : /* @__PURE__ */ J("span", {
 					style: {
 						display: "inline-flex",
 						alignItems: "center",
@@ -2637,8 +2637,8 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		i,
 		n,
 		De,
-		ee,
 		A,
+		j,
 		b,
 		p,
 		Y
@@ -2675,17 +2675,17 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		}) : null] }) : null,
 		children: [ge ? /* @__PURE__ */ q(Kr, {
 			selectedCount: _e,
-			total: L,
+			total: R,
 			allPageSelected: ve,
 			allMatchingSelected: ye,
 			onSelectAllMatching: () => void Se(),
 			onClearSelection: me,
 			actions: he,
 			onExecute: Ee,
-			selectedIds: [...ie],
-			running: ae || P
+			selectedIds: [...re],
+			running: ae || F
 		}) : null, /* @__PURE__ */ J("div", {
-			ref: j,
+			ref: M,
 			className: "ding-admin-resource-list-table",
 			style: {
 				"--ding-scroll-thumb": O.colorTextQuaternary,
@@ -2693,12 +2693,12 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 			},
 			children: [/* @__PURE__ */ q(ce, {
 				rowKey: "id",
-				loading: P,
+				loading: F,
 				columns: Oe,
-				dataSource: I,
+				dataSource: L,
 				scroll: {
 					x: "max-content",
-					...M ? { y: M } : {}
+					...N ? { y: N } : {}
 				},
 				rowSelection: ge ? {
 					selectedRowKeys: be,
@@ -2711,10 +2711,10 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 				}
 			}), /* @__PURE__ */ q("div", {
 				className: "ding-admin-resource-list-pagination",
-				children: /* @__PURE__ */ q(re, {
+				children: /* @__PURE__ */ q(ne, {
 					current: y.page,
 					pageSize: y.perPage,
-					total: L,
+					total: R,
 					showSizeChanger: !0,
 					onChange: ke
 				})
@@ -3145,7 +3145,7 @@ function $({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, 
 			required: r ? `${m} is required` : !1,
 			...i
 		},
-		render: ({ field: e, fieldState: t }) => /* @__PURE__ */ q(j.Item, {
+		render: ({ field: e, fieldState: t }) => /* @__PURE__ */ q(M.Item, {
 			label: p,
 			validateStatus: t.error ? "error" : void 0,
 			help: t.error?.message,
@@ -3172,7 +3172,7 @@ function Di({ source: e, name: t, label: n, required: r, rules: i, placeholder: 
 		rules: i,
 		hideLabel: s,
 		hidden: c,
-		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(P, {
+		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(F, {
 			value: e,
 			onChange: (e) => t(e.target.value),
 			onBlur: n,
@@ -3193,7 +3193,7 @@ function Oi({ source: e, name: t, label: n, required: r, rules: i, placeholder: 
 		rules: i,
 		hideLabel: s,
 		hidden: c,
-		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(P.TextArea, {
+		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(F.TextArea, {
 			value: e,
 			onChange: (e) => t(e.target.value),
 			onBlur: n,
@@ -3218,7 +3218,7 @@ function ki({ source: e, name: t, label: n, required: r, rules: i, min: a, max: 
 		rules: i,
 		hideLabel: l,
 		hidden: u,
-		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(F, {
+		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(I, {
 			value: e,
 			onChange: (e) => t(e),
 			onBlur: n,
@@ -3482,21 +3482,21 @@ function Bi({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/fields/SelectField.tsx
-function Vi({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, allowClear: s, hideLabel: c, hidden: l }) {
+function Vi({ source: e, name: t, label: n, required: r, rules: i, choices: a, mode: o, hideLabel: s, hidden: c }) {
 	return /* @__PURE__ */ q($, {
 		source: e,
 		name: t,
 		label: n,
 		required: r,
 		rules: i,
-		hideLabel: c,
-		hidden: l,
+		hideLabel: s,
+		hidden: c,
 		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(z, {
 			value: e,
 			onChange: (e) => t(e ?? null),
 			options: a,
 			mode: o,
-			allowClear: s,
+			allowClear: !0,
 			disabled: n,
 			style: { width: "100%" }
 		})
@@ -3513,7 +3513,7 @@ function Hi({ source: e, name: t, label: n, required: r, rules: i, autoComplete:
 		rules: i,
 		hideLabel: o,
 		hidden: s,
-		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(P.Password, {
+		children: ({ value: e, onChange: t, onBlur: n, disabled: r }) => /* @__PURE__ */ q(F.Password, {
 			value: e,
 			onChange: (e) => t(e.target.value),
 			onBlur: n,
@@ -3723,32 +3723,32 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 		m,
 		n,
 		r
-	]), w = u(/* @__PURE__ */ new Map()), T = l(() => (w.current = $i(S, h, w.current), ea(S, w.current)), [S, h]), E = l(() => Zi(C, T), [C, T]), D = !!(b && (!c || f || Array.isArray(b))), [O, k] = d(() => E.length ? E : !x || i || c || !v ? [] : ca.get(x) ?? []), [ee, A] = d(() => D ? !v || !x || i ? !!b : !ca.has(x) : !1), [j, M] = d(() => !!(g && t && Qi(S, E).length)), N = u(O);
-	N.current = O;
-	let P = u(S);
-	P.current = S, s(() => {
+	]), w = u(/* @__PURE__ */ new Map()), T = l(() => (w.current = $i(S, h, w.current), ea(S, w.current)), [S, h]), E = l(() => Zi(C, T), [C, T]), D = !!(b && (!c || f || Array.isArray(b))), [O, k] = d(() => E.length ? E : !x || i || c || !v ? [] : ca.get(x) ?? []), [A, j] = d(() => D ? !v || !x || i ? !!b : !ca.has(x) : !1), [M, N] = d(() => !!(g && t && Qi(S, E).length)), P = u(O);
+	P.current = O;
+	let F = u(S);
+	F.current = S, s(() => {
 		E.length && k((e) => Zi(e, E));
 	}, [E]);
-	let F = a(async () => {
+	let I = a(async () => {
 		if (!b || !D) {
-			b || k(E), A(!1);
+			b || k(E), j(!1);
 			return;
 		}
 		if (v) {
 			let e = ua(b, i), t = ca.get(e);
 			if (t && !i) {
-				k((e) => Zi(ta(e, P.current, E), t)), A(!1);
+				k((e) => Zi(ta(e, F.current, E), t)), j(!1);
 				return;
 			}
 		}
-		A(!0), c && k((e) => ta(e, P.current, E));
+		j(!0), c && k((e) => ta(e, F.current, E));
 		try {
 			let e = await fa(b, y, n, r, i, v);
-			k((t) => Zi(ta(t, P.current, E), e));
+			k((t) => Zi(ta(t, F.current, E), e));
 		} catch {
-			!S.length && !E.length ? k([]) : c && k((e) => ta(e, P.current, E));
+			!S.length && !E.length ? k([]) : c && k((e) => ta(e, F.current, E));
 		} finally {
-			A(!1);
+			j(!1);
 		}
 	}, [
 		b,
@@ -3763,9 +3763,9 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 		E
 	]);
 	s(() => {
-		F();
-	}, [F]), s(() => {
-		c && !f && !i && (k((e) => ta(e, S, E)), A(!1));
+		I();
+	}, [I]), s(() => {
+		c && !f && !i && (k((e) => ta(e, S, E)), j(!1));
 	}, [
 		c,
 		f,
@@ -3774,16 +3774,16 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 		S
 	]), s(() => {
 		if (!g || !t || !S.length) {
-			M(!1);
+			N(!1);
 			return;
 		}
-		let e = Qi(S, Zi(E, N.current));
+		let e = Qi(S, Zi(E, P.current));
 		if (!e.length) {
-			M(!1);
+			N(!1);
 			return;
 		}
 		let i = !1;
-		return M(!0), (async () => {
+		return N(!0), (async () => {
 			let a = [];
 			for (let i of e) try {
 				let e = (await y.getOne(t, i)).data;
@@ -3801,7 +3801,7 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 			i || (a.length && k((e) => {
 				let t = a.filter((t) => !e.some((e) => e.value === t.value));
 				return t.length ? Zi(e, t) : e;
-			}), M(!1));
+			}), N(!1));
 		})(), () => {
 			i = !0;
 		};
@@ -3814,15 +3814,15 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 		S,
 		E
 	]);
-	let I = a((e) => O.find((t) => t.value === e)?.label ?? String(e ?? "—"), [O]);
+	let L = a((e) => O.find((t) => t.value === e)?.label ?? String(e ?? "—"), [O]);
 	return {
 		options: O,
-		loading: ee,
-		selectedLoading: j,
-		labelForValue: I,
-		labelsForValues: a((e) => e?.length ? e.map((e) => I(e)).join(", ") : "—", [I]),
+		loading: A,
+		selectedLoading: M,
+		labelForValue: L,
+		labelsForValues: a((e) => e?.length ? e.map((e) => L(e)).join(", ") : "—", [L]),
 		optionForValue: a((e) => O.find((t) => t.value === e), [O]),
-		reload: F
+		reload: I
 	};
 }
 //#endregion
@@ -3867,53 +3867,53 @@ function ma({ reference: e, referenceForm: t, referencePermissions: n, reference
 }
 //#endregion
 //#region src/crud/fields/ReferenceField.tsx
-function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a, disabled: o, inputStyle: s, onValueChange: c, lazy: u = !0, fetchSelected: f = !0, value: p, onChange: m, fieldName: h, selectedRecords: g, selectedLabels: _, referenceForm: v, referencePermissions: y, referenceTitle: b, referenceDefaultValues: x, referenceModalWidth: S, referenceActions: C = !0, popupMatchSelectWidth: w, popupMinWidth: T }) {
-	let [E, D] = d(), [O, k] = d(!1), ee = O || !!E, A = Gi(p, r), { options: j, loading: M, selectedLoading: N, optionForValue: P, reload: F } = pa(t, e, n, r, i ? E : void 0, {
-		lazy: u,
-		active: ee,
-		selectedValues: p,
-		selectedRecords: g,
-		selectedLabels: _,
-		fetchSelected: f
-	}), I = oa(M, N, o), te = l(() => j.map((e) => ({
+function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, disabled: a, inputStyle: o, onValueChange: s, lazy: c = !0, fetchSelected: u = !0, value: f, onChange: p, fieldName: m, selectedRecords: h, selectedLabels: g, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
+	let [T, E] = d(), [D, O] = d(!1), k = D || !!T, A = Gi(f, r), { options: j, loading: M, selectedLoading: N, optionForValue: P, reload: F } = pa(t, e, n, r, i ? T : void 0, {
+		lazy: c,
+		active: k,
+		selectedValues: f,
+		selectedRecords: h,
+		selectedLabels: g,
+		fetchSelected: u
+	}), I = oa(M, N, a), L = l(() => j.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [j]), L = (e) => {
+	})), [j]), ee = (e) => {
 		let t = e[r];
-		m(t), c?.(t, {
+		p(t), s?.(t, {
 			label: Yi(e, n),
 			value: t,
 			record: e
-		}, { name: h }), F();
-	}, ne = /* @__PURE__ */ q(z, {
+		}, { name: m }), F();
+	}, R = /* @__PURE__ */ q(z, {
 		...ia({
-			popupMatchSelectWidth: w,
-			popupMinWidth: T
+			popupMatchSelectWidth: C,
+			popupMinWidth: w
 		}),
 		value: sa(N, A, void 0),
 		onChange: (e) => {
 			let t = e ?? null;
-			m(t), c?.(t, P(e), { name: h });
+			p(t), s?.(t, P(e), { name: m });
 		},
-		options: te,
+		options: L,
 		loading: I.loading,
 		notFoundContent: aa(I.loading),
 		showSearch: i,
 		filterOption: i ? !1 : void 0,
-		onSearch: i ? D : void 0,
+		onSearch: i ? E : void 0,
 		onOpenChange: (e) => {
-			k(e), e || D(void 0);
+			O(e), e || E(void 0);
 		},
-		allowClear: a,
+		allowClear: !0,
 		disabled: I.disabled,
 		optionFilterProp: "label",
 		style: {
 			width: "100%",
 			minWidth: 160,
-			...s
+			...o
 		}
 	});
-	return C ? /* @__PURE__ */ J("div", {
+	return S ? /* @__PURE__ */ J("div", {
 		style: {
 			display: "flex",
 			gap: 8,
@@ -3925,95 +3925,94 @@ function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 				flex: 1,
 				minWidth: 0
 			},
-			children: ne
+			children: R
 		}), /* @__PURE__ */ q(ma, {
 			reference: e,
-			referenceForm: v,
-			referencePermissions: y,
-			referenceTitle: b,
-			referenceDefaultValues: x,
-			referenceModalWidth: S,
+			referenceForm: _,
+			referencePermissions: v,
+			referenceTitle: y,
+			referenceDefaultValues: b,
+			referenceModalWidth: x,
 			selectedId: A,
 			disabled: I.disabled,
-			onCreated: L,
+			onCreated: ee,
 			onUpdated: () => void F()
 		})]
-	}) : ne;
+	}) : R;
 }
-function ga({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u, disabled: d, hideLabel: f, hidden: p, inputStyle: m, onValueChange: h, lazy: g = !0, recordSource: _, labelSource: v, fetchSelected: y = !0, referenceForm: b, referencePermissions: x, referenceTitle: S, referenceDefaultValues: C, referenceModalWidth: w, referenceActions: T = !0, popupMatchSelectWidth: E, popupMinWidth: D }) {
-	let O = ra(_), k = ra(v ? na(v, t, e) : void 0);
+function ga({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, disabled: u, hideLabel: d, hidden: f, inputStyle: p, onValueChange: m, lazy: h = !0, recordSource: g, labelSource: _, fetchSelected: v = !0, referenceForm: y, referencePermissions: b, referenceTitle: x, referenceDefaultValues: S, referenceModalWidth: C, referenceActions: w = !0, popupMatchSelectWidth: T, popupMinWidth: E }) {
+	let D = ra(g), O = ra(_ ? na(_, t, e) : void 0);
 	return /* @__PURE__ */ q($, {
 		source: e,
 		name: t,
 		label: n,
 		required: s,
 		rules: c,
-		hideLabel: f,
-		hidden: p,
+		hideLabel: d,
+		hidden: f,
 		children: ({ value: e, onChange: t, disabled: n, name: s }) => /* @__PURE__ */ q(ha, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
 			optionValue: o,
 			search: l,
-			allowClear: u,
-			disabled: n || d,
-			inputStyle: m,
-			onValueChange: h,
-			lazy: g,
-			fetchSelected: y && !(v && k === void 0),
+			disabled: n || u,
+			inputStyle: p,
+			onValueChange: m,
+			lazy: h,
+			fetchSelected: v && !(_ && O === void 0),
 			value: e,
 			onChange: t,
 			fieldName: s,
-			selectedRecords: _ ? O : void 0,
-			selectedLabels: v ? k : void 0,
-			referenceForm: b,
-			referencePermissions: x,
-			referenceTitle: S,
-			referenceDefaultValues: C,
-			referenceModalWidth: w,
-			referenceActions: T,
-			popupMatchSelectWidth: E,
-			popupMinWidth: D
+			selectedRecords: g ? D : void 0,
+			selectedLabels: _ ? O : void 0,
+			referenceForm: y,
+			referencePermissions: b,
+			referenceTitle: x,
+			referenceDefaultValues: S,
+			referenceModalWidth: C,
+			referenceActions: w,
+			popupMatchSelectWidth: T,
+			popupMinWidth: E
 		})
 	});
 }
 //#endregion
 //#region src/crud/fields/ReferenceManyField.tsx
-function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, allowClear: a = !0, lazy: o = !0, fetchSelected: s = !0, value: c, onChange: u, disabled: f, selectedRecords: p, selectedLabels: m, referenceForm: h, referencePermissions: g, referenceTitle: _, referenceDefaultValues: v, referenceModalWidth: y, referenceActions: b = !0, popupMatchSelectWidth: x, popupMinWidth: S }) {
-	let [C, w] = d(), [T, E] = d(!1), D = T || !!C, O = Ki(c, r), { options: k, loading: ee, selectedLoading: A, reload: j } = pa(t, e, n, r, i ? C : void 0, {
-		lazy: o,
-		active: D,
-		selectedValues: c,
-		selectedRecords: p,
-		selectedLabels: m,
-		fetchSelected: s
-	}), M = oa(ee, A, f), N = l(() => k.map((e) => ({
+function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, lazy: a = !0, fetchSelected: o = !0, value: s, onChange: c, disabled: u, selectedRecords: f, selectedLabels: p, referenceForm: m, referencePermissions: h, referenceTitle: g, referenceDefaultValues: _, referenceModalWidth: v, referenceActions: y = !0, popupMatchSelectWidth: b, popupMinWidth: x }) {
+	let [S, C] = d(), [w, T] = d(!1), E = w || !!S, D = Ki(s, r), { options: O, loading: k, selectedLoading: A, reload: j } = pa(t, e, n, r, i ? S : void 0, {
+		lazy: a,
+		active: E,
+		selectedValues: s,
+		selectedRecords: f,
+		selectedLabels: p,
+		fetchSelected: o
+	}), M = oa(k, A, u), N = l(() => O.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [k]), P = /* @__PURE__ */ q(z, {
+	})), [O]), P = /* @__PURE__ */ q(z, {
 		...ia({
-			popupMatchSelectWidth: x,
-			popupMinWidth: S
+			popupMatchSelectWidth: b,
+			popupMinWidth: x
 		}),
 		mode: "multiple",
-		value: sa(A, O, []),
-		onChange: (e) => u(e ?? []),
+		value: sa(A, D, []),
+		onChange: (e) => c(e ?? []),
 		options: N,
 		loading: M.loading,
 		notFoundContent: aa(M.loading),
 		showSearch: i,
 		filterOption: i ? !1 : void 0,
-		onSearch: i ? w : void 0,
+		onSearch: i ? C : void 0,
 		onOpenChange: (e) => {
-			E(e), e || w(void 0);
+			T(e), e || C(void 0);
 		},
-		allowClear: a,
+		allowClear: !0,
 		disabled: M.disabled,
 		optionFilterProp: "label",
 		style: { width: "100%" }
 	});
-	return b ? /* @__PURE__ */ J("div", {
+	return y ? /* @__PURE__ */ J("div", {
 		style: {
 			display: "flex",
 			gap: 8,
@@ -4028,55 +4027,54 @@ function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 			children: P
 		}), /* @__PURE__ */ q(ma, {
 			reference: e,
-			referenceForm: h,
-			referencePermissions: g,
-			referenceTitle: _,
-			referenceDefaultValues: v,
-			referenceModalWidth: y,
+			referenceForm: m,
+			referencePermissions: h,
+			referenceTitle: g,
+			referenceDefaultValues: _,
+			referenceModalWidth: v,
 			disabled: M.disabled,
 			onCreated: (e) => {
-				let t = e[r], n = Array.isArray(O) ? O : [];
+				let t = e[r], n = Array.isArray(D) ? D : [];
 				if (n.some((e) => e === t)) {
 					j();
 					return;
 				}
-				u([...n, t]), j();
+				c([...n, t]), j();
 			}
 		})]
 	}) : P;
 }
-function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, allowClear: u = !0, hideLabel: d, hidden: f, disabled: p, lazy: m = !0, recordSource: h, labelSource: g, fetchSelected: _ = !0, referenceForm: v, referencePermissions: y, referenceTitle: b, referenceDefaultValues: x, referenceModalWidth: S, referenceActions: C = !0, popupMatchSelectWidth: w, popupMinWidth: T }) {
-	let E = ra(h), D = ra(g ? na(g, t, e) : void 0);
+function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, hideLabel: u, hidden: d, disabled: f, lazy: p = !0, recordSource: m, labelSource: h, fetchSelected: g = !0, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
+	let T = ra(m), E = ra(h ? na(h, t, e) : void 0);
 	return /* @__PURE__ */ q($, {
 		source: e,
 		name: t,
 		label: n,
 		required: s,
 		rules: c,
-		hideLabel: d,
-		hidden: f,
+		hideLabel: u,
+		hidden: d,
 		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(_a, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
 			optionValue: o,
 			search: l,
-			allowClear: u,
-			lazy: m,
-			fetchSelected: _ && !(g && D === void 0),
+			lazy: p,
+			fetchSelected: g && !(h && E === void 0),
 			value: e,
 			onChange: t,
-			disabled: n || p,
-			selectedRecords: h ? E : void 0,
-			selectedLabels: g ? D : void 0,
-			referenceForm: v,
-			referencePermissions: y,
-			referenceTitle: b,
-			referenceDefaultValues: x,
-			referenceModalWidth: S,
-			referenceActions: C,
-			popupMatchSelectWidth: w,
-			popupMinWidth: T
+			disabled: n || f,
+			selectedRecords: m ? T : void 0,
+			selectedLabels: h ? E : void 0,
+			referenceForm: _,
+			referencePermissions: v,
+			referenceTitle: y,
+			referenceDefaultValues: b,
+			referenceModalWidth: x,
+			referenceActions: S,
+			popupMatchSelectWidth: C,
+			popupMinWidth: w
 		})
 	});
 }
@@ -4115,7 +4113,7 @@ function Sa({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "ima
 		size: "middle",
 		style: { width: "100%" },
 		children: [
-			s ? /* @__PURE__ */ q(N, {
+			s ? /* @__PURE__ */ q(P, {
 				src: s,
 				alt: "",
 				style: {
@@ -4472,7 +4470,7 @@ function Ra({ source: e, label: t }) {
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: n, onChange: r }) => /* @__PURE__ */ q(F, {
+		render: ({ value: n, onChange: r }) => /* @__PURE__ */ q(I, {
 			placeholder: t ?? e,
 			value: n,
 			onChange: (e) => r(e ?? void 0),

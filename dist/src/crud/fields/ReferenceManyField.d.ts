@@ -6,7 +6,6 @@ export type ReferenceManyFieldProps = FieldSourceProps & ReferenceProps & {
     required?: boolean;
     rules?: FieldRules;
     search?: boolean;
-    allowClear?: boolean;
     hideLabel?: boolean;
     disabled?: boolean;
     referenceForm?: ReactNode;
@@ -19,5 +18,5 @@ export type ReferenceManyFieldProps = FieldSourceProps & ReferenceProps & {
     popupMatchSelectWidth?: boolean | number;
     popupMinWidth?: number;
 };
-export declare function ReferenceManyField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, allowClear, hideLabel, hidden, disabled: disabledProp, lazy, recordSource, labelSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceManyFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReferenceManyField({ source, name, label, reference, choices, optionLabel, optionValue, required, rules, search, hideLabel, hidden, disabled: disabledProp, lazy, recordSource, labelSource, fetchSelected, referenceForm, referencePermissions, referenceTitle, referenceDefaultValues, referenceModalWidth, referenceActions, popupMatchSelectWidth, popupMinWidth, }: ReferenceManyFieldProps): import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=ReferenceManyField.d.ts.map

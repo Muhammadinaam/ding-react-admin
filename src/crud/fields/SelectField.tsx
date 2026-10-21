@@ -8,7 +8,6 @@ export type SelectFieldProps = FieldSourceProps & {
   rules?: FieldRules;
   choices: ChoiceOption[];
   mode?: "multiple";
-  allowClear?: boolean;
   hideLabel?: boolean;
 };
 
@@ -20,7 +19,6 @@ export function SelectField({
   rules,
   choices,
   mode,
-  allowClear,
   hideLabel,
   hidden,
 }: SelectFieldProps) {
@@ -40,7 +38,7 @@ export function SelectField({
           onChange={(next) => onChange(next ?? null)}
           options={choices}
           mode={mode}
-          allowClear={allowClear}
+          allowClear
           disabled={disabled}
           style={{ width: "100%" }}
         />

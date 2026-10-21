@@ -57,7 +57,6 @@ function InvoiceLinesInline() {
               hideLabel
               reference="products"
               optionLabel="name"
-              allowClear
               inputStyle={{ minWidth: 200 }}
               onValueChange={(value, option, { name }) => {
                 const unitPriceName = name.replace(/\.productId$/, ".unitPrice");

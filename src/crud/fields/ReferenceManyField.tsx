@@ -22,7 +22,6 @@ export type ReferenceManyFieldProps = FieldSourceProps &
     required?: boolean;
     rules?: FieldRules;
     search?: boolean;
-    allowClear?: boolean;
     hideLabel?: boolean;
     disabled?: boolean;
     referenceForm?: ReactNode;
@@ -53,7 +52,6 @@ function ReferenceManyFieldSelect({
   optionLabel = "name",
   optionValue = "id",
   search,
-  allowClear = true,
   lazy = true,
   fetchSelected = true,
   value,
@@ -121,7 +119,7 @@ function ReferenceManyFieldSelect({
         setDropdownOpen(open);
         if (!open) setSearchText(undefined);
       }}
-      allowClear={allowClear}
+      allowClear
       disabled={selectState.disabled}
       optionFilterProp="label"
       style={{ width: "100%" }}
@@ -167,7 +165,6 @@ export function ReferenceManyField({
   required,
   rules,
   search,
-  allowClear = true,
   hideLabel,
   hidden,
   disabled: disabledProp,
@@ -211,7 +208,6 @@ export function ReferenceManyField({
           optionLabel={optionLabel}
           optionValue={optionValue}
           search={search}
-          allowClear={allowClear}
           lazy={lazy}
           fetchSelected={
             fetchSelected && !(labelSource && selectedLabels === undefined)

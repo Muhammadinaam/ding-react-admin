@@ -47,7 +47,6 @@ function CustomerFormFields() {
           source="industry"
           label="Industry"
           choices={INDUSTRY_CHOICES}
-          allowClear
         />
         <TextField source="website" label="Website" placeholder="https://" />
         <BooleanField source="active" label="Active" />
