@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDataProvider } from "../../context/DataProvider";
 import type { Identifier } from "../../data/dataProviderTypes";
 import type { ChoiceOption, ChoicesLoader } from "../types";
+import { useDebouncedValue } from "./useDebouncedValue";
 import {
   collectSelectedRecords,
   keepSelectedOptions,
@@ -13,6 +14,9 @@ import {
   resolveOptionLabel,
   unresolvedSelectedIds,
 } from "./choiceSelectionUtils";
+
+const CHOICES_PAGE_SIZE = 20;
+const CHOICES_SEARCH_DEBOUNCE_MS = 300;
 
 const choicesCache = new Map<string, ChoiceOption[]>();
 const choicesInflight = new Map<string, Promise<ChoiceOption[]>>();
@@ -73,7 +77,7 @@ async function fetchChoices(
       ...effectiveLoader.filter,
       ...(search ? { q: search } : {}),
     },
-    pagination: { page: 1, perPage: 500 },
+    pagination: { page: 1, perPage: CHOICES_PAGE_SIZE },
   });
   return (res.data as Record<string, unknown>[]).map((row) => ({
     label: resolveOptionLabel(row, optionLabel),
@@ -128,6 +132,10 @@ export function useChoices(
   search?: string,
   hookOptions: UseChoicesOptions = {},
 ) {
+  const query = useDebouncedValue(
+    search,
+    search ? CHOICES_SEARCH_DEBOUNCE_MS : 0,
+  );
   const {
     lazy = false,
     active = false,
@@ -145,12 +153,12 @@ export function useChoices(
     if (!reference) return undefined;
     return {
       resource: reference,
-      filter: search ? { q: search } : undefined,
+      filter: query ? { q: query } : undefined,
     };
-  }, [loader, reference, search]);
+  }, [loader, reference, query]);
 
   const cacheKey = effectiveLoader
-    ? loaderKey(effectiveLoader, search)
+    ? loaderKey(effectiveLoader, query)
     : undefined;
 
   const normalizedSelected = useMemo(
@@ -189,13 +197,13 @@ export function useChoices(
 
   const [options, setOptions] = useState<ChoiceOption[]>(() => {
     if (providedOptions.length) return providedOptions;
-    if (!cacheKey || search || lazy || !useCache) return [];
+    if (!cacheKey || query || lazy || !useCache) return [];
     return choicesCache.get(cacheKey) ?? [];
   });
 
   const [loading, setLoading] = useState(() => {
     if (!shouldLoadList) return false;
-    if (!useCache || !cacheKey || search) return Boolean(effectiveLoader);
+    if (!useCache || !cacheKey || query) return Boolean(effectiveLoader);
     return !choicesCache.has(cacheKey);
   });
 
@@ -211,6 +219,7 @@ export function useChoices(
   optionsRef.current = options;
   const normalizedSelectedRef = useRef(normalizedSelected);
   normalizedSelectedRef.current = normalizedSelected;
+  const requestRef = useRef(0);
 
   useEffect(() => {
     if (!providedOptions.length) return;
@@ -218,18 +227,21 @@ export function useChoices(
   }, [providedOptions]);
 
   const load = useCallback(async () => {
+    const requestId = ++requestRef.current;
+    const current = () => requestId === requestRef.current;
+
     if (!effectiveLoader || !shouldLoadList) {
-      if (!effectiveLoader) {
+      if (!effectiveLoader && current()) {
         setOptions(providedOptions);
       }
-      setLoading(false);
+      if (current()) setLoading(false);
       return;
     }
 
     if (useCache) {
-      const key = loaderKey(effectiveLoader, search);
+      const key = loaderKey(effectiveLoader, query);
       const cached = choicesCache.get(key);
-      if (cached && !search) {
+      if (cached && !query) {
         setOptions((prev) =>
           mergeOptions(
             keepSelectedOptions(
@@ -262,9 +274,10 @@ export function useChoices(
         dp,
         optionLabel,
         optionValue,
-        search,
+        query,
         useCache,
       );
+      if (!current()) return;
       setOptions((prev) =>
         mergeOptions(
           keepSelectedOptions(
@@ -276,6 +289,7 @@ export function useChoices(
         ),
       );
     } catch {
+      if (!current()) return;
       if (!normalizedSelected.length && !providedOptions.length) {
         setOptions([]);
       } else if (lazy) {
@@ -288,7 +302,7 @@ export function useChoices(
         );
       }
     } finally {
-      setLoading(false);
+      if (current()) setLoading(false);
     }
   }, [
     effectiveLoader,
@@ -297,7 +311,7 @@ export function useChoices(
     dp,
     optionLabel,
     optionValue,
-    search,
+    query,
     lazy,
     normalizedSelected.length,
     providedOptions,

@@ -1,6 +1,6 @@
 import { Children as e, createContext as t, createElement as n, forwardRef as r, isValidElement as i, useCallback as a, useContext as o, useEffect as s, useLayoutEffect as c, useMemo as l, useRef as u, useState as d } from "react";
 import { Link as f, Navigate as p, Outlet as m, RouterProvider as h, createBrowserRouter as g, useLocation as _, useNavigate as v, useParams as y, useSearchParams as b } from "react-router-dom";
-import { Alert as x, App as S, Avatar as C, Button as w, Card as T, Col as E, ConfigProvider as D, DatePicker as O, Drawer as k, Dropdown as A, Flex as j, Form as M, Grid as N, Image as P, Input as F, InputNumber as I, Layout as L, List as ee, Menu as R, Modal as te, Pagination as ne, Popover as re, Row as ie, Segmented as ae, Select as z, Space as B, Spin as oe, Steps as V, Switch as se, Table as ce, Tabs as H, TimePicker as le, Tooltip as U, Typography as W, theme as G } from "antd";
+import { Alert as x, App as S, Avatar as C, Button as w, Card as T, Col as E, ConfigProvider as D, DatePicker as O, Drawer as k, Dropdown as A, Flex as j, Form as M, Grid as N, Image as P, Input as F, InputNumber as I, Layout as L, List as R, Menu as z, Modal as ee, Pagination as te, Popover as ne, Row as re, Segmented as ie, Select as B, Space as V, Spin as ae, Steps as oe, Switch as se, Table as ce, Tabs as H, TimePicker as le, Tooltip as U, Typography as W, theme as G } from "antd";
 import { Fragment as K, jsx as q, jsxs as J } from "react/jsx-runtime";
 import { AppstoreOutlined as ue, ArrowLeftOutlined as de, CaretDownOutlined as fe, CaretUpOutlined as pe, ColumnHeightOutlined as me, DeleteOutlined as he, DesktopOutlined as ge, EditOutlined as _e, LayoutOutlined as ve, LogoutOutlined as ye, MenuOutlined as be, MoonOutlined as xe, PaperClipOutlined as Se, PlusOutlined as Ce, SearchOutlined as we, SettingOutlined as Y, SunOutlined as Te, UploadOutlined as Ee, UserOutlined as De } from "@ant-design/icons";
 import { Controller as Oe, FormProvider as ke, useFieldArray as Ae, useForm as je, useFormContext as Me, useFormState as Ne, useWatch as Pe } from "react-hook-form";
@@ -93,7 +93,7 @@ var $e = [{
 }];
 function et() {
 	let { density: e, setDensity: t } = Qe();
-	return /* @__PURE__ */ q(ae, {
+	return /* @__PURE__ */ q(ie, {
 		size: "small",
 		value: e,
 		options: $e,
@@ -121,7 +121,7 @@ var tt = [
 ];
 function nt() {
 	let { mode: e, setMode: t } = Qe();
-	return /* @__PURE__ */ q(ae, {
+	return /* @__PURE__ */ q(ie, {
 		size: "small",
 		value: e,
 		options: tt,
@@ -132,10 +132,10 @@ function nt() {
 //#region src/components/ThemeToolbar.tsx
 function rt() {
 	let { token: e } = G.useToken();
-	return /* @__PURE__ */ q(re, {
+	return /* @__PURE__ */ q(ne, {
 		placement: N.useBreakpoint().lg ? "bottomRight" : "bottom",
 		trigger: "click",
-		content: /* @__PURE__ */ J(B, {
+		content: /* @__PURE__ */ J(V, {
 			orientation: "vertical",
 			size: "middle",
 			style: {
@@ -446,7 +446,7 @@ function Pt({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, on
 	})] });
 }
 function Ft({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, onOpenChange: i, onNavigate: a, wrapLabels: o, itemDivider: s }) {
-	return /* @__PURE__ */ q(R, {
+	return /* @__PURE__ */ q(z, {
 		className: Nt({
 			wrapLabels: o,
 			itemDivider: s
@@ -472,9 +472,9 @@ function Ft({ menuItems: e, selectedKeys: t, inlineCollapsed: n, openKeys: r, on
 	});
 }
 function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDrawerTitle: r, headerExtras: i, userMenuItems: o, onUserMenuClick: c, loginPath: f = "/login", siderCollapsedStorageKey: p = Ot, navSearch: h = !0, navMenu: g, hideSider: y = !1 }) {
-	let b = v(), x = _(), { resolved: S } = Qe(), T = S === "dark", { logout: E, userLabel: D } = ut(), O = ht(), [j, M] = d(() => kt(p)), [N, P] = d(!1), F = At(), { token: I } = G.useToken(), ee = u(null), [R, te] = d(""), ne = h !== !1, re = typeof h == "object" ? h.placeholder : void 0, ie = g?.wrapLabels !== !1, ae = g?.itemDivider ?? "inset", z = r ?? t, B = () => {
+	let b = v(), x = _(), { resolved: S } = Qe(), T = S === "dark", { logout: E, userLabel: D } = ut(), O = ht(), [j, M] = d(() => kt(p)), [N, P] = d(!1), F = At(), { token: I } = G.useToken(), R = u(null), [z, ee] = d(""), te = h !== !1, ne = typeof h == "object" ? h.placeholder : void 0, re = g?.wrapLabels !== !1, ie = g?.itemDivider ?? "inset", B = r ?? t, V = () => {
 		E(), b(f, { replace: !0 });
-	}, oe = a((e) => {
+	}, ae = a((e) => {
 		M(e);
 		try {
 			localStorage.setItem(p, e ? "1" : "0");
@@ -485,33 +485,33 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 	}, [F]), s(() => {
 		P(!1);
 	}, [x.pathname]), s(() => {
-		ee.current?.scrollTo({
+		R.current?.scrollTo({
 			top: 0,
 			left: 0
 		});
 	}, [x.pathname]), s(() => {
-		j && te("");
+		j && ee("");
 	}, [j]);
-	let V = l(() => Et(e, O), [e, O]), se = R.trim(), ce = se.length > 0, H = l(() => ce ? yt(V, se) : V, [
-		V,
+	let oe = l(() => Et(e, O), [e, O]), se = z.trim(), ce = se.length > 0, H = l(() => ce ? yt(oe, se) : oe, [
+		oe,
 		se,
 		ce
 	]), le = l(() => jt(H), [H]), U = l(() => Tt(H, {
-		showLabelTooltip: !j && !ie,
-		wrapLabels: ie && !j,
+		showLabelTooltip: !j && !re,
+		wrapLabels: re && !j,
 		collapsed: j
 	}), [
 		H,
 		j,
-		ie
-	]), K = l(() => Ct(H), [H]), ue = l(() => Mt(V, x.pathname), [V, x.pathname]), [de, fe] = d(() => Mt(V, x.pathname));
+		re
+	]), K = l(() => Ct(H), [H]), ue = l(() => Mt(oe, x.pathname), [oe, x.pathname]), [de, fe] = d(() => Mt(oe, x.pathname));
 	s(() => {
 		fe((e) => [...new Set([...e, ...ue])]);
 	}, [ue]);
 	let pe = a((e) => {
 		fe(e);
 	}, []), me = ce ? K : de, he = a((e) => {
-		te(e);
+		ee(e);
 	}, []), ge = l(() => [{
 		key: "logout",
 		icon: /* @__PURE__ */ q(ye, {}),
@@ -522,7 +522,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 			c(e);
 			return;
 		}
-		e.key === "logout" && B();
+		e.key === "logout" && V();
 	}, xe = T ? I.colorBgContainer : Dt, Se = T ? "default" : "on-dark", Ce = T ? "app" : "on-dark", we = [x.pathname], Y = (e) => {
 		le.has(e) && (b(e), F && P(!1));
 	};
@@ -537,7 +537,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 			!y && !F && /* @__PURE__ */ q(L.Sider, {
 				collapsible: !0,
 				collapsed: j,
-				onCollapse: oe,
+				onCollapse: ae,
 				collapsedWidth: 64,
 				style: {
 					background: xe,
@@ -573,14 +573,14 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						openKeys: me,
 						onOpenChange: pe,
 						onNavigate: Y,
-						navQuery: R,
+						navQuery: z,
 						onNavQueryChange: he,
-						showNavSearch: ne,
-						navSearchPlaceholder: re,
+						showNavSearch: te,
+						navSearchPlaceholder: ne,
 						scrollVariant: Se,
 						searchVariant: Ce,
-						wrapLabels: ie,
-						itemDivider: ae
+						wrapLabels: re,
+						itemDivider: ie
 					})]
 				})
 			}),
@@ -588,7 +588,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 				title: /* @__PURE__ */ q(W.Text, {
 					strong: !0,
 					style: { color: I.colorTextLightSolid },
-					children: z
+					children: B
 				}),
 				placement: "left",
 				size: 280,
@@ -619,14 +619,14 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						openKeys: me,
 						onOpenChange: pe,
 						onNavigate: Y,
-						navQuery: R,
+						navQuery: z,
 						onNavQueryChange: he,
-						showNavSearch: ne,
-						navSearchPlaceholder: re,
+						showNavSearch: te,
+						navSearchPlaceholder: ne,
 						scrollVariant: Se,
 						searchVariant: Ce,
-						wrapLabels: ie,
-						itemDivider: ae
+						wrapLabels: re,
+						itemDivider: ie
 					})
 				})
 			}),
@@ -699,7 +699,7 @@ function It({ navItems: e, brand: t = "Admin", collapsedBrand: n = "A", mobileDr
 						flexDirection: "column"
 					},
 					children: /* @__PURE__ */ q(at, {
-						ref: ee,
+						ref: R,
 						style: {
 							margin: F ? I.marginSM : I.marginLG,
 							flex: 1,
@@ -1384,8 +1384,8 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 				justifyContent: "center",
 				padding: u.paddingXL
 			},
-			children: /* @__PURE__ */ q(oe, { size: "large" })
-		}) : y ? /* @__PURE__ */ q(ee, {
+			children: /* @__PURE__ */ q(ae, { size: "large" })
+		}) : y ? /* @__PURE__ */ q(R, {
 			bordered: !0,
 			dataSource: _,
 			locale: { emptyText: "No menus match your search." },
@@ -1395,10 +1395,10 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 			},
 			renderItem: (e) => {
 				let t = e.Icon;
-				return /* @__PURE__ */ q(ee.Item, {
+				return /* @__PURE__ */ q(R.Item, {
 					style: { cursor: "pointer" },
 					onClick: () => h(e),
-					children: /* @__PURE__ */ q(ee.Item.Meta, {
+					children: /* @__PURE__ */ q(R.Item.Meta, {
 						avatar: t ? /* @__PURE__ */ q("span", {
 							style: {
 								fontSize: 20,
@@ -1411,7 +1411,7 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 					})
 				});
 			}
-		}) : /* @__PURE__ */ q(ie, {
+		}) : /* @__PURE__ */ q(re, {
 			gutter: [16, 16],
 			justify: "center",
 			children: e.map((e) => {
@@ -1429,7 +1429,7 @@ function Hn({ apps: e, menuItems: t, onAppClick: n, onMenuClick: r, menuSearchPl
 							textAlign: "center",
 							padding: u.paddingLG
 						} },
-						children: /* @__PURE__ */ J(B, {
+						children: /* @__PURE__ */ J(V, {
 							orientation: "vertical",
 							size: "middle",
 							children: [t ? /* @__PURE__ */ q("span", {
@@ -2083,7 +2083,7 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 							justifyContent: "center",
 							zIndex: 1
 						},
-						children: /* @__PURE__ */ q(oe, {})
+						children: /* @__PURE__ */ q(ae, {})
 					}) : null, /* @__PURE__ */ n(ke, {
 						...C,
 						key: E
@@ -2102,7 +2102,7 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 									marginTop: 16,
 									marginBottom: 0
 								},
-								children: /* @__PURE__ */ J(B, { children: [/* @__PURE__ */ q(w, {
+								children: /* @__PURE__ */ J(V, { children: [/* @__PURE__ */ q(w, {
 									type: "primary",
 									htmlType: "submit",
 									loading: O,
@@ -2119,13 +2119,13 @@ function Wr({ resource: e, id: t, children: r, defaultValues: i, enabled: a = !0
 			})
 		})
 	});
-	return T && !O && p === "replace" ? /* @__PURE__ */ q(oe, {}) : N;
+	return T && !O && p === "replace" ? /* @__PURE__ */ q(ae, {}) : N;
 }
 //#endregion
 //#region src/crud/ResourceFormModal.tsx
 function Gr({ resource: e, editId: t, onClose: n, children: r, title: i, permissions: a, defaultValues: o, width: s = 560, onSuccess: c }) {
 	let l = t === "new", u = t != null, d = ht(), f = i ?? (l ? `New ${e}` : `Edit ${e}`), p = a ? X(d, a, l ? "add" : "change") : !0;
-	return /* @__PURE__ */ q(te, {
+	return /* @__PURE__ */ q(ee, {
 		open: u,
 		title: f,
 		onCancel: n,
@@ -2164,7 +2164,7 @@ function Kr({ selectedCount: e, total: t, allPageSelected: n, allMatchingSelecte
 		e,
 		u
 	]), _ = n && !r && t > e;
-	return /* @__PURE__ */ J(B, {
+	return /* @__PURE__ */ J(V, {
 		wrap: !0,
 		style: {
 			marginBottom: 16,
@@ -2213,7 +2213,7 @@ function Kr({ selectedCount: e, total: t, allPageSelected: n, allMatchingSelecte
 					" items selected"
 				]
 			})] }) : null,
-			/* @__PURE__ */ q(z, {
+			/* @__PURE__ */ q(B, {
 				placeholder: "Action",
 				style: { minWidth: 200 },
 				options: h,
@@ -2375,8 +2375,8 @@ function ni(e, t) {
 	}, ...r];
 }
 function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "page", formChildren: o, actions: s, rowActions: p, headerExtra: m, bulkActions: h, bulkDelete: g = !0, bulkActionsEnabled: _ = !0, permissions: v, queryState: y, queryActions: b }) {
-	let x = Zt(), C = ht(), { message: E, modal: D } = S.useApp(), { token: O } = G.useToken(), { columns: k, sortOrders: A, sortPriorities: j } = Yn(), M = u(null), [N, P] = d(), [F, I] = d(!1), [L, ee] = d([]), [R, te] = d(0), [re, ie] = d(() => /* @__PURE__ */ new Set()), [ae, z] = d(!1), oe = r ?? `${n}/new`, V = X(C, v, "add"), se = X(C, v, "change"), H = X(C, v, "delete"), le = se && (i === "page" || i === "both") && s?.edit !== !1, U = se && (i === "modal" || i === "both") && s?.quickEdit !== !1, ue = H && s?.delete !== !1, de = le || U || ue || p, me = a(() => {
-		ie(/* @__PURE__ */ new Set());
+	let x = Zt(), C = ht(), { message: E, modal: D } = S.useApp(), { token: O } = G.useToken(), { columns: k, sortOrders: A, sortPriorities: j } = Yn(), M = u(null), [N, P] = d(), [F, I] = d(!1), [L, R] = d([]), [z, ee] = d(0), [ne, re] = d(() => /* @__PURE__ */ new Set()), [ie, B] = d(!1), ae = r ?? `${n}/new`, oe = X(C, v, "add"), se = X(C, v, "change"), H = X(C, v, "delete"), le = se && (i === "page" || i === "both") && s?.edit !== !1, U = se && (i === "modal" || i === "both") && s?.quickEdit !== !1, ue = H && s?.delete !== !1, de = le || U || ue || p, me = a(() => {
+		re(/* @__PURE__ */ new Set());
 	}, []), he = l(() => {
 		if (!_) return [];
 		let t = [];
@@ -2396,7 +2396,7 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		x,
 		e,
 		E
-	]), ge = he.length > 0, _e = re.size;
+	]), ge = he.length > 0, _e = ne.size;
 	c(() => {
 		let e = M.current;
 		if (!e) return;
@@ -2415,39 +2415,39 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 	}, [
 		ge,
 		_e,
-		R,
+		z,
 		F
 	]);
-	let ve = L.length > 0 && L.every((e) => re.has(e.id)), ye = R > 0 && _e >= R, be = l(() => L.filter((e) => re.has(e.id)).map((e) => e.id), [L, re]), xe = a((e) => {
-		ie((t) => {
+	let ve = L.length > 0 && L.every((e) => ne.has(e.id)), ye = z > 0 && _e >= z, be = l(() => L.filter((e) => ne.has(e.id)).map((e) => e.id), [L, ne]), xe = a((e) => {
+		re((t) => {
 			let n = new Set(t), r = L.map((e) => e.id);
 			for (let t of r) e.includes(t) || n.delete(t);
 			for (let t of e) n.add(t);
 			return n;
 		});
 	}, [L]), Se = a(async () => {
-		if (!(R <= 0)) {
-			z(!0);
+		if (!(z <= 0)) {
+			B(!0);
 			try {
 				let t = y.sort.length === 0 ? void 0 : y.sort.length === 1 ? y.sort[0] : y.sort, n = await x.getList(e, {
 					pagination: {
 						page: 1,
-						perPage: R
+						perPage: z
 					},
 					sort: t,
 					filter: y.filter
 				});
-				ie(new Set(n.data.map((e) => e.id)));
+				re(new Set(n.data.map((e) => e.id)));
 			} catch (e) {
 				E.error(e instanceof Error ? e.message : "Load failed");
 			} finally {
-				z(!1);
+				B(!1);
 			}
 		}
 	}, [
 		x,
 		e,
-		R,
+		z,
 		y.sort,
 		y.filter,
 		E
@@ -2490,7 +2490,7 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 				signal: t
 			});
 			if (t?.aborted) return;
-			ee(n.data), te(n.total);
+			R(n.data), ee(n.total);
 		} catch (e) {
 			tn(e) || E.error(e instanceof Error ? e.message : "Load failed");
 		} finally {
@@ -2518,13 +2518,13 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 				});
 			})) return;
 		}
-		z(!0);
+		B(!0);
 		try {
 			await e.execute(t, Te);
 		} catch (e) {
 			E.error(e instanceof Error ? e.message : "Action failed");
 		} finally {
-			z(!1);
+			B(!1);
 		}
 	}, [
 		Te,
@@ -2595,7 +2595,7 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 			title: "Actions",
 			key: "__actions",
 			width: i === "both" ? 200 : 160,
-			render: (e, r) => /* @__PURE__ */ J(B, {
+			render: (e, r) => /* @__PURE__ */ J(V, {
 				size: "small",
 				wrap: !0,
 				children: [
@@ -2659,15 +2659,15 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 			style: { margin: 0 },
 			children: t
 		}),
-		extra: m || V ? /* @__PURE__ */ J(B, { children: [m, V ? i === "modal" || i === "both" ? /* @__PURE__ */ J(K, { children: [i === "both" ? /* @__PURE__ */ q(f, {
-			to: oe,
+		extra: m || oe ? /* @__PURE__ */ J(V, { children: [m, oe ? i === "modal" || i === "both" ? /* @__PURE__ */ J(K, { children: [i === "both" ? /* @__PURE__ */ q(f, {
+			to: ae,
 			children: /* @__PURE__ */ q(w, { children: "New page" })
 		}) : null, /* @__PURE__ */ q(w, {
 			type: "primary",
 			onClick: () => b.openCreateModal(),
 			children: "New"
 		})] }) : /* @__PURE__ */ q(f, {
-			to: oe,
+			to: ae,
 			children: /* @__PURE__ */ q(w, {
 				type: "primary",
 				children: "New"
@@ -2675,15 +2675,15 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 		}) : null] }) : null,
 		children: [ge ? /* @__PURE__ */ q(Kr, {
 			selectedCount: _e,
-			total: R,
+			total: z,
 			allPageSelected: ve,
 			allMatchingSelected: ye,
 			onSelectAllMatching: () => void Se(),
 			onClearSelection: me,
 			actions: he,
 			onExecute: Ee,
-			selectedIds: [...re],
-			running: ae || F
+			selectedIds: [...ne],
+			running: ie || F
 		}) : null, /* @__PURE__ */ J("div", {
 			ref: M,
 			className: "ding-admin-resource-list-table",
@@ -2711,10 +2711,10 @@ function ri({ resource: e, title: t, pathPrefix: n, newPath: r, editMode: i = "p
 				}
 			}), /* @__PURE__ */ q("div", {
 				className: "ding-admin-resource-list-pagination",
-				children: /* @__PURE__ */ q(ne, {
+				children: /* @__PURE__ */ q(te, {
 					current: y.page,
 					pageSize: y.perPage,
-					total: R,
+					total: z,
 					showSizeChanger: !0,
 					onChange: ke
 				})
@@ -2782,11 +2782,11 @@ function ii({ resource: e, title: t, pathPrefix: n, newPath: r, staticFilter: i,
 //#region src/crud/FilterBar.tsx
 function ai() {
 	let e = ir();
-	return !e || e.filters.length === 0 ? null : /* @__PURE__ */ q(B, {
+	return !e || e.filters.length === 0 ? null : /* @__PURE__ */ q(V, {
 		wrap: !0,
 		size: "middle",
 		style: { marginBottom: 16 },
-		children: e.filters.map((t) => /* @__PURE__ */ J(B, {
+		children: e.filters.map((t) => /* @__PURE__ */ J(V, {
 			orientation: "vertical",
 			size: 2,
 			children: [t.label ? /* @__PURE__ */ q(W.Text, {
@@ -2818,7 +2818,7 @@ function si({ resource: e, title: t, listPath: n, children: r, defaultValues: i,
 	]);
 	let h = c ? X(d, c, u ? "add" : "change") : !0;
 	return /* @__PURE__ */ q(T, {
-		title: /* @__PURE__ */ J(B, { children: [/* @__PURE__ */ J(f, {
+		title: /* @__PURE__ */ J(V, { children: [/* @__PURE__ */ J(f, {
 			to: n,
 			style: { color: m.colorText },
 			children: [/* @__PURE__ */ q(de, {}), " Back"]
@@ -2942,7 +2942,7 @@ function gi({ field: e, label: t, payloadKey: n, transformRows: r, sources: i, r
 				level: 5,
 				children: t ?? "Related items"
 			}),
-			/* @__PURE__ */ q(B, {
+			/* @__PURE__ */ q(V, {
 				orientation: "vertical",
 				size: "middle",
 				style: { width: "100%" },
@@ -3087,7 +3087,7 @@ function Ti({ children: t, initialStep: n = 0, showNavigation: r = !0, allowStep
 		_(e);
 	}, []);
 	return /* @__PURE__ */ J(K, { children: [
-		/* @__PURE__ */ q(V, {
+		/* @__PURE__ */ q(oe, {
 			current: g,
 			items: S,
 			style: {
@@ -3107,7 +3107,7 @@ function Ti({ children: t, initialStep: n = 0, showNavigation: r = !0, allowStep
 				children: e.props.children
 			})
 		}, e.key ?? String(t))),
-		r && m.length > 1 ? /* @__PURE__ */ J(B, {
+		r && m.length > 1 ? /* @__PURE__ */ J(V, {
 			style: {
 				marginTop: 16,
 				...s
@@ -3491,7 +3491,7 @@ function Vi({ source: e, name: t, label: n, required: r, rules: i, choices: a, m
 		rules: i,
 		hideLabel: s,
 		hidden: c,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(z, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(B, {
 			value: e,
 			onChange: (e) => t(e ?? null),
 			options: a,
@@ -3656,7 +3656,7 @@ function ia(e = {}) {
 //#endregion
 //#region src/crud/utils/referenceSelectNotFoundContent.tsx
 function aa(e) {
-	return e ? /* @__PURE__ */ q(oe, { size: "small" }) : void 0;
+	return e ? /* @__PURE__ */ q(ae, { size: "small" }) : void 0;
 }
 //#endregion
 //#region src/crud/utils/referenceSelectSelectedProps.ts
@@ -3671,11 +3671,11 @@ function sa(e, t, n) {
 }
 //#endregion
 //#region src/crud/utils/useChoices.ts
-var ca = /* @__PURE__ */ new Map(), la = /* @__PURE__ */ new Map();
-function ua(e, t) {
+var ca = 20, la = 300, ua = /* @__PURE__ */ new Map(), da = /* @__PURE__ */ new Map();
+function fa(e, t) {
 	return typeof e == "function" ? `fn:${t ?? ""}` : Array.isArray(e) ? `static:${e.length}` : `res:${e.resource}:${JSON.stringify(e.filter ?? {})}:${t ?? ""}`;
 }
-async function da(e, t, n, r, i) {
+async function pa(e, t, n, r, i) {
 	return typeof e == "function" ? e({
 		dataProvider: t,
 		search: i
@@ -3686,7 +3686,7 @@ async function da(e, t, n, r, i) {
 		},
 		pagination: {
 			page: 1,
-			perPage: 500
+			perPage: ca
 		}
 	})).data.map((e) => ({
 		label: Yi(e, n),
@@ -3694,99 +3694,104 @@ async function da(e, t, n, r, i) {
 		record: e
 	}));
 }
-function fa(e, t, n, r, i, a) {
-	let o = ua(e, i);
+function ma(e, t, n, r, i, a) {
+	let o = fa(e, i);
 	if (a) {
-		let e = ca.get(o);
+		let e = ua.get(o);
 		if (e && !i) return Promise.resolve(e);
 	}
-	let s = la.get(o);
+	let s = da.get(o);
 	if (s) return s;
-	let c = da(e, t, n, r, i).then((e) => (a && !i && ca.set(o, e), e)).finally(() => {
-		la.delete(o);
+	let c = pa(e, t, n, r, i).then((e) => (a && !i && ua.set(o, e), e)).finally(() => {
+		da.delete(o);
 	});
-	return la.set(o, c), c;
+	return da.set(o, c), c;
 }
-function pa(e, t, n = "name", r = "id", i, o = {}) {
-	let { lazy: c = !1, active: f = !1, selectedValues: p, selectedRecords: m, selectedLabels: h, fetchSelected: g = !0, cache: _ } = o, v = _ ?? !c, y = Zt(), b = l(() => {
+function ha(e, t, n = "name", r = "id", i, o = {}) {
+	let c = Zn(i, i ? la : 0), { lazy: f = !1, active: p = !1, selectedValues: m, selectedRecords: h, selectedLabels: g, fetchSelected: _ = !0, cache: v } = o, y = v ?? !f, b = Zt(), x = l(() => {
 		if (e) return e;
 		if (t) return {
 			resource: t,
-			filter: i ? { q: i } : void 0
+			filter: c ? { q: c } : void 0
 		};
 	}, [
 		e,
 		t,
-		i
-	]), x = b ? ua(b, i) : void 0, S = l(() => qi(p, r), [p, r]), C = l(() => Xi(Ji(p, m, r), n, r), [
-		p,
+		c
+	]), S = x ? fa(x, c) : void 0, C = l(() => qi(m, r), [m, r]), w = l(() => Xi(Ji(m, h, r), n, r), [
 		m,
+		h,
 		n,
 		r
-	]), w = u(/* @__PURE__ */ new Map()), T = l(() => (w.current = $i(S, h, w.current), ea(S, w.current)), [S, h]), E = l(() => Zi(C, T), [C, T]), D = !!(b && (!c || f || Array.isArray(b))), [O, k] = d(() => E.length ? E : !x || i || c || !v ? [] : ca.get(x) ?? []), [A, j] = d(() => D ? !v || !x || i ? !!b : !ca.has(x) : !1), [M, N] = d(() => !!(g && t && Qi(S, E).length)), P = u(O);
-	P.current = O;
-	let F = u(S);
-	F.current = S, s(() => {
-		E.length && k((e) => Zi(e, E));
-	}, [E]);
-	let I = a(async () => {
-		if (!b || !D) {
-			b || k(E), j(!1);
+	]), T = u(/* @__PURE__ */ new Map()), E = l(() => (T.current = $i(C, g, T.current), ea(C, T.current)), [C, g]), D = l(() => Zi(w, E), [w, E]), O = !!(x && (!f || p || Array.isArray(x))), [k, A] = d(() => D.length ? D : !S || c || f || !y ? [] : ua.get(S) ?? []), [j, M] = d(() => O ? !y || !S || c ? !!x : !ua.has(S) : !1), [N, P] = d(() => !!(_ && t && Qi(C, D).length)), F = u(k);
+	F.current = k;
+	let I = u(C);
+	I.current = C;
+	let L = u(0);
+	s(() => {
+		D.length && A((e) => Zi(e, D));
+	}, [D]);
+	let R = a(async () => {
+		let e = ++L.current, t = () => e === L.current;
+		if (!x || !O) {
+			!x && t() && A(D), t() && M(!1);
 			return;
 		}
-		if (v) {
-			let e = ua(b, i), t = ca.get(e);
-			if (t && !i) {
-				k((e) => Zi(ta(e, F.current, E), t)), j(!1);
+		if (y) {
+			let e = fa(x, c), t = ua.get(e);
+			if (t && !c) {
+				A((e) => Zi(ta(e, I.current, D), t)), M(!1);
 				return;
 			}
 		}
-		j(!0), c && k((e) => ta(e, F.current, E));
+		M(!0), f && A((e) => ta(e, I.current, D));
 		try {
-			let e = await fa(b, y, n, r, i, v);
-			k((t) => Zi(ta(t, F.current, E), e));
+			let e = await ma(x, b, n, r, c, y);
+			if (!t()) return;
+			A((t) => Zi(ta(t, I.current, D), e));
 		} catch {
-			!S.length && !E.length ? k([]) : c && k((e) => ta(e, F.current, E));
+			if (!t()) return;
+			!C.length && !D.length ? A([]) : f && A((e) => ta(e, I.current, D));
 		} finally {
-			j(!1);
+			t() && M(!1);
 		}
 	}, [
-		b,
-		D,
-		v,
+		x,
+		O,
 		y,
+		b,
 		n,
 		r,
-		i,
-		c,
-		S.length,
-		E
-	]);
-	s(() => {
-		I();
-	}, [I]), s(() => {
-		c && !f && !i && (k((e) => ta(e, S, E)), j(!1));
-	}, [
 		c,
 		f,
+		C.length,
+		D
+	]);
+	s(() => {
+		R();
+	}, [R]), s(() => {
+		f && !p && !i && (A((e) => ta(e, C, D)), M(!1));
+	}, [
+		f,
+		p,
 		i,
-		E,
-		S
+		D,
+		C
 	]), s(() => {
-		if (!g || !t || !S.length) {
-			N(!1);
+		if (!_ || !t || !C.length) {
+			P(!1);
 			return;
 		}
-		let e = Qi(S, Zi(E, P.current));
+		let e = Qi(C, Zi(D, F.current));
 		if (!e.length) {
-			N(!1);
+			P(!1);
 			return;
 		}
 		let i = !1;
-		return N(!0), (async () => {
+		return P(!0), (async () => {
 			let a = [];
 			for (let i of e) try {
-				let e = (await y.getOne(t, i)).data;
+				let e = (await b.getOne(t, i)).data;
 				a.push({
 					label: Yi(e, n),
 					value: e[r],
@@ -3798,38 +3803,38 @@ function pa(e, t, n = "name", r = "id", i, o = {}) {
 					value: i
 				});
 			}
-			i || (a.length && k((e) => {
+			i || (a.length && A((e) => {
 				let t = a.filter((t) => !e.some((e) => e.value === t.value));
 				return t.length ? Zi(e, t) : e;
-			}), N(!1));
+			}), P(!1));
 		})(), () => {
 			i = !0;
 		};
 	}, [
-		g,
+		_,
 		t,
-		y,
+		b,
 		n,
 		r,
-		S,
-		E
+		C,
+		D
 	]);
-	let L = a((e) => O.find((t) => t.value === e)?.label ?? String(e ?? "—"), [O]);
+	let z = a((e) => k.find((t) => t.value === e)?.label ?? String(e ?? "—"), [k]);
 	return {
-		options: O,
-		loading: A,
-		selectedLoading: M,
-		labelForValue: L,
-		labelsForValues: a((e) => e?.length ? e.map((e) => L(e)).join(", ") : "—", [L]),
-		optionForValue: a((e) => O.find((t) => t.value === e), [O]),
-		reload: I
+		options: k,
+		loading: j,
+		selectedLoading: N,
+		labelForValue: z,
+		labelsForValues: a((e) => e?.length ? e.map((e) => z(e)).join(", ") : "—", [z]),
+		optionForValue: a((e) => k.find((t) => t.value === e), [k]),
+		reload: R
 	};
 }
 //#endregion
 //#region src/crud/fields/ReferenceInputActions.tsx
-function ma({ reference: e, referenceForm: t, referencePermissions: n, referenceTitle: r, referenceDefaultValues: i, referenceModalWidth: a, selectedId: o, disabled: s, onCreated: c, onUpdated: l }) {
+function ga({ reference: e, referenceForm: t, referencePermissions: n, referenceTitle: r, referenceDefaultValues: i, referenceModalWidth: a, selectedId: o, disabled: s, onCreated: c, onUpdated: l }) {
 	let u = ht(), f = r ?? e, p = !!(e && t) && X(u, n, "add"), m = !!(e && t && o != null && o !== "") && X(u, n, "change"), [h, g] = d(null);
-	return !p && !m ? null : /* @__PURE__ */ J(K, { children: [/* @__PURE__ */ J(B, {
+	return !p && !m ? null : /* @__PURE__ */ J(K, { children: [/* @__PURE__ */ J(V, {
 		size: 4,
 		children: [p ? /* @__PURE__ */ q(U, {
 			title: `Add ${f ?? "record"}`,
@@ -3867,8 +3872,8 @@ function ma({ reference: e, referenceForm: t, referencePermissions: n, reference
 }
 //#endregion
 //#region src/crud/fields/ReferenceField.tsx
-function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, disabled: a, inputStyle: o, onValueChange: s, lazy: c = !0, fetchSelected: u = !0, value: f, onChange: p, fieldName: m, selectedRecords: h, selectedLabels: g, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
-	let [T, E] = d(), [D, O] = d(!1), k = D || !!T, A = Gi(f, r), { options: j, loading: M, selectedLoading: N, optionForValue: P, reload: F } = pa(t, e, n, r, i ? T : void 0, {
+function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, disabled: a, inputStyle: o, onValueChange: s, lazy: c = !0, fetchSelected: u = !0, value: f, onChange: p, fieldName: m, selectedRecords: h, selectedLabels: g, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
+	let [T, E] = d(), [D, O] = d(!1), k = D || !!T, A = Gi(f, r), { options: j, loading: M, selectedLoading: N, optionForValue: P, reload: F } = ha(t, e, n, r, i ? T : void 0, {
 		lazy: c,
 		active: k,
 		selectedValues: f,
@@ -3878,14 +3883,14 @@ function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 	}), I = oa(M, N, a), L = l(() => j.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [j]), ee = (e) => {
+	})), [j]), R = (e) => {
 		let t = e[r];
 		p(t), s?.(t, {
 			label: Yi(e, n),
 			value: t,
 			record: e
 		}, { name: m }), F();
-	}, R = /* @__PURE__ */ q(z, {
+	}, z = /* @__PURE__ */ q(B, {
 		...ia({
 			popupMatchSelectWidth: C,
 			popupMinWidth: w
@@ -3925,8 +3930,8 @@ function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 				flex: 1,
 				minWidth: 0
 			},
-			children: R
-		}), /* @__PURE__ */ q(ma, {
+			children: z
+		}), /* @__PURE__ */ q(ga, {
 			reference: e,
 			referenceForm: _,
 			referencePermissions: v,
@@ -3935,12 +3940,12 @@ function ha({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 			referenceModalWidth: x,
 			selectedId: A,
 			disabled: I.disabled,
-			onCreated: ee,
+			onCreated: R,
 			onUpdated: () => void F()
 		})]
-	}) : R;
+	}) : z;
 }
-function ga({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, disabled: u, hideLabel: d, hidden: f, inputStyle: p, onValueChange: m, lazy: h = !0, recordSource: g, labelSource: _, fetchSelected: v = !0, referenceForm: y, referencePermissions: b, referenceTitle: x, referenceDefaultValues: S, referenceModalWidth: C, referenceActions: w = !0, popupMatchSelectWidth: T, popupMinWidth: E }) {
+function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, disabled: u, hideLabel: d, hidden: f, inputStyle: p, onValueChange: m, lazy: h = !0, recordSource: g, labelSource: _, fetchSelected: v = !0, referenceForm: y, referencePermissions: b, referenceTitle: x, referenceDefaultValues: S, referenceModalWidth: C, referenceActions: w = !0, popupMatchSelectWidth: T, popupMinWidth: E }) {
 	let D = ra(g), O = ra(_ ? na(_, t, e) : void 0);
 	return /* @__PURE__ */ q($, {
 		source: e,
@@ -3950,7 +3955,7 @@ function ga({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 		rules: c,
 		hideLabel: d,
 		hidden: f,
-		children: ({ value: e, onChange: t, disabled: n, name: s }) => /* @__PURE__ */ q(ha, {
+		children: ({ value: e, onChange: t, disabled: n, name: s }) => /* @__PURE__ */ q(_a, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
@@ -3979,8 +3984,8 @@ function ga({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/ReferenceManyField.tsx
-function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, lazy: a = !0, fetchSelected: o = !0, value: s, onChange: c, disabled: u, selectedRecords: f, selectedLabels: p, referenceForm: m, referencePermissions: h, referenceTitle: g, referenceDefaultValues: _, referenceModalWidth: v, referenceActions: y = !0, popupMatchSelectWidth: b, popupMinWidth: x }) {
-	let [S, C] = d(), [w, T] = d(!1), E = w || !!S, D = Ki(s, r), { options: O, loading: k, selectedLoading: A, reload: j } = pa(t, e, n, r, i ? S : void 0, {
+function ya({ reference: e, choices: t, optionLabel: n = "name", optionValue: r = "id", search: i, lazy: a = !0, fetchSelected: o = !0, value: s, onChange: c, disabled: u, selectedRecords: f, selectedLabels: p, referenceForm: m, referencePermissions: h, referenceTitle: g, referenceDefaultValues: _, referenceModalWidth: v, referenceActions: y = !0, popupMatchSelectWidth: b, popupMinWidth: x }) {
+	let [S, C] = d(), [w, T] = d(!1), E = w || !!S, D = Ki(s, r), { options: O, loading: k, selectedLoading: A, reload: j } = ha(t, e, n, r, i ? S : void 0, {
 		lazy: a,
 		active: E,
 		selectedValues: s,
@@ -3990,7 +3995,7 @@ function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 	}), M = oa(k, A, u), N = l(() => O.map((e) => ({
 		label: e.label,
 		value: e.value
-	})), [O]), P = /* @__PURE__ */ q(z, {
+	})), [O]), P = /* @__PURE__ */ q(B, {
 		...ia({
 			popupMatchSelectWidth: b,
 			popupMinWidth: x
@@ -4025,7 +4030,7 @@ function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 				minWidth: 0
 			},
 			children: P
-		}), /* @__PURE__ */ q(ma, {
+		}), /* @__PURE__ */ q(ga, {
 			reference: e,
 			referenceForm: m,
 			referencePermissions: h,
@@ -4044,7 +4049,7 @@ function _a({ reference: e, choices: t, optionLabel: n = "name", optionValue: r 
 		})]
 	}) : P;
 }
-function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, hideLabel: u, hidden: d, disabled: f, lazy: p = !0, recordSource: m, labelSource: h, fetchSelected: g = !0, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
+function ba({ source: e, name: t, label: n, reference: r, choices: i, optionLabel: a = "name", optionValue: o = "id", required: s, rules: c, search: l, hideLabel: u, hidden: d, disabled: f, lazy: p = !0, recordSource: m, labelSource: h, fetchSelected: g = !0, referenceForm: _, referencePermissions: v, referenceTitle: y, referenceDefaultValues: b, referenceModalWidth: x, referenceActions: S = !0, popupMatchSelectWidth: C, popupMinWidth: w }) {
 	let T = ra(m), E = ra(h ? na(h, t, e) : void 0);
 	return /* @__PURE__ */ q($, {
 		source: e,
@@ -4054,7 +4059,7 @@ function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 		rules: c,
 		hideLabel: u,
 		hidden: d,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(_a, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(ya, {
 			reference: r,
 			choices: i,
 			optionLabel: a,
@@ -4080,10 +4085,10 @@ function va({ source: e, name: t, label: n, reference: r, choices: i, optionLabe
 }
 //#endregion
 //#region src/crud/fields/uploadFieldUtils.ts
-function ya(e) {
+function xa(e) {
 	return e instanceof File ? !0 : typeof e == "string" && e.length > 0;
 }
-function ba(e) {
+function Sa(e) {
 	if (e instanceof File) return e.name;
 	if (typeof e == "string" && e.length > 0) try {
 		return new URL(e, "http://local").pathname.split("/").filter(Boolean).pop() || e;
@@ -4093,7 +4098,7 @@ function ba(e) {
 }
 //#endregion
 //#region src/crud/fields/useUploadPreviewUrl.ts
-function xa(e) {
+function Ca(e) {
 	let [t, n] = d();
 	if (s(() => {
 		if (e instanceof File) {
@@ -4106,9 +4111,9 @@ function xa(e) {
 }
 //#endregion
 //#region src/crud/fields/ImageField.tsx
-function Sa({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
-	let o = u(null), s = xa(e), c = r && ya(e);
-	return /* @__PURE__ */ J(B, {
+function wa({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "image/*", previewWidth: a = 200 }) {
+	let o = u(null), s = Ca(e), c = r && xa(e);
+	return /* @__PURE__ */ J(V, {
 		orientation: "vertical",
 		size: "middle",
 		style: { width: "100%" },
@@ -4122,7 +4127,7 @@ function Sa({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "ima
 					objectFit: "contain"
 				}
 			}) : null,
-			/* @__PURE__ */ J(B, {
+			/* @__PURE__ */ J(V, {
 				wrap: !0,
 				children: [/* @__PURE__ */ q(w, {
 					icon: /* @__PURE__ */ q(Ee, {}),
@@ -4154,7 +4159,7 @@ function Sa({ value: e, onChange: t, disabled: n, clearable: r, accept: i = "ima
 		]
 	});
 }
-function Ca({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, hidden: o, clearable: s, accept: c, previewWidth: l }) {
+function Ta({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, hidden: o, clearable: s, accept: c, previewWidth: l }) {
 	return /* @__PURE__ */ q($, {
 		source: e,
 		name: t,
@@ -4163,7 +4168,7 @@ function Ca({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		rules: i,
 		hideLabel: a,
 		hidden: o,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(Sa, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(wa, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -4175,20 +4180,20 @@ function Ca({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/fields/FileField.tsx
-function wa({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
-	let a = u(null), o = ba(e), s = typeof e == "string" && e.length > 0 ? e : void 0, c = r && ya(e);
-	return /* @__PURE__ */ J(B, {
+function Ea({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
+	let a = u(null), o = Sa(e), s = typeof e == "string" && e.length > 0 ? e : void 0, c = r && xa(e);
+	return /* @__PURE__ */ J(V, {
 		orientation: "vertical",
 		size: "middle",
 		style: { width: "100%" },
 		children: [
-			o ? /* @__PURE__ */ J(B, { children: [/* @__PURE__ */ q(Se, {}), s ? /* @__PURE__ */ q(W.Link, {
+			o ? /* @__PURE__ */ J(V, { children: [/* @__PURE__ */ q(Se, {}), s ? /* @__PURE__ */ q(W.Link, {
 				href: s,
 				target: "_blank",
 				rel: "noopener noreferrer",
 				children: o
 			}) : /* @__PURE__ */ q(W.Text, { children: o })] }) : null,
-			/* @__PURE__ */ J(B, {
+			/* @__PURE__ */ J(V, {
 				wrap: !0,
 				children: [/* @__PURE__ */ q(w, {
 					icon: /* @__PURE__ */ q(Ee, {}),
@@ -4220,7 +4225,7 @@ function wa({ value: e, onChange: t, disabled: n, clearable: r, accept: i }) {
 		]
 	});
 }
-function Ta({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, hidden: o, clearable: s, accept: c }) {
+function Da({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a, hidden: o, clearable: s, accept: c }) {
 	return /* @__PURE__ */ q($, {
 		source: e,
 		name: t,
@@ -4229,7 +4234,7 @@ function Ta({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 		rules: i,
 		hideLabel: a,
 		hidden: o,
-		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(wa, {
+		children: ({ value: e, onChange: t, disabled: n }) => /* @__PURE__ */ q(Ea, {
 			value: e,
 			onChange: t,
 			disabled: n,
@@ -4240,12 +4245,12 @@ function Ta({ source: e, name: t, label: n, required: r, rules: i, hideLabel: a,
 }
 //#endregion
 //#region src/crud/utils/columnDataIndex.ts
-function Ea(e) {
+function Oa(e) {
 	return e.includes(".") ? e.split(".") : e;
 }
 //#endregion
 //#region src/crud/columns/TextColumn.tsx
-function Da({ source: e, label: t, sortable: n = !0 }) {
+function ka({ source: e, label: t, sortable: n = !0 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4253,7 +4258,7 @@ function Da({ source: e, label: t, sortable: n = !0 }) {
 		sortable: n,
 		buildColumn: () => ({
 			title: t ?? e,
-			dataIndex: Ea(e),
+			dataIndex: Oa(e),
 			key: e,
 			sorter: n ? !0 : void 0
 		})
@@ -4263,12 +4268,12 @@ function Da({ source: e, label: t, sortable: n = !0 }) {
 		n
 	])), null;
 }
-function Oa(e, t, n) {
+function Aa(e, t, n) {
 	return typeof n == "function" ? n(e) : n ? Q(e, n) : Q(e, t);
 }
 //#endregion
 //#region src/crud/columns/NumberColumn.tsx
-function ka({ source: e, label: t, sortable: n = !0 }) {
+function ja({ source: e, label: t, sortable: n = !0 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4276,7 +4281,7 @@ function ka({ source: e, label: t, sortable: n = !0 }) {
 		sortable: n,
 		buildColumn: () => ({
 			title: t ?? e,
-			dataIndex: Ea(e),
+			dataIndex: Oa(e),
 			key: e,
 			sorter: n ? !0 : void 0
 		})
@@ -4288,7 +4293,7 @@ function ka({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/BooleanColumn.tsx
-function Aa({ source: e, label: t, sortable: n = !0 }) {
+function Ma({ source: e, label: t, sortable: n = !0 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4296,7 +4301,7 @@ function Aa({ source: e, label: t, sortable: n = !0 }) {
 		sortable: n,
 		buildColumn: () => ({
 			title: t ?? e,
-			dataIndex: Ea(e),
+			dataIndex: Oa(e),
 			key: e,
 			sorter: n ? !0 : void 0,
 			render: (e) => e ? "Yes" : "No"
@@ -4309,7 +4314,7 @@ function Aa({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/DateColumn.tsx
-function ja({ source: e, label: t, sortable: n = !0 }) {
+function Na({ source: e, label: t, sortable: n = !0 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4317,7 +4322,7 @@ function ja({ source: e, label: t, sortable: n = !0 }) {
 		sortable: n,
 		buildColumn: () => ({
 			title: t ?? e,
-			dataIndex: Ea(e),
+			dataIndex: Oa(e),
 			key: e,
 			sorter: n ? !0 : void 0,
 			render: (e) => e ? String(e).slice(0, 10) : "—"
@@ -4330,16 +4335,16 @@ function ja({ source: e, label: t, sortable: n = !0 }) {
 }
 //#endregion
 //#region src/crud/columns/ReferenceColumn.tsx
-function Ma({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
-	let { labelForValue: s } = pa(i, r, a, o), c = Q(e, t);
+function Pa({ record: e, source: t, display: n, reference: r, choices: i, optionLabel: a, optionValue: o }) {
+	let { labelForValue: s } = ha(i, r, a, o), c = Q(e, t);
 	if (typeof n == "function") return /* @__PURE__ */ q(K, { children: n(e) });
 	if (n && n !== t) {
-		let r = Oa(e, t, n);
+		let r = Aa(e, t, n);
 		return /* @__PURE__ */ q(K, { children: r == null ? "—" : String(r) });
 	}
 	return /* @__PURE__ */ q(K, { children: s(c) });
 }
-function Na({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: s = !0 }) {
+function Fa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", display: o, sortable: s = !0 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4350,7 +4355,7 @@ function Na({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: s ? !0 : void 0,
-			render: (s, c) => /* @__PURE__ */ q(Ma, {
+			render: (s, c) => /* @__PURE__ */ q(Pa, {
 				record: c,
 				source: e,
 				label: t,
@@ -4374,11 +4379,11 @@ function Na({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ReferenceManyColumn.tsx
-function Pa({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
-	let { labelsForValues: o } = pa(r, n, i, a), s = Q(e, t);
+function Ia({ record: e, source: t, reference: n, choices: r, optionLabel: i, optionValue: a }) {
+	let { labelsForValues: o } = ha(r, n, i, a), s = Q(e, t);
 	return /* @__PURE__ */ q(K, { children: o(Array.isArray(s) ? s : []) });
 }
-function Fa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
+function La({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", sortable: o = !1 }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4389,7 +4394,7 @@ function Fa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 			dataIndex: e,
 			key: e,
 			sorter: o ? !0 : void 0,
-			render: (t, o) => /* @__PURE__ */ q(Pa, {
+			render: (t, o) => /* @__PURE__ */ q(Ia, {
 				record: o,
 				source: e,
 				reference: n,
@@ -4410,7 +4415,7 @@ function Fa({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 }
 //#endregion
 //#region src/crud/columns/ImageColumn.tsx
-function Ia({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: s = "" }) {
+function Ra({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 40, objectFit: a = "cover", borderRadius: o = 4, alt: s = "" }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4418,7 +4423,7 @@ function Ia({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 
 		sortable: n,
 		buildColumn: () => ({
 			title: t ?? e,
-			dataIndex: Ea(e),
+			dataIndex: Oa(e),
 			key: e,
 			sorter: n ? !0 : void 0,
 			render: (e) => e == null || e === "" ? null : /* @__PURE__ */ q("img", {
@@ -4445,7 +4450,7 @@ function Ia({ source: e, label: t, sortable: n = !1, width: r = 40, height: i = 
 }
 //#endregion
 //#region src/crud/columns/CustomColumn.tsx
-function La({ source: e, label: t, sortable: n = !1, render: r }) {
+function za({ source: e, label: t, sortable: n = !1, render: r }) {
 	return Xn(l(() => ({
 		key: e,
 		source: e,
@@ -4465,7 +4470,7 @@ function La({ source: e, label: t, sortable: n = !1, render: r }) {
 }
 //#endregion
 //#region src/crud/filters/NumberFilter.tsx
-function Ra({ source: e, label: t }) {
+function Ba({ source: e, label: t }) {
 	return ar(l(() => ({
 		key: e,
 		source: e,
@@ -4480,12 +4485,12 @@ function Ra({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/BooleanFilter.tsx
-function za({ source: e, label: t }) {
+function Va({ source: e, label: t }) {
 	return ar(l(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: n, onChange: r }) => /* @__PURE__ */ q(z, {
+		render: ({ value: n, onChange: r }) => /* @__PURE__ */ q(B, {
 			allowClear: !0,
 			placeholder: t ?? e,
 			value: n,
@@ -4503,7 +4508,7 @@ function za({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/DateFilter.tsx
-function Ba({ source: e, label: t }) {
+function Ha({ source: e, label: t }) {
 	return ar(l(() => ({
 		key: e,
 		source: e,
@@ -4519,12 +4524,12 @@ function Ba({ source: e, label: t }) {
 }
 //#endregion
 //#region src/crud/filters/SelectFilter.tsx
-function Va({ source: e, label: t, choices: n, multiple: r }) {
+function Ua({ source: e, label: t, choices: n, multiple: r }) {
 	return ar(l(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: i, onChange: a }) => /* @__PURE__ */ q(z, {
+		render: ({ value: i, onChange: a }) => /* @__PURE__ */ q(B, {
 			allowClear: !0,
 			mode: r ? "multiple" : void 0,
 			placeholder: t ?? e,
@@ -4542,14 +4547,14 @@ function Va({ source: e, label: t, choices: n, multiple: r }) {
 }
 //#endregion
 //#region src/crud/filters/ReferenceFilter.tsx
-function Ha({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, lazy: c = !0, fetchSelected: l = !0, popupMatchSelectWidth: u, popupMinWidth: f, value: p, onChange: m }) {
-	let [h, g] = d(), [_, v] = d(!1), { options: y, loading: b, selectedLoading: x } = pa(r, n, i, a, s ? h : void 0, {
+function Wa({ source: e, label: t, reference: n, choices: r, optionLabel: i, optionValue: a, multiple: o, search: s, lazy: c = !0, fetchSelected: l = !0, popupMatchSelectWidth: u, popupMinWidth: f, value: p, onChange: m }) {
+	let [h, g] = d(), [_, v] = d(!1), { options: y, loading: b, selectedLoading: x } = ha(r, n, i, a, s ? h : void 0, {
 		lazy: c,
 		active: _ || !!h,
 		selectedValues: p,
 		fetchSelected: l
 	}), S = oa(b, x), C = p;
-	return /* @__PURE__ */ q(z, {
+	return /* @__PURE__ */ q(B, {
 		...ia({
 			popupMatchSelectWidth: u,
 			popupMinWidth: f
@@ -4576,12 +4581,12 @@ function Ha({ source: e, label: t, reference: n, choices: r, optionLabel: i, opt
 		style: { minWidth: 180 }
 	});
 }
-function Ua({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: s, lazy: c = !0, fetchSelected: u = !0, popupMatchSelectWidth: d, popupMinWidth: f }) {
+function Ga({ source: e, label: t, reference: n, choices: r, optionLabel: i = "name", optionValue: a = "id", multiple: o, search: s, lazy: c = !0, fetchSelected: u = !0, popupMatchSelectWidth: d, popupMinWidth: f }) {
 	return ar(l(() => ({
 		key: e,
 		source: e,
 		label: t,
-		render: ({ value: l, onChange: p }) => /* @__PURE__ */ q(Ha, {
+		render: ({ value: l, onChange: p }) => /* @__PURE__ */ q(Wa, {
 			source: e,
 			label: t,
 			reference: n,
@@ -4612,11 +4617,11 @@ function Ua({ source: e, label: t, reference: n, choices: r, optionLabel: i = "n
 		f
 	])), null;
 }
-function Wa(e) {
-	return /* @__PURE__ */ q(Ua, {
+function Ka(e) {
+	return /* @__PURE__ */ q(Ga, {
 		...e,
 		multiple: !0
 	});
 }
 //#endregion
-export { Jt as AdminApp, It as AdminLayout, Hn as AppHub, Un as AppLauncherButton, Ze as AppThemeProvider, Rn as AuthAlternateLink, zn as AuthPageLayout, lt as AuthProvider, Aa as BooleanColumn, Ai as BooleanField, za as BooleanFilter, La as CustomColumn, Qn as DEFAULT_TEXT_FILTER_DEBOUNCE_MS, Xt as DataProvider, ja as DateColumn, Ii as DateField, Ba as DateFilter, Li as DateTimeField, et as DensitySwitch, nn as EXPECTED_VALIDATION_BODY_HINT, $ as FieldWrapper, Ta as FileField, oi as FilterBar, Ci as FormStep, Ti as FormSteps, bi as FormTab, Si as FormTabs, Lt as Guard, zt as GuestOnly, di as HiddenSources, Ia as ImageColumn, Ca as ImageField, hi as InlineFormSet, gi as InlineFormSetStacked, Bn as LoginPage, ka as NumberColumn, ki as NumberField, Ra as NumberFilter, Ui as PasswordField, mt as PermissionsProvider, Vn as PlaceholderPage, Rt as Protected, Na as ReferenceColumn, ga as ReferenceField, Ua as ReferenceFilter, Fa as ReferenceManyColumn, va as ReferenceManyField, Wa as ReferenceManyFilter, Bt as RequirePermission, si as ResourceForm, Gr as ResourceFormModal, ii as ResourceList, Vi as SelectField, Va as SelectFilter, Oi as TextAreaField, Da as TextColumn, Di as TextField, tr as TextFilter, nt as ThemeSwitch, rt as ThemeToolbar, Bi as TimeField, jn as applyInMemoryListParams, Z as asStringMessages, Cr as buildFormPayload, wr as buildInlineRowsPayload, Nr as buildResourceFormSubmitBody, Ea as columnDataIndex, en as combineResourceHandlers, qt as createAdminRouter, Mn as createMemoryResourceHandlers, gt as createPermissionsChecker, Nn as createRestResourceHandlers, ft as createSessionStorageAuthAdapter, Gt as deriveAuthPaths, ln as describeNonStandardValidationBody, xt as filterFlatNavItems, Et as filterNavByPermission, yt as filterNavItems, kn as filterRows, _n as finalizeFormErrors, bt as flattenNavLeaves, gn as flattenNestedArrayErrors, fn as getErrorBody, Q as getFormValue, vt as getNavItemLabel, Vt as getRouteAccess, En as getRowById, Tr as hasUploadValues, tn as isAbortError, fi as nestedFieldPath, bn as parseDjangoDRFFormErrors, xn as parseDotNetFormErrors, Sn as parseNodeFormErrors, Ht as partitionAdminRoutes, Mr as prepareFormSubmitBody, mn as resolveErrorBody, na as resolveLabelSourcePath, Sr as setFormValue, Fn as toDjangoRestOrdering, jr as toFormData, Ln as toJsonApiSort, In as toODataOrderBy, Vr as useAbortableEffect, ut as useAuth, _t as useCan, pa as useChoices, Zt as useDataProvider, Qr as useListQueryState, ht as usePermissions, hr as useRegisterPayloadField, gr as useRegisterSectionField, ei as useResourceListContext, Qe as useThemeMode };
+export { Jt as AdminApp, It as AdminLayout, Hn as AppHub, Un as AppLauncherButton, Ze as AppThemeProvider, Rn as AuthAlternateLink, zn as AuthPageLayout, lt as AuthProvider, Ma as BooleanColumn, Ai as BooleanField, Va as BooleanFilter, za as CustomColumn, Qn as DEFAULT_TEXT_FILTER_DEBOUNCE_MS, Xt as DataProvider, Na as DateColumn, Ii as DateField, Ha as DateFilter, Li as DateTimeField, et as DensitySwitch, nn as EXPECTED_VALIDATION_BODY_HINT, $ as FieldWrapper, Da as FileField, oi as FilterBar, Ci as FormStep, Ti as FormSteps, bi as FormTab, Si as FormTabs, Lt as Guard, zt as GuestOnly, di as HiddenSources, Ra as ImageColumn, Ta as ImageField, hi as InlineFormSet, gi as InlineFormSetStacked, Bn as LoginPage, ja as NumberColumn, ki as NumberField, Ba as NumberFilter, Ui as PasswordField, mt as PermissionsProvider, Vn as PlaceholderPage, Rt as Protected, Fa as ReferenceColumn, va as ReferenceField, Ga as ReferenceFilter, La as ReferenceManyColumn, ba as ReferenceManyField, Ka as ReferenceManyFilter, Bt as RequirePermission, si as ResourceForm, Gr as ResourceFormModal, ii as ResourceList, Vi as SelectField, Ua as SelectFilter, Oi as TextAreaField, ka as TextColumn, Di as TextField, tr as TextFilter, nt as ThemeSwitch, rt as ThemeToolbar, Bi as TimeField, jn as applyInMemoryListParams, Z as asStringMessages, Cr as buildFormPayload, wr as buildInlineRowsPayload, Nr as buildResourceFormSubmitBody, Oa as columnDataIndex, en as combineResourceHandlers, qt as createAdminRouter, Mn as createMemoryResourceHandlers, gt as createPermissionsChecker, Nn as createRestResourceHandlers, ft as createSessionStorageAuthAdapter, Gt as deriveAuthPaths, ln as describeNonStandardValidationBody, xt as filterFlatNavItems, Et as filterNavByPermission, yt as filterNavItems, kn as filterRows, _n as finalizeFormErrors, bt as flattenNavLeaves, gn as flattenNestedArrayErrors, fn as getErrorBody, Q as getFormValue, vt as getNavItemLabel, Vt as getRouteAccess, En as getRowById, Tr as hasUploadValues, tn as isAbortError, fi as nestedFieldPath, bn as parseDjangoDRFFormErrors, xn as parseDotNetFormErrors, Sn as parseNodeFormErrors, Ht as partitionAdminRoutes, Mr as prepareFormSubmitBody, mn as resolveErrorBody, na as resolveLabelSourcePath, Sr as setFormValue, Fn as toDjangoRestOrdering, jr as toFormData, Ln as toJsonApiSort, In as toODataOrderBy, Vr as useAbortableEffect, ut as useAuth, _t as useCan, ha as useChoices, Zt as useDataProvider, Qr as useListQueryState, ht as usePermissions, hr as useRegisterPayloadField, gr as useRegisterSectionField, ei as useResourceListContext, Qe as useThemeMode };
