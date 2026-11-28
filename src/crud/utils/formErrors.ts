@@ -23,6 +23,11 @@ export type ApplyApiErrorsOptions = {
   inlineRegistry: Iterable<InlineFieldRegistration>;
 };
 
+/** Client-side and API validation both use this. Details stay on the form. */
+export function warnToFixFormErrors(message: { warning: (content: string) => void }) {
+  message.warning("Please fix the errors below.");
+}
+
 function toMessages(value: string | string[] | undefined): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];

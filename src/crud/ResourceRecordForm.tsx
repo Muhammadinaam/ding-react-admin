@@ -15,6 +15,7 @@ import {
   type InlineFieldRegistration,
 } from "./context/InlineFieldsRegistry";
 import { FormGlobalErrorsAlert } from "./FormGlobalErrorsAlert";
+import { warnToFixFormErrors } from "./utils/formErrors";
 import { useFormRecordLoad, useFormRecordSave } from "./utils/useFormRecord";
 
 export type ResourceRecordFormProps<T extends FieldValues & { id?: unknown }> = {
@@ -89,7 +90,7 @@ export function ResourceRecordForm<T extends FieldValues & { id?: unknown }>({
 
   const handleFinish = () => {
     void form.handleSubmit(onSubmit, () => {
-      message.warning("Please fix the errors below.");
+      warnToFixFormErrors(message);
     })();
   };
 

@@ -7,6 +7,7 @@ import {
   applyApiErrorsToForm,
   isKnownFormFieldPath,
   partitionFormErrors,
+  warnToFixFormErrors,
 } from "./formErrors";
 
 const inlineRegistry = new Map<string, InlineFieldRegistration>([
@@ -18,6 +19,14 @@ const inlineRegistry = new Map<string, InlineFieldRegistration>([
     },
   ],
 ]);
+
+describe("warnToFixFormErrors", () => {
+  it("uses the same notice for every form validation failure", () => {
+    const message = { warning: vi.fn() };
+    warnToFixFormErrors(message);
+    expect(message.warning).toHaveBeenCalledWith("Please fix the errors below.");
+  });
+});
 
 describe("isKnownFormFieldPath", () => {
   it("matches top-level payload fields", () => {

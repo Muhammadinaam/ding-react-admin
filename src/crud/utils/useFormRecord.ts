@@ -13,7 +13,7 @@ import {
 } from "react-hook-form";
 import type { InlineFieldRegistration } from "../context/InlineFieldsRegistry";
 import { buildResourceFormSubmitBody } from "./buildResourceFormSubmitBody";
-import { applyApiErrorsToForm } from "./formErrors";
+import { applyApiErrorsToForm, warnToFixFormErrors } from "./formErrors";
 import { useAbortableEffect } from "./useAbortableEffect";
 
 type LoadOptions<T extends FieldValues> = {
@@ -152,7 +152,7 @@ export function useFormRecordSave<T extends FieldValues & { id?: unknown }>({
         );
         if (handled) {
           setGlobalErrors(globalErrors);
-          message.error(globalErrors[0] ?? "Save failed.");
+          warnToFixFormErrors(message);
         } else {
           setGlobalErrors([]);
           message.error(e instanceof Error ? e.message : "Save failed");
